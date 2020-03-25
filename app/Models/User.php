@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Telefone;
 
 class User extends Authenticatable
 {
@@ -15,25 +16,32 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $fillable = ['nome', 'email', 'password','tipo_usuario'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
+    protected $casts = ['email_verified_at' => 'datetime'];
+
+    public static $rules = [
+        'nome'         => ['required', 'min:3'],
+        'email'        => ['required', 'unique:users'],
+        'password'     => ['required', 'min:8']
     ];
+
+    
+
+    public function telefone()
+    {
+        return $this->hasOne(Telefone::class);
+    }
 }
