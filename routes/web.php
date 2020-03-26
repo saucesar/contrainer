@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/','Controller@login')->name('user.login');
 Route::post('/','Controller@autenticar')->name('user.auth');
+Route::resource('users','UsersController');
