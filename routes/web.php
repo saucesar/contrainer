@@ -17,3 +17,4 @@ Route::get('/','Controller@login')->name('user.login');
 Route::post('/','Controller@autenticar')->name('user.auth');
 Route::get('/home','Controller@index')->name('home.index');
 Route::resource('users','UsersController');
+Route::resource('maquinas','MaquinasController');
