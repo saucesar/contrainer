@@ -13,24 +13,24 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public function index()
+    {
+        return view('home.index');
+    }
+
     public function login()
     {
-        return view('users.login');
+        return view('users.login', ['title' => 'Login']);
     }
 
     public function autenticar(Request $request)
     {
-        //dd($request->all());
-
         $lembrar = ($request->input('lembrar') == "true");
-        
-        if(Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')], $lembrar))
-        {
-            return "logado com sucesso!!!";
-        }
-        else
-        {
-            return view('users.login',['message' => 'Login/Senha Invaldo(s)!']);
+
+        if(Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')], $lembrar)){
+            return view('home.index', ['title' => 'Dashboard']);
+        } else{
+            return view('users.login', ['message' => 'Login/Senha Invalido(s)!']);
         }
     }
 }
