@@ -21,5 +21,23 @@ class DatabaseSeeder extends Seeder
             'created_at'   => now(),
             'updated_at'   => now()
         ]);
+
+        DB::table('maquinas')->insert([
+            'cpu_utilizavel'         => 30,
+            'ram_utilizavel'        => 1024,
+            'hashcode'     => 'ascde',
+            'user_id' => 1,
+            'created_at'   => now(),
+            'updated_at'   => now()
+        ]);
+
+        DB::table('atividade_maquinas')->insert([
+            'hashcode_maquina'         => 'ascde',
+            'dataHoraInicio'        => now(),
+            'created_at'   => now(),
+            'updated_at'   => now()
+        ]);
+
+        
     }
 }
