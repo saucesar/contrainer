@@ -17,7 +17,7 @@ class CreateMaquinasTable extends Migration
             $table->id();
             $table->integer('cpu_utilizavel')->default(25);// percentual(%)
             $table->integer('ram_utilizavel');// em MB
-            $table->string('hashcode');// poderia ser o MAC?
+            $table->string('hashcode')->unique();
             $table->boolean('disponivel')->default(false);
             $table->bigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
