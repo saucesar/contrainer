@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Telefone::class);
     }
+
+    public function maquinas()
+    {
+        return $this->hasMany(Maquina::class);
+    }
 }

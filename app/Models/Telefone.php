@@ -22,8 +22,8 @@ class Telefone extends Model
         'max'     => 'Quantidade maior que o permitido no campo :attribute.'
     ];
 
-    public function user()
+    public function user():User
     {
-        return $this->belongsTo(User::class);
+        return User::firstWhere('id', $this->user_id);
     }
 }
