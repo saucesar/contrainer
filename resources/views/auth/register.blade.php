@@ -59,8 +59,13 @@
                       <i class="material-icons">phone</i>
                   </span>
                 </div>
-                <input type="text" name="telefone" class="form-control" placeholder="{{ __('Phone number...') }}" value="{{ old('telefone') }}">
+                <input type="text" name="phone" class="form-control" placeholder="{{ __('Phone number...') }}" value="{{ old('phone') }}">
               </div>
+              @if ($errors->has('phone'))
+              <div id="phone-error" class="error text-danger pl-3" for="phone" style="display: block;">
+                <strong>{{ $errors->first('phone') }}</strong>
+              </div>
+            @endif
             <div class="bmd-form-group{{ $errors->has('password') ? ' has-danger' : '' }} mt-3">
               <div class="input-group">
                 <div class="input-group-prepend">
