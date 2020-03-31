@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -34,6 +34,9 @@ class UserRequest extends FormRequest
             ],
             'password' => [
                 $this->route()->user ? 'nullable' : 'required', 'confirmed', 'min:6'
+            ],
+            'phone' => [
+                'required', 'min:11', 'numeric'
             ]
         ];
     }
