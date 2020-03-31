@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 	if (auth()->guest()) {
-		return view('welcome');
+		return redirect()->route('login');
 	} else {
 		return redirect()->route('home');
 	}
