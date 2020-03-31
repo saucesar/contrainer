@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +25,7 @@ Route::get('/', function () {
 	}
 });
 Route::get('/home','Controller@index')->name('home.index');
-Route::resource('users','UsersController');
+
 Route::resource('maquinas','MaquinasController');
 Route::resource('containers','ContainersController');
 Auth::routes();
