@@ -24,13 +24,11 @@ Route::get('/', function () {
 		return redirect()->route('home');
 	}
 });
-Route::get('/home','Controller@index')->name('home.index');
 
 Route::resource('maquinas','MaquinasController');
 Route::resource('containers','ContainersController');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
