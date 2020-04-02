@@ -25,7 +25,7 @@ Route::get('/', function () {
 	}
 });
 
-Route::resource('maquinas','MaquinasController');
+Route::resource('machines','MaquinasController')->except('index')->middleware('auth');
 Route::resource('containers','ContainersController');
 Auth::routes();
 
@@ -61,6 +61,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('upgrade', function () {
 		return view('pages.upgrade');
 	})->name('upgrade');
+
+	Route::get('user-machines', 'UserController@machines')->name('user.machines');
 });
 
 Route::group(['middleware' => 'auth'], function () {
