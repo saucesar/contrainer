@@ -3,125 +3,70 @@
 namespace App\Http\Controllers;
 
 use App\Models\Maquina;
-use Illuminate\Http\Request;
+use App\Http\Requests\MachineRequest;
 use Illuminate\Support\Facades\Auth;
 
 class MaquinasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('maquinas.create');
+        return view('pages.user.user_machines_new');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(MachineRequest $request)
     {
         $this->validar($request);
         $maquina = Maquina::create($this->getData($request));
 
         if($maquina){
-            return redirect()->route('home.index');
-        } else{
+            return redirect()->route('user.machines');
+        } else {
             return redirect()->back()->withInput();
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        return view('maquinas.show', ['maquina' =>  Maquina::firstWhere('id', $id)]);
+        return view('pages.user.user_machine_show', ['machine' =>  Maquina::firstWhere('id', $id)]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        return view('maquinas.edit', ['maquina' =>  Maquina::firstWhere('id', $id)]);
+        return view('pages.user.user_machines_edit', ['machine' =>  Maquina::firstWhere('id', $id)]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(MachineRequest $request, $id)
     {
         $this->validar($request);
         $maquina = Maquina::firstWhere('id', $id);
-        $maquina->update($this->getData($request));
+        $result = $maquina->update($request->all());
 
-        if($maquina){
-            return redirect()->route('home.index');
-        } else{
+        if($result){
+            return redirect()->route('user.machines');
+        } else {
             return redirect()->back()->withInput();
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $maquina = Maquina::firstWhere('id',$id);
         if($maquina->delete()){
-            return redirect()->route('home.index');
-        } else{ 
-            return redirect()->route('maquinas.show',['maquina' => $maquina]);
+            return redirect()->route('user.machines');
+        } else { 
+            return redirect()->back()->with('error', 'Falha ao deletar!');
         }
     }
 
-    private function validar(Request $request)
+    private function validar(MachineRequest $request)
     {
-        $this->validate($request, Maquina::$rules, Maquina::$messages);
+        $this->validate($request, $request->rules(), $request->messages());
     }
 
-    private function getUserId()
-    {
-        return Auth::user()->id;
-    }
-
-    private function getData(Request $request)
-    {
-        $data = [
-            'cpu_utilizavel' => $request->input('cpu_utilizavel'),
-            'ram_utilizavel' => $request->input('cpu_utilizavel'),
-            'user_id'        => $this->getUserId(),
-        ];
-
+    private function getData(MachineRequest $request)
+    {   
+        $data = $request->all();
+        $data['user_id'] = Auth::user()->id;
         $data['hashcode'] = $this->getHashCode($data);
 
         return $data;
@@ -135,6 +80,9 @@ class MaquinasController extends Controller
             $hash .= $d;
         }
 
-        return $hash;
+        $time = now();
+        $hash .= "$time";
+
+        return bcrypt($hash);
     }
 }
