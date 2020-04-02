@@ -33,7 +33,7 @@ class User extends Authenticatable
      */
     protected $casts = ['email_verified_at' => 'datetime'];
 
-    public function maquinas()
+    public function machines()
     {
         return $this->hasMany(Maquina::class);
     }
