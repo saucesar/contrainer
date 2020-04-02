@@ -32,10 +32,10 @@
                 <span class="sidebar-normal">{{ __('User profile') }} </span>
               </a>
             </li>
-            <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-              <a class="nav-link" href="{{ route('user.index') }}">
-                <span class="sidebar-mini"> UM </span>
-                <span class="sidebar-normal"> {{ __('User Management') }} </span>
+            <li class="nav-item{{ $activePage == 'user-machines' ? ' active' : '' }}">
+              <a class="nav-link" href="{{ route('user.machines') }}">
+                <i class="material-icons">dvr</i>
+                <span class="sidebar-normal"> {{ __('Machines') }} </span>
               </a>
             </li>
           </ul>
