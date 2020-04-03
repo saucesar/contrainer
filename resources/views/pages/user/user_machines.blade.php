@@ -38,16 +38,32 @@
                                   <div class='content'>
                                     <div class='conteiner-fluid'>
                                       <div class='row'>
-                                        <a href="{{ route('machines.show', $machine) }}" class="btn btn-sm btn-outline-info"><i class="material-icons">remove_red_eye</i></a>  
-                                        <a href="{{ route('machines.edit', $machine) }}" class="btn btn-sm btn-outline-warning"><i class="material-icons">create</i></a>
+                                        <button class="btn btn-sm btn-outline-info" type="button" data-toggle="collapse" data-target="#{{ $machine->id }}" aria-expanded="false" aria-controls="collapseExample">
+                                          <i class="material-icons">remove_red_eye</i>
+                                        </button>
+                                        <a href="{{ route('machines.edit', $machine) }}" class="btn btn-sm btn-outline-warning">
+                                          <i class="material-icons">create</i>
+                                        </a>
                                         {!! Form::open(['route' => ['machines.destroy', $machine], 'method' => 'delete']) !!}
                                           <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-sm btn-outline-danger"><i class="material-icons">delete_sweep</i></button>
                                         {!! Form::close() !!}                                      </div>
                                     </div>
                                   </div>
-
                                 </td>
-                            </tr>                          
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="collapse" id="{{ $machine->id }}">
+                                  @include('pages.user.machine_show_form', ['machine' => $machine])
+                                  <a href="{{ route('machines.show', $machine) }}" class="btn btn-sm btn-outline-info">
+                                    Mais detalhes
+                                  </a>
+                                  <button class="btn btn-sm btn-outline" type="button" data-toggle="collapse" data-target="#{{ $machine->id }}" aria-expanded="false" aria-controls="collapseExample">
+                                    Ocultar
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>                      
                           @endforeach
                       </tbody>
                   </table>
