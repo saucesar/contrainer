@@ -27,7 +27,7 @@ class MaquinasController extends Controller
 
     public function show($id)
     {
-        return view('pages.user.user_machine_show', ['machine' =>  Maquina::firstWhere('id', $id)]);
+        return view('pages.user.machine_show', ['machine' =>  Maquina::firstWhere('id', $id)]);
     }
 
     public function edit($id)
