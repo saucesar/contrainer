@@ -8,20 +8,11 @@
           <div class="card">
             <div class="card-header card-header-primary">
               <h4 class="card-title ">Show Machine</h4>
-              <p class="card-category">show details of machine</p>
+              <p class="card-category">show machine details</p>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                  @if($errors->any())
-                    <div class="alert alert-danger">
-                      <ul>
-                          @foreach ($errors->all() as $error)
-                              <li>{{$error}}</li>
-                          @endforeach
-                      </ul>
-                    </div>
-                  @endif
-
+                @include('pages.user.machine_show_form', ['machine' => $machine])
               </div>
             </div>
           </div>
