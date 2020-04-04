@@ -16,13 +16,21 @@ class AtividadeMaquinasController extends Controller
 
     public function store(Request $request)
     {
+        $hash = $request->input('hashcode_maquina');
         $data = [
-            'hashcode_maquina' => $request->input('hashcode_maquina'),
+            'hashcode_maquina' => $hash,
             'dataHoraInicio'   => now(),
         ];
+        
+        $machine = Maquina::firstWhere('hashcode', $hash);
+        $activity = AtividadeMaquina::firstWhere(['dataHoraFim' => null, 'hashcode_maquina' => $hash]);
 
-        if(Maquina::firstWhere('hashcode', $data['hashcode_maquina'])){
+        if($machine && !$activity){
             AtividadeMaquina::create($data);
+
+            $machine->disponivel = true;
+            $machine->save();
+
             return "activity save.";
         } else {
             return "hashcode not found.";
@@ -34,13 +42,19 @@ class AtividadeMaquinasController extends Controller
         return AtividadeMaquina::firstWhere('id', $id);
     }
 
-    public function update($id)
+    public function update(Request $request, $id)
     {
-        $atividade = AtividadeMaquina::firstWhere('id', $id);
+        $hash = $request->input('hashcode_maquina');
 
-        if(!$atividade->dataHoraFim){
-            $atividade->dataHoraFim = now();
-            $atividade->save();
+        $machine = Maquina::firstWhere('hashcode', $hash);
+        $activity = AtividadeMaquina::firstWhere(['dataHoraFim' => null, 'hashcode_maquina' => $hash]);
+
+        if($machine && $activity){
+            $activity->dataHoraFim = now();
+            $activity->save();
+
+            $machine->disponivel = false;
+            $machine->save();
         }
     }
 
