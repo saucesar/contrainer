@@ -18,6 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('atividadeMaquinas','AtividadeMaquinasController');
-Route::apiResource('InstanciaContainers','InstanciaContainerController');
-
+Route::apiResource('atividadeMaquinas','Api\AtividadeMaquinasController');
+Route::apiResource('InstanciaContainers','Api\InstanciaContainerController');
