@@ -18,13 +18,13 @@ class AtividadeMaquina extends Model
         'required' => 'O campo :attibute é obrigatório.',
     ];
 
-    public function maquina():Maquina
+    public function machine():Maquina
     {
         return Maquina::firstWhere('hashcode', $this->hashcode_maquina);
     }
 
     public function user():User
     {
-        return $this->maquina()->user();
+        return $this->machine()->user();
     }
 }
