@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InstanciaContainer;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Container;
 
-class InstanciaContainerController extends Controller
+class ContainersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,7 +25,7 @@ class InstanciaContainerController extends Controller
      */
     public function create()
     {
-        //
+        return view('containers.create',['programas' => $this->getProgramsList()]);
     }
 
     /**
@@ -36,7 +37,11 @@ class InstanciaContainerController extends Controller
     public function store(Request $request)
     {
         $this->validar($request);
-        InstanciaContainer::create($request->all());
+
+        $dados = $request->all();
+        $dados['programas'] = $this->getRequestPrograms($request);
+
+        Container::create($dados);
     }
 
     /**
@@ -47,7 +52,7 @@ class InstanciaContainerController extends Controller
      */
     public function show($id)
     {
-        return InstanciaContainer::firstWhere('id', $id);
+        return view('containers.show',['container' => Container::firstWhere('id', $id)]);
     }
 
     /**
@@ -58,7 +63,7 @@ class InstanciaContainerController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('containers.edit',['container' => Container::firstWhere('id', $id)]);   
     }
 
     /**
@@ -71,8 +76,12 @@ class InstanciaContainerController extends Controller
     public function update(Request $request, $id)
     {
         $this->validar($request);
-        $instancia = InstanciaContainer::firstWhere('id', $id);
-        $instancia->update($request->all());
+
+        $dados = $request->all();
+        $dados['programas'] = $this->getRequestPrograms($request);
+
+        $container = Container::firstWhere('id', $id);
+        $container->update($dados);
     }
 
     /**
@@ -83,12 +92,36 @@ class InstanciaContainerController extends Controller
      */
     public function destroy($id)
     {
-        $instancia = InstanciaContainer::firstWhere('id', $id);
-        $instancia->delete();
+        $container = Container::firstWhere('id', $id);
+
+        if($container->delete()){
+
+        } else{
+
+        }
     }
 
     private function validar(Request $request)
     {
-        $this->validate($request, InstanciaContainer::$rules);
+        $this->validate($request, Container::$rules, Container::$messages);
+    }
+
+    private function getProgramsList()
+    {
+        return ['MYSQL', 'POSTGRES', 'NGINX', 'PHP'];
+    }
+
+    private function getRequestPrograms(Request $request)
+    {
+        $str = "";
+
+        foreach($this->getProgramsList() as $program){
+            if($program == $request->input($program)){
+                $str .= $program;
+                $str .= ',';
+            }
+        }
+
+        return $str;
     }
 }
