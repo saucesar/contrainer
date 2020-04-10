@@ -12,7 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
         DB::table('users')->insert([
             'name'         => 'Admin  admin',
             'email'        => 'admin@nuvem.com',
@@ -24,22 +23,28 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('maquinas')->insert([
-            'cpu_utilizavel'         => 30,
-            'ram_utilizavel'        => 1024,
-            'hashcode'     => 'ascde',
-            'user_id' => 1,
-            'created_at'   => now(),
-            'updated_at'   => now()
+            'cpu_utilizavel' => 30,
+            'ram_utilizavel' => 1024,
+            'hashcode'       => 'ascde',
+            'user_id'        => 1,
+            'created_at'     => now(),
+            'updated_at'     => now()
         ]);
 
         DB::table('atividade_maquinas')->insert([
-            'hashcode_maquina'         => 'ascde',
-            'dataHoraInicio'        => now(),
-            'created_at'   => now(),
-            'updated_at'   => now()
+            'hashcode_maquina' => 'ascde',
+            'dataHoraInicio'   => now(),
+            'created_at'       => now(),
+            'updated_at'       => now()
         ]);
 
-        
+        DB::table('containers')->insert([
+            'descricao'  => 'Container vazio.',
+            'programas'  => "",
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
         $this->call([UsersTableSeeder::class]);
     }
 }
