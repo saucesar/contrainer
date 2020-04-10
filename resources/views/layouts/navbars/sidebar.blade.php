@@ -18,17 +18,23 @@
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
-              <a class="nav-link" href="{{ route('profile.edit') }}">
-                <i class="material-icons">account_circle</i>
-                <span class="sidebar-normal">{{ __('User profile') }} </span>
-              </a>
-            </li>
-            <li class="nav-item{{ $activePage == 'user-machines' ? ' active' : '' }}">
-              <a class="nav-link" href="{{ route('user.machines') }}">
-                <i class="material-icons">dvr</i>
-                <span class="sidebar-normal"> {{ __('Machines') }} </span>
-              </a>
-            </li>
+        <a class="nav-link" href="{{ route('profile.edit') }}">
+          <i class="material-icons">account_circle</i>
+            <span class="sidebar-normal">{{ __('User profile') }} </span>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'user-machines' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('user.machines') }}">
+          <i class="material-icons">dvr</i>
+            <span class="sidebar-normal"> {{ __('Machines') }} </span>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'user-container' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('containers.index') }}">
+          <i class="fas fa-box"></i>
+            <span class="sidebar-normal"> {{ __('Containers') }} </span>
+        </a>
+      </li>
       <!-- <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
           <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i>
