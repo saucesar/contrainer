@@ -45,8 +45,11 @@
                                           <i class="material-icons">create</i>
                                         </a>
                                         {!! Form::open(['route' => ['machines.destroy', $machine], 'method' => 'delete']) !!}
-                                          <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-sm btn-outline-danger"><i class="material-icons">delete_sweep</i></button>
-                                        {!! Form::close() !!}                                      </div>
+                                          <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="material-icons">delete_sweep</i>
+                                          </button>
+                                        {!! Form::close() !!}
+                                      </div>
                                     </div>
                                   </div>
                                 </td>
