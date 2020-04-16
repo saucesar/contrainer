@@ -7,7 +7,7 @@ use App\Models\Maquina;
 
 class AtividadeMaquina extends Model
 {
-    protected $fillable = ['hashcode_maquina', 'dataHoraInicio', 'dataHoraFim'];
+    protected $fillable = ['hashcode_maquina', 'dataHoraInicio', 'dataHoraFim', 'last_notification'];
 
     public static $rules = [
         'hashcode_maquina' => ['required'],
