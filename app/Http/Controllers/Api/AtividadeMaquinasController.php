@@ -18,22 +18,24 @@ class AtividadeMaquinasController extends Controller
     {
         $hash = $request->input('hashcode_maquina');
         $data = [
-            'hashcode_maquina' => $hash,
-            'dataHoraInicio'   => now(),
+            'hashcode_maquina'  => $hash,
+            'dataHoraInicio'    => now(),
+            'last_notification' => now()
         ];
         
         $machine = Maquina::firstWhere('hashcode', $hash);
         $activity = AtividadeMaquina::firstWhere(['dataHoraFim' => null, 'hashcode_maquina' => $hash]);
 
-        if($machine && !$activity){
-            AtividadeMaquina::create($data);
+        if($machine){
+            if($activity){
+                $activity->last_notification = now();
+                $activity->save();
+            } else {
+                AtividadeMaquina::create($data);
 
-            $machine->disponivel = true;
-            $machine->save();
-
-            return "activity save.";
-        } else {
-            return "hashcode not found.";
+                $machine->disponivel = true;
+                $machine->save();    
+            }   
         }
     }
 
