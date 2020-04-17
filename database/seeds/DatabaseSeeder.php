@@ -25,22 +25,24 @@ class DatabaseSeeder extends Seeder
         DB::table('maquinas')->insert([
             'cpu_utilizavel' => 30,
             'ram_utilizavel' => 1024,
-            'hashcode'       => 'ascde',
+            'hashcode'       => '$2y$10$meLLu4qZwa9GXlGSB9/KLu/KDT.ayLqTAFKbtxP/qQpieyFe2.wUW',
             'user_id'        => 1,
             'created_at'     => now(),
             'updated_at'     => now()
         ]);
 
         DB::table('atividade_maquinas')->insert([
-            'hashcode_maquina' => 'ascde',
+            'hashcode_maquina' => '$2y$10$meLLu4qZwa9GXlGSB9/KLu/KDT.ayLqTAFKbtxP/qQpieyFe2.wUW',
             'dataHoraInicio'   => now(),
+            'last_notification'=> now(),
             'created_at'       => now(),
             'updated_at'       => now()
         ]);
 
         DB::table('containers')->insert([
-            'descricao'  => 'Container vazio.',
-            'programas'  => "",
+            'description'  => 'Create a empty container.',
+            'programs'  => "",
+            'command'  => "run docker command",
             'created_at' => now(),
             'updated_at' => now()
         ]);
