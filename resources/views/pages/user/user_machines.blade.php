@@ -21,19 +21,29 @@
                   @endif
                   <table class='table'>
                       <thead>
-                          <th>Id</th>
-                          <th>CPU Available(%)</th>
-                          <th>RAM Available(Mb)</th>
-                          <th>Available(Now)</th>
+                          <th>Hashcode</th>
+                          <th>CPU/RAM Available</th>
+                          <th>Running</th>
                           <th>Options</th>
                       </thead>
                       <tbody>
                           @foreach ($machines as $machine)
                             <tr>
-                                <td>{{ $machine->id }}</td>
-                                <td>{{ $machine->cpu_utilizavel }}</td>
-                                <td>{{ $machine->ram_utilizavel }}</td>
-                                <td>{{ $machine->disponivel?'Yes':'No' }}</td>
+                                <td>{{ $machine->hashcode }}</td>
+                                <td>
+                                  {{ $machine->cpu_utilizavel }}%
+                                  <span>/</span>
+                                  {{ $machine->ram_utilizavel }}MB
+                                </td>
+                                <td>
+                                  @if($machine->disponivel)
+                                    <div class="spinner-grow text-success" role="status">
+                                      <span class="sr-only">Loading...</span>
+                                    </div>
+                                  @else
+                                    Stopped
+                                  @endif
+                                </td>
                                 <td>
                                   <div class='content'>
                                     <div class='conteiner-fluid'>
@@ -59,10 +69,10 @@
                                 <div class="collapse" id="{{ $machine->id }}">
                                   @include('pages.user.machine_show_form', ['machine' => $machine])
                                   <a href="{{ route('machines.show', $machine) }}" class="btn btn-sm btn-outline-info">
-                                    Mais detalhes
+                                    More Details
                                   </a>
                                   <button class="btn btn-sm btn-outline" type="button" data-toggle="collapse" data-target="#{{ $machine->id }}" aria-expanded="false" aria-controls="collapseExample">
-                                    Ocultar
+                                    Ocult
                                   </button>
                                 </div>
                               </td>
