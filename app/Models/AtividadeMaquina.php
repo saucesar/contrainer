@@ -27,4 +27,14 @@ class AtividadeMaquina extends Model
     {
         return $this->machine()->user();
     }
+
+    public function activityTime($round = 0)
+    {
+        if($this->dataHoraFim) {
+            $time = strtotime($this->dataHoraFim) - strtotime($this->dataHoraInicio);
+        } else {
+            $time = strtotime(now()) - strtotime($this->dataHoraInicio);
+        }
+        return ($round ? round($time/3600, $round) : $time/3600);
+    }
 }
