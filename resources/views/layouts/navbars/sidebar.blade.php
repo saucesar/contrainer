@@ -32,7 +32,7 @@
       <li class="nav-item{{ $activePage == 'user-container' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('containers.index') }}">
           <i class="fas fa-box"></i>
-            <span class="sidebar-normal"> {{ __('Containers') }} </span>
+            <span class="sidebar-normal"> {{ __('Container Images') }} </span>
         </a>
       </li>
       <!-- <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
