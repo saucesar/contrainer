@@ -28,8 +28,8 @@
                       <tbody>
                           @foreach ($containers as $container)
                             <td>{{ $container->id }}</td>
-                            <td>{{ $container->descricao }}</td>
-                            <td>{{ $container->programas }}</td>
+                            <td>{{ $container->description }}</td>
+                            <td>{{ $container->programs }}</td>
                             <td>
                               <a href="#">
                                 <i class="material-icons">queue</i>
