@@ -16,4 +16,19 @@ class Maquina extends Model
     {
         return User::firstWhere('id', $this->user_id);
     }
+
+    public function totalTimeActivity($round = 0)
+    {
+        $activities = AtividadeMaquina::where('hashcode_maquina', $this->hashcode)->get();
+        $time = 0;
+
+        foreach($activities as $act) {
+            if($act->dataHoraFim) {
+                $time += strtotime($act->dataHoraFim) - strtotime($act->dataHoraInicio);
+            } else {
+                $time += strtotime(now()) - strtotime($act->dataHoraInicio);
+            }
+        }
+        return ($round ? round($time/3600, $round) : $time/3600);
+    }
 }
