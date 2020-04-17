@@ -31,4 +31,16 @@ class Maquina extends Model
         }
         return ($round ? round($time/3600, $round) : $time/3600);
     }
+
+    public static function totalTimeAllMachines($round =0)
+    {
+        $machines = Maquina::all();
+        $total = 0;
+
+        foreach($machines as $machine){
+            $total += $machine->totalTimeActivity();
+        }
+
+        return ($round ? round($total, $round) : $total);
+    }
 }
