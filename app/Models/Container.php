@@ -9,9 +9,7 @@ class Container extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['descricao', 'programas'];
-
-    protected $casts = ['programas' => 'json'];
+    protected $fillable = ['description', 'programs', 'command'];
     
     public static $rules = [
         'descricao' => ['required', 'between:20,1024'],
