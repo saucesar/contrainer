@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Maquina;
 use App\Http\Requests\MachineRequest;
+use App\Models\AtividadeMaquina;
 use Illuminate\Support\Facades\Auth;
 
 class MaquinasController extends Controller
@@ -27,7 +28,15 @@ class MaquinasController extends Controller
 
     public function show($id)
     {
-        return view('pages.user.machine_show', ['machine' =>  Maquina::firstWhere('id', $id)]);
+        $machine = Maquina::firstWhere('id', $id);
+        $params = [
+            'machine'    => $machine,
+            'activities' => AtividadeMaquina::where('hashcode_maquina', $machine->hashcode )
+                                                    ->orderBy('created_at','desc')->limit(20)
+                                                    ->get()
+        ];
+        //dd($params);
+        return view('pages.user.machine_show', $params);
     }
 
     public function edit($id)
