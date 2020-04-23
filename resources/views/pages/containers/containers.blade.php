@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'user-container', 'titlePage' => __("Avaiable Container")])
+@extends('layouts.app', ['activePage' => 'user-container', 'titlePage' => __("Containers")])
 
 @push('js')
 @endpush
@@ -15,10 +15,12 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                  <a href="{{ route('containers.create') }}">
-                    <i class="material-icons">queue</i>
-                    Add New
-                  </a>
+                  @if ($isAdmin)
+                    <a href="{{ route('containers.create') }}">
+                      <i class="material-icons">queue</i>
+                      Add New
+                    </a>
+                  @endif
                   @if(session('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
                   @endif
@@ -39,15 +41,15 @@
                           @foreach ($containers as $container)
                             <tr>
                               <td>{{ $container->name }}</td>
-                              <td>{{ $container->description }}</td>
-                              <td>{{ $container->programs }}</td>
+                              <td width='400px'>{{ $container->description }}</td>
+                              <td width='150px'>{{ $container->programs }}</td>
                               @if ($isAdmin)
                                 <td>{{ $container->command }}</td>
                               @endif
                               <td>
                                 <div class='row'>
                                   {!! Form::open(['route' => ['containers.instaciate', $container], 'method' => 'post']) !!}
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <button type="submit" class="btn btn-sucess btn-danger">
                                       <i class="material-icons">queue</i>
                                       Create
                                     </button>
