@@ -17,7 +17,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'phone','tipo_usuario'];
+    protected $fillable = ['name', 'email', 'password', 'phone','user_type'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -36,5 +36,10 @@ class User extends Authenticatable
     public function machines()
     {
         return $this->hasMany(Maquina::class);
+    }
+
+    public function isAdmin()
+    {
+        return ($this->user_type == 'admin');
     }
 }
