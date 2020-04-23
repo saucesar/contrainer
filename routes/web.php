@@ -26,7 +26,7 @@ Route::get('/', function () {
 });
 
 Route::resource('machines','MaquinasController')->except('index')->middleware('auth');
-Route::resource('containers','ContainersController');
+Route::resource('containers','ContainersController')->except('show')->middleware('auth');
 Auth::routes();
 
 Auth::routes();
