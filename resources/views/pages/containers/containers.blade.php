@@ -48,10 +48,11 @@
                               @endif
                               <td>
                                 <div class='row'>
-                                  {!! Form::open(['route' => ['containers.instaciate', $container], 'method' => 'post']) !!}
+                                  {!! Form::open(['route' => ['InstanciaContainers.store', $container], 'method' => 'post']) !!}
+                                    <input type="hidden" value="{{ $container->id }}" name='id'>
                                     <button type="submit" class="btn btn-sucess btn-danger">
                                       <i class="material-icons">queue</i>
-                                      Create
+                                      Use
                                     </button>
                                   {!! Form::close() !!}
                                   @if ($isAdmin)
