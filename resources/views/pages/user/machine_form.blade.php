@@ -10,7 +10,7 @@
 </select>
 <br>
 <br>
-<label>RAM Usage Limit(MB)</label>
+<label>RAM Usage Limit (MB)</label>
 <select name="ram_utilizavel" class='custom-select'>
     @for ($i = 128; $i <= 1024; $i+=128)
         @if ($selected_ram && $i == $selected_ram)
