@@ -18,7 +18,8 @@ class CreateContainersTable extends Migration
             $table->string('name');
             $table->string('description',1024);
             $table->string('programs')->nullable();
-            $table->string('command');
+            $table->string('command_pull');
+            $table->string('command_run');
             $table->timestamps();
             $table->softDeletes();
         });
