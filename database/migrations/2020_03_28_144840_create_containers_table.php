@@ -15,8 +15,9 @@ class CreateContainersTable extends Migration
     {
         Schema::create('containers', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('description',1024);
-            $table->string('programs');
+            $table->string('programs')->nullable();
             $table->string('command');
             $table->timestamps();
             $table->softDeletes();

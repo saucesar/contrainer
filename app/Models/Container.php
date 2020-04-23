@@ -9,19 +9,10 @@ class Container extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['description', 'programs', 'command'];
-    
-    public static $rules = [
-        'descricao' => ['required', 'between:20,1024'],
-    ];
-
-    public static $messages = [
-        'required' => 'O campo :attribute é obrigatório.',
-        'between'  => 'O campo :attribute deve ter entre 20 e 1024 caracteres.'
-    ];
+    protected $fillable = ['name', 'description', 'programs', 'command'];
 
     public function programas()
     {   //Tranforma a string programas em um array
-        return explode(',',$this->programas());
+        return explode(',',$this->programs);
     }
 }
