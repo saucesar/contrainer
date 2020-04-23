@@ -46,10 +46,12 @@
                               @endif
                               <td>
                                 <div class='row'>
-                                  <a href="{{ route('containers.instaciate', $container) }}" class="btn btn-sm btn-outline-danger">
-                                    <i class="material-icons">queue</i>
-                                    Create
-                                  </a>
+                                  {!! Form::open(['route' => ['containers.instaciate', $container], 'method' => 'post']) !!}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                      <i class="material-icons">queue</i>
+                                      Create
+                                    </button>
+                                  {!! Form::close() !!}
                                   @if ($isAdmin)
                                     <a href="{{ route('containers.edit', $container) }}" class="btn btn-sm btn-outline-warning">
                                       <i class="material-icons">create</i>

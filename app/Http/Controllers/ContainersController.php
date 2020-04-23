@@ -10,20 +10,6 @@ use Symfony\Component\Process\Process;
 
 class ContainersController extends Controller
 {
-    public function instanciate($id)
-    {
-        dd($id);
-        $container = Container::firstWhere('id', $id);
-        if($container){
-            $process = new Process([$container->command]);
-            $process->run();
-
-            return redirect()->route('containers.index')->with('success', 'Container created with sucess!');
-        } else{
-            return redirect()->route('containers.index')->with('error', 'Problem to create the container!');
-        }
-    }
-
     public function index()
     {
         return view('pages/containers/containers',['containers' => Container::all(), 'isAdmin' => Auth::user()->isAdmin()]);
