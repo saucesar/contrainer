@@ -15,27 +15,54 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
+                  <a href="{{ route('containers.create') }}">
+                    <i class="material-icons">queue</i>
+                    Add New
+                  </a>
                   @if(session('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
                   @endif
+                  @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                  @endif
                   <table class='table'>
                       <thead>
-                          <th>Id</th>
+                          <th>Name</th>
                           <th>Description</th>
                           <th>Programs</th>
-                          <th></th>
+                          @if ($isAdmin)
+                            <th>Command</th>
+                          @endif
+                          <th>Options</th>
                       </thead>
                       <tbody>
                           @foreach ($containers as $container)
-                            <td>{{ $container->id }}</td>
-                            <td>{{ $container->description }}</td>
-                            <td>{{ $container->programs }}</td>
-                            <td>
-                              <a href="#">
-                                <i class="material-icons">queue</i>
-                                Instantiate
-                              </a>
-                            </td>
+                            <tr>
+                              <td>{{ $container->name }}</td>
+                              <td>{{ $container->description }}</td>
+                              <td>{{ $container->programs }}</td>
+                              @if ($isAdmin)
+                                <td>{{ $container->command }}</td>
+                              @endif
+                              <td>
+                                <div class='row'>
+                                  <a href="{{ route('containers.instaciate', $container) }}" class="btn btn-sm btn-outline-danger">
+                                    <i class="material-icons">queue</i>
+                                    Create
+                                  </a>
+                                  @if ($isAdmin)
+                                    <a href="{{ route('containers.edit', $container) }}" class="btn btn-sm btn-outline-warning">
+                                      <i class="material-icons">create</i>
+                                    </a>
+                                    {!! Form::open(['route' => ['containers.destroy', $container], 'method' => 'delete']) !!}
+                                      <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="material-icons">delete_sweep</i>
+                                      </button>
+                                    {!! Form::close() !!}
+                                  @endif
+                                </div>
+                              </td>
+                              </tr>
                           @endforeach
                       </tbody>
                   </table>
