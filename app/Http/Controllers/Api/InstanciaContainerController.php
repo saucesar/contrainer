@@ -10,11 +10,11 @@ use Symfony\Component\Process\Process;
 
 class InstanciaContainerController extends Controller
 {
-    public function instanciate(Request $request, $id)
+    public function instanciate(Request $request)
     {
         //dd($id);
         dd($request);
-        $container = Container::firstWhere('id', $id);
+        $container = Container::firstWhere('id', $request->id);
         if($container){
             $process = new Process([$container->command]);
             $process->run();
@@ -37,8 +37,16 @@ class InstanciaContainerController extends Controller
 
     public function store(Request $request)
     {
-        $this->validar($request);
-        InstanciaContainer::create($request->all());
+        $container = Container::firstWhere('id', $request->id);
+
+        if($container){
+            $process = new Process([$container->command, "docker run $container->name"]);
+            $process->start();
+
+            return redirect()->route('containers.index')->with('success', 'Container created with sucess!');
+        } else{
+            return redirect()->route('containers.index')->with('error', 'Problem to create the container!');
+        }
     }
 
     public function show($id)
