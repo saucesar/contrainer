@@ -31,42 +31,46 @@
                       <thead>
                           <th>Name</th>
                           <th>Description</th>
-                          <th>Programs</th>
-                          @if ($isAdmin)
-                            <th>Command</th>
-                          @endif
                           <th>Options</th>
                       </thead>
                       <tbody>
                           @foreach ($containers as $container)
                             <tr>
                               <td>{{ $container->name }}</td>
-                              <td width='400px'>{{ $container->description }}</td>
-                              <td width='150px'>{{ $container->programs }}</td>
-                              @if ($isAdmin)
-                                <td>{{ $container->command }}</td>
-                              @endif
-                              <td>
+                              <td width='600px'>{{ $container->description }}</td>
+                              <td class="td-actions text-right">
                                 <div class='row'>
                                   {!! Form::open(['route' => ['InstanciaContainers.store', $container], 'method' => 'post']) !!}
                                     <input type="hidden" value="{{ $container->id }}" name='id'>
-                                    <button type="submit" class="btn btn-sucess btn-danger">
+                                    <button type="submit" class="btn btn-sucess btn-link">
                                       <i class="material-icons">queue</i>
                                       Use
                                     </button>
                                   {!! Form::close() !!}
                                   @if ($isAdmin)
-                                    <a href="{{ route('containers.edit', $container) }}" class="btn btn-sm btn-outline-warning">
-                                      <i class="material-icons">create</i>
+                                    <a rel="tooltip" class="btn btn-success btn-link" data-toggle="collapse" data-target="#{{ $container->id }}" aria-expanded="false" aria-controls="collapseExample">
+                                      <i class="material-icons">details</i>
+                                      <div class="ripple-container"></div>
+                                    </a>
+                                    <a href="{{ route('containers.edit', $container) }}" class="btn btn-warning btn-link">
+                                      <i class="material-icons">edit</i>
                                     </a>
                                     {!! Form::open(['route' => ['containers.destroy', $container], 'method' => 'delete']) !!}
-                                      <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-sm btn-outline-danger">
+                                      <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger btn-link">
                                         <i class="material-icons">delete_sweep</i>
                                       </button>
                                     {!! Form::close() !!}
                                   @endif
                                 </div>
                               </td>
+                              </tr>
+                              <tr>
+                                <td></td>
+                                <td>
+                                  <div class="collapse" id="{{ $container->id }}">
+                                    @include('pages.containers.containers_show_form', ['container' => $container, 'isAdmin' => $isAdmin])
+                                  </div>
+                                </td>
                               </tr>
                           @endforeach
                       </tbody>

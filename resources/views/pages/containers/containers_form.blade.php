@@ -13,9 +13,16 @@
 </div>
 <br>
 <div class="row">
-    {!! Form::label('Command', null, ['class'=>"col-sm-2 col-form-label"]) !!}
+    {!! Form::label('Command pull', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">
-        {!! Form::text('command', $container->command ?? null, ['class'=>"form-control", 'placeholder' =>"Command to create a container", 'required'=>"true"]) !!}
+        {!! Form::text('command_pull', $container->command_pull ?? null, ['class'=>"form-control", 'placeholder' =>"Command to download image a container", 'required'=>"true"]) !!}
+    </div>
+</div>
+<br>
+<div class="row">
+    {!! Form::label('Command run', null, ['class'=>"col-sm-2 col-form-label"]) !!}
+    <div class="col-sm">
+        {!! Form::text('command_run', $container->command_run ?? null, ['class'=>"form-control", 'placeholder' =>"Command to create a container", 'required'=>"true"]) !!}
     </div>
 </div>
 <br>

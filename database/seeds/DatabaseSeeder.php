@@ -46,7 +46,8 @@ class DatabaseSeeder extends Seeder
                                protocols, as well as a load balancer, HTTP cache, and a web
                                server (origin server).',
             'programs'  => "",
-            'command'  => "docker pull nginx",
+            'command_pull'  => "docker pull nginx",
+            'command_run'  => "docker run --name some-nginx -d some-content-nginx",
             'created_at' => now(),
             'updated_at' => now()
         ]);

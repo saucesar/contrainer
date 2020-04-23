@@ -9,7 +9,7 @@ class Container extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'programs', 'command'];
+    protected $fillable = ['name', 'description', 'programs', 'command_pull', 'command_run'];
 
     public function programas()
     {   //Tranforma a string programas em um array

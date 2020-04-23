@@ -27,12 +27,8 @@ class ContainersController extends Controller
         if( Auth::user()->isAdmin()){
             $container = Container::create($request->all());
         }
-        
-        if($container) {
-            return redirect()->route('containers.index');
-        } else {
-            return redirect()->back()->withInput();
-        }
+
+        return redirect()->route('containers.index');
     }
 
     public function show($id)
@@ -68,7 +64,8 @@ class ContainersController extends Controller
         $this->validate($request, [
             'name' => ['required'],
             'description' => ['required '],
-            'command' => ['required'],
+            'command_pull' => ['required'],
+            'command_run' => ['required'],
         ]);
     }
 }
