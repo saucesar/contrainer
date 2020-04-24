@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
                                server (origin server).',
             'programs'  => "",
             'command_pull'  => "docker pull nginx",
-            'command_run'  => "docker run --name some-nginx -d some-content-nginx",
+            'command_run'  => "docker run -d nginx",
             'created_at' => now(),
             'updated_at' => now()
         ]);
