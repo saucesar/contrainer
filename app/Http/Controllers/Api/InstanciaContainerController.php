@@ -5,25 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Container;
 use App\Models\InstanciaContainer;
+use App\Models\Maquina;
+use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 
 class InstanciaContainerController extends Controller
 {
-    public function instanciate(Request $request)
-    {
-        //dd($id);
-        dd($request);
-        $container = Container::firstWhere('id', $request->id);
-        if($container){
-            $process = new Process([$container->command]);
-            $process->run();
-
-            return redirect()->route('containers.index')->with('success', 'Container created with sucess!');
-        } else{
-            return redirect()->route('containers.index')->with('error', 'Problem to create the container!');
-        }
-    }
 
     public function index()
     {
@@ -37,15 +25,31 @@ class InstanciaContainerController extends Controller
 
     public function store(Request $request)
     {
-        $container = Container::firstWhere('id', $request->id);
+        try{
+            $container = Container::findOrFail($request->id);
 
-        if($container){
-            $process = new Process([$container->command, "docker run $container->name"]);
-            $process->start();
+            $process_pull = new Process(explode(" ", $container->command_pull));
+            $process_pull->mustRun();
+            $out_pull = $process_pull->getOutput();
 
-            return redirect()->route('containers.index')->with('success', 'Container created with sucess!');
-        } else{
-            return redirect()->route('containers.index')->with('error', 'Problem to create the container!');
+            $process_run = new Process(explode(" ", $container->command_run));
+            $process_run->mustRun();
+            $container_id = substr($process_run->getOutput(), 0, -1);;
+
+            $data = [
+                'hashcode_maquina'     => Maquina::first()->hashcode,
+                'container_docker_id'  => $container_id,
+                'user_id'              => $request->user_id,
+                'dataHora_instanciado' => now(),
+                'dataHora_finalizado'  => null
+            ];
+            
+            InstanciaContainer::create($data);
+            
+            session(['success' => 'Container created with sucess!']);
+            return redirect()->route('containers.index',['success' => 'Container created with sucess!']);
+        } catch(Exception $e) {
+            return  $e->getMessage();
         }
     }
 
