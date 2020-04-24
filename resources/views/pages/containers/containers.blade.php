@@ -19,7 +19,7 @@
                     <a href="{{ route('containers.create') }}">
                       <i class="material-icons">queue</i>
                       Add New
-                    </a>
+                    </a><br>
                   @endif
                   @if(session('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
@@ -37,13 +37,14 @@
                           @foreach ($containers as $container)
                             <tr>
                               <td>{{ $container->name }}</td>
-                              <td width='600px'>{{ $container->description }}</td>
+                              <td width='550px'>{{ $container->description }}</td>
                               <td class="td-actions text-right">
                                 <div class='row'>
                                   {!! Form::open(['route' => ['InstanciaContainers.store', $container], 'method' => 'post']) !!}
                                     <input type="hidden" value="{{ $container->id }}" name='id'>
+                                    <input type="hidden" value="{{ $user_id }}" name='user_id'>
                                     <button type="submit" class="btn btn-sucess btn-link">
-                                      <i class="material-icons">queue</i>
+                                      <i class="material-icons">play_circle_filled</i>
                                       Use
                                     </button>
                                   {!! Form::close() !!}
