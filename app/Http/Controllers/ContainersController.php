@@ -11,7 +11,12 @@ class ContainersController extends Controller
 {
     public function index()
     {
-        return view('pages/containers/containers',['containers' => Container::all(), 'isAdmin' => Auth::user()->isAdmin()]);
+        $data = ['containers' => Container::all(),
+                 'isAdmin' => Auth::user()->isAdmin(),
+                 'user_id' => Auth::user()->id
+        ];
+
+        return view('pages/containers/containers',$data);
     }
 
     public function create()
@@ -28,7 +33,7 @@ class ContainersController extends Controller
             $container = Container::create($request->all());
         }
 
-        return redirect()->route('containers.index');
+        return redirect()->route('containers.index')->with('success', 'Container created!!!');
     }
 
     public function show($id)
@@ -48,7 +53,7 @@ class ContainersController extends Controller
             $container = Container::firstWhere('id', $id);
             $container->update($request->all());
         }
-        return redirect()->route('containers.index');
+        return redirect()->route('containers.index')->with('success', 'Container updated!!!');
     }
 
     public function destroy($id)
@@ -56,7 +61,7 @@ class ContainersController extends Controller
         $container = Container::firstWhere('id', $id);
 
         $container->delete();
-        return redirect()->route('containers.index');
+        return redirect()->route('containers.index')->with('success', 'Container deleted!!!');
     }
 
     private function validar(Request $request)
