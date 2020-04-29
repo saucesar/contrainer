@@ -44,10 +44,12 @@ class InstanciaContainerController extends Controller
                 'dataHora_finalizado'  => null
             ];
             
-            InstanciaContainer::create($data);
+            if($process_run->isSuccessful()){
+                InstanciaContainer::create($data);
+            }
             
             session(['success' => 'Container created with sucess!']);
-            return redirect()->route('containers.index',['success' => 'Container created with sucess!']);
+            return redirect()->route('containers.index')->with('success', 'Container created with sucess!');
         } catch(Exception $e) {
             return  $e->getMessage();
         }
