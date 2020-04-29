@@ -15,12 +15,6 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                  @if ($isAdmin)
-                    <a href="{{ route('containers.create') }}">
-                      <i class="material-icons">queue</i>
-                      Add New
-                    </a><br>
-                  @endif
                   @if(session('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
                   @endif
@@ -81,6 +75,18 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="col-lg-11 text-right" style="margin-left: 48px;">
+      @if ($isAdmin)
+        <button class="btn btn-primary btn-fab btn-round">
+          <a href="{{ route('containers.create') }}">
+            <i class="material-icons" style="color:white">add_to_queue</i>
+          </a>
+          @if(session('error'))
+          <div class="alert alert-danger">{{ session('error') }}</div>
+          @endif
+        </button>
+      @endif
     </div>
   </div>
 @endsection
