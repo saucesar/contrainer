@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Container;
 use App\Models\InstanciaContainer;
-use App\Models\Maquina;
 use Exception;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Process\Process;
 
 class InstanciaContainerController extends Controller
 {
-
     public function index()
     {
         //
@@ -23,33 +22,33 @@ class InstanciaContainerController extends Controller
         //
     }
 
+    public function stop($container_id)
+    {
+        $instancia = InstanciaContainer::where('container_docker_id', $container_id)->first();
+        $cmd = "docker stop $container_id";
+        try{
+            $process_pull = new Process(explode(" ", $cmd));
+            $process_pull->mustRun();
+
+            $instancia->dataHora_finalizado = now();
+            $instancia->save();
+    
+            return redirect()->route('instance.index')->with('success', 'Container created with sucess!');
+        } catch(Exception $e) {
+            return redirect()->route('instance.index')->with('error', "Fail to stop the container! $e");
+        }
+    }
+
     public function store(Request $request)
     {
         try{
-            $container = Container::findOrFail($request->id);
-
-            $process_pull = new Process(explode(" ", $container->command_pull));
-            $process_pull->mustRun();
-            $out_pull = $process_pull->getOutput();
-
-            $process_run = new Process(explode(" ", $container->command_run));
-            $process_run->mustRun();
-            $container_id = substr($process_run->getOutput(), 0, -1);;
-
-            $data = [
-                'hashcode_maquina'     => Maquina::first()->hashcode,
-                'container_docker_id'  => $container_id,
-                'user_id'              => $request->user_id,
-                'dataHora_instanciado' => now(),
-                'dataHora_finalizado'  => null
+            $params = [
+                'imageId' => $request->id,
+                'userId' => $request->user_id
             ];
-            
-            if($process_run->isSuccessful()){
-                InstanciaContainer::create($data);
-            }
-            
-            session(['success' => 'Container created with sucess!']);
-            return redirect()->route('containers.index')->with('success', 'Container created with sucess!');
+
+            Artisan::call('create:container', $params);
+            return redirect()->route('instance.index')->with('success', 'Container creation is running!');
         } catch(Exception $e) {
             return  $e->getMessage();
         }
@@ -62,7 +61,12 @@ class InstanciaContainerController extends Controller
 
     public function edit($id)
     {
-        //
+        $instancia = InstanciaContainer::firstWhere('id', $id);
+        
+        $instancia->dataHora_finalizado = now();
+        $instancia->save();
+
+        return redirect()->route('instance.index')->with('success', 'Container created with sucess!');
     }
 
     public function update(Request $request, $id)
@@ -76,6 +80,7 @@ class InstanciaContainerController extends Controller
     {
         $instancia = InstanciaContainer::firstWhere('id', $id);
         $instancia->delete();
+        return redirect()->route('instance.index')->with('success', 'Container created with sucess!');
     }
 
     private function validar(Request $request)
