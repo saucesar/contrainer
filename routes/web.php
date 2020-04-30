@@ -27,6 +27,7 @@ Route::get('/', function () {
 
 Route::resource('machines','MaquinasController')->except('index')->middleware('auth');
 Route::resource('containers','ContainersController')->except('show')->middleware('auth');
+Route::get("containers-instace","ContainersController@instanceIndex")->name("instance.index");
 Auth::routes();
 
 Auth::routes();
