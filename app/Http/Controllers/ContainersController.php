@@ -6,9 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Container;
 use Illuminate\Support\Facades\Auth;
+use App\Models\InstanciaContainer;
 
 class ContainersController extends Controller
 {
+    public function instanceIndex()
+    {
+        $containers =  InstanciaContainer::where('user_id', Auth::user()->id)->get();
+        return view('pages/my-containers/my_containers', ['mycontainers' => $containers]);
+    }
+
     public function index()
     {
         $data = ['containers' => Container::all(),
