@@ -31,8 +31,14 @@
       </li>
       <li class="nav-item{{ $activePage == 'user-container' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('containers.index') }}">
-          <i class="fas fa-box"></i>
+          <i class="material-icons">album</i>
             <span class="sidebar-normal"> {{ __('Container Images') }} </span>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'my-containers' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('instance.index') }}">
+          <i class="material-icons">ondemand_video</i>
+            <span class="sidebar-normal"> {{ __('My Containers') }} </span>
         </a>
       </li>
       <!-- <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
