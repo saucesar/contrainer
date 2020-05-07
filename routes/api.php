@@ -20,4 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResource('atividadeMaquinas','Api\AtividadeMaquinasController');
 Route::apiResource('InstanciaContainers','Api\InstanciaContainerController');
-Route::get('InstanciaContainers/stop/{containerId}','Api\InstanciaContainerController@stop')->name('instance.stop');
+Route::get('InstanciaContainers/stop/{containerId}','Api\InstanciaContainerController@playStop')->name('instance.playStop');
