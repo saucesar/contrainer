@@ -34,7 +34,7 @@
                               <td width='550px'>{{ $container->description }}</td>
                               <td class="td-actions text-right">
                                 <div class='row'>
-                                  {!! Form::open(['route' => ['InstanciaContainers.store', $container], 'method' => 'post']) !!}
+                                  {!! Form::open(['route' => 'InstanciaContainers.store', 'method' => 'post']) !!}
                                     <input type="hidden" value="{{ $container->id }}" name='id'>
                                     <input type="hidden" value="{{ $user_id }}" name='user_id'>
                                     <button type="submit" class="btn btn-sucess btn-link">
@@ -61,7 +61,7 @@
                               </tr>
                               <tr>
                                 <td></td>
-                                <td>
+                                <td colspan="2">
                                   <div class="collapse" id="{{ $container->id }}">
                                     @include('pages.containers.containers_show_form', ['container' => $container, 'isAdmin' => $isAdmin])
                                   </div>
