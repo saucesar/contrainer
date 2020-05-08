@@ -11,16 +11,6 @@ use Symfony\Component\Process\Process;
 
 class InstanciaContainerController extends Controller
 {
-    public function index()
-    {
-        //
-    }
-
-    public function create()
-    {
-        //
-    }
-
     public function playStop($container_id)
     {
         $instancia = InstanciaContainer::where('container_docker_id', $container_id)->first();
@@ -54,7 +44,7 @@ class InstanciaContainerController extends Controller
                 'userId'  => $request->user_id,
             ];
 
-            $job = Artisan::call("create:container", $params);
+            Artisan::call("create:container", $params);
             return redirect()->route('instance.index')->with('success', 'Container creation is running!');
         } catch(Exception $e) {
             return  $e->getMessage();
