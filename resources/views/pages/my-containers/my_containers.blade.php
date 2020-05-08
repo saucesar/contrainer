@@ -46,14 +46,35 @@
                               </td>
                               <td class="td-actions text-right">
                                 <div class='row'>
-                                  <a href="{{ route('instance.stop', $container->container_docker_id) }}" class="btn btn-warning" data-original-title="" title="">
-                                    <i class=" material-icons">stop</i>
+                                  @if($container->dataHora_finalizado)
+                                  <a href="{{ route('instance.playStop', $container->container_docker_id) }}" class="btn btn-success" data-original-title="" title="">
+                                    <i class=" material-icons">play_circle_outline</i>
                                   </a>
+                                  @else
+                                  <a href="{{ route('instance.playStop', $container->container_docker_id) }}" class="btn btn-warning" data-original-title="" title="">
+                                    <i class=" material-icons">pause_circle_outline</i>
+                                  </a>
+                                  @endif
+
+                                  <a rel="tooltip" class="btn btn-success btn-link" data-toggle="collapse" data-target="#{{ $container->id }}" aria-expanded="false" aria-controls="collapseExample">
+                                      <i class="material-icons">details</i>
+                                      <div class="ripple-container"></div>
+                                    </a>
+                                    <a href="{{ route('containers.edit', $container) }}" class="btn btn-warning btn-link">
+                                      <i class="material-icons">edit</i>
+                                    </a>
                                   {!! Form::open(['route' => ['InstanciaContainers.destroy', $container], 'method' => 'delete']) !!}
-                                    <button type="button" class="btn btn-danger" data-original-title="" title="" onclick="return confirm('Are you sure?')" type="submit">
+                                    <button type="submit" class="btn btn-danger btn-link" data-original-title="" title="" onclick="return confirm('Are you sure?')" type="submit">
                                         <i class="material-icons">delete</i>
                                     </button>
                                   {!! Form::close() !!}
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colspan='5' width = "100px">
+                                <div class="collapse card-header" style="background: gray;" id="{{ $container->id }}">
+                                  @include('pages.my-containers.my_containers_show', ['mycontainer' => $container])
                                 </div>
                               </td>
                             </tr>
