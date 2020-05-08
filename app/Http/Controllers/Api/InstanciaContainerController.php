@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\InstanciaContainer;
 use Exception;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Process\Process;
@@ -22,15 +21,23 @@ class InstanciaContainerController extends Controller
         //
     }
 
-    public function stop($container_id)
+    public function playStop($container_id)
     {
         $instancia = InstanciaContainer::where('container_docker_id', $container_id)->first();
-        $cmd = "docker stop $container_id";
+        
+        if($instancia->dataHora_finalizado){
+            $cmd = "docker start $container_id";
+            $dataHora_fim = null;
+        } else {
+            $cmd = "docker stop $container_id";
+            $dataHora_fim = now();
+        }
+
         try{
             $process_pull = new Process(explode(" ", $cmd));
             $process_pull->mustRun();
 
-            $instancia->dataHora_finalizado = now();
+            $instancia->dataHora_finalizado = $dataHora_fim;
             $instancia->save();
     
             return redirect()->route('instance.index')->with('success', 'Container created with sucess!');
@@ -44,10 +51,10 @@ class InstanciaContainerController extends Controller
         try{
             $params = [
                 'imageId' => $request->id,
-                'userId' => $request->user_id
+                'userId'  => $request->user_id,
             ];
 
-            Artisan::call('create:container', $params);
+            $job = Artisan::call("create:container", $params);
             return redirect()->route('instance.index')->with('success', 'Container creation is running!');
         } catch(Exception $e) {
             return  $e->getMessage();

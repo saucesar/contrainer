@@ -31,18 +31,15 @@ class CreateContainer extends Command
 
         $cmd = "$containerImage->command_pull && $containerImage->command_run";
 
-        $process_pull = Process::fromShellCommandline($cmd);
-        $process_pull->start();
-        $process_pull->wait();
-
+        $process = Process::fromShellCommandline($cmd);
+        $process->run();
         $bar->advance();
 
-        if($process_pull->isSuccessful()){
+        if($process->isSuccessful()){
             $this->info("Image $containerImage->name successfully downloaded/updated.");
             
-            $out = explode("\n",$process_pull->getOutput());    
-            $container_id = $out[5];
-                
+            $out = explode("\n", $process->getOutput());    
+            $container_id = $out[4];
             $data = [
                 'hashcode_maquina'     => Maquina::first()->hashcode,
                 'container_docker_id'  => $container_id,
