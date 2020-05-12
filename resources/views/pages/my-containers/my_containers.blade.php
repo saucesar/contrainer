@@ -74,7 +74,7 @@
                               </td>
                             </tr>
                             <tr>
-                              <td colspan='5' width = "100px">
+                              <td colspan='6'>
                                 <div class="collapse card-header" style="background: gray;" id="{{ $container->id }}">
                                   @include('pages.my-containers.my_containers_show', ['mycontainer' => $container, 'consoleOuts' => $consoleOuts])
                                 </div>
