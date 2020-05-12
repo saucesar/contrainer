@@ -25,6 +25,7 @@
                       <thead>
                           <th>Machine Hashcode</th>
                           <th>Container Id</th>
+                          <th>Nickname</th>
                           <th>Iniciated at</th>
                           <th>Running</th>
                           <th>Options</th>
@@ -34,6 +35,7 @@
                             <tr>
                               <td>{{ substr($container->hashcode_maquina, 0, 10) }} ...</td>  
                               <td>{{ substr($container->container_docker_id, 0, 10  ) }}</td>  
+                              <td>{{ $container->nickname }}</td>
                               <td>{{ $container->dataHora_instanciado }}</td>
                               <td>
                                   @if ($container->dataHora_finalizado)
@@ -60,7 +62,7 @@
                                       <i class="material-icons">details</i>
                                       <div class="ripple-container"></div>
                                     </a>
-                                    <a href="{{ route('containers.edit', $container) }}" class="btn btn-warning btn-link">
+                                    <a href="#" class="btn btn-warning btn-link">
                                       <i class="material-icons">edit</i>
                                     </a>
                                   {!! Form::open(['route' => ['InstanciaContainers.destroy', $container], 'method' => 'delete']) !!}
@@ -74,7 +76,7 @@
                             <tr>
                               <td colspan='5' width = "100px">
                                 <div class="collapse card-header" style="background: gray;" id="{{ $container->id }}">
-                                  @include('pages.my-containers.my_containers_show', ['mycontainer' => $container])
+                                  @include('pages.my-containers.my_containers_show', ['mycontainer' => $container, 'consoleOuts' => $consoleOuts])
                                 </div>
                               </td>
                             </tr>
