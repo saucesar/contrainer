@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\ConsoleOut;
 use Illuminate\Http\Request;
 use App\Models\Container;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,8 @@ class ContainersController extends Controller
     public function instanceIndex()
     {
         $containers =  InstanciaContainer::where('user_id', Auth::user()->id)->get();
-        return view('pages/my-containers/my_containers', ['mycontainers' => $containers]);
+        $outs = ConsoleOut::where('created_at','<', now())->orderBy('created_at', 'desc')->take(100)->get();
+        return view('pages/my-containers/my_containers', ['mycontainers' => $containers, 'consoleOuts' => $outs]);
     }
 
     public function index()
@@ -23,7 +25,7 @@ class ContainersController extends Controller
                  'user_id' => Auth::user()->id
         ];
 
-        return view('pages/containers/containers',$data);
+        return view('pages/containers/containers', $data);
     }
 
     public function create()
