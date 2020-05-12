@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ConsoleOut;
 use App\Models\InstanciaContainer;
 use Exception;
 use Illuminate\Http\Request;
@@ -34,6 +35,22 @@ class InstanciaContainerController extends Controller
         } catch(Exception $e) {
             return redirect()->route('instance.index')->with('error', "Fail to stop the container! $e");
         }
+    }
+
+    public function execInTerminal(Request $request, $containerId)
+    {
+        $cmd = "docker exec -i $containerId $request->command";
+        $process = Process::fromShellCommandline($cmd);
+        $process->run();
+        $data = [
+            'containerDockerId' => $containerId,
+            'command'           => $request->command,
+            'out'               => $process->getOutput(),
+            'status'            => $process->isSuccessful()
+        ];
+        ConsoleOut::create($data);
+        
+        return redirect()->route('instance.index')->with('success', 'Command executed with sucess!');
     }
 
     public function store(Request $request)
