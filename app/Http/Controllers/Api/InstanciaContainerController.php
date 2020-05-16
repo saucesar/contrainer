@@ -49,8 +49,7 @@ class InstanciaContainerController extends Controller
             'status'            => $process->isSuccessful()
         ];
         ConsoleOut::create($data);
-        
-        return redirect()->route('instance.index')->with('success', 'Command executed with sucess!');
+        return redirect()->back()->with('success', 'Command executed with sucess!');
     }
 
     public function store(Request $request)
@@ -92,9 +91,17 @@ class InstanciaContainerController extends Controller
 
     public function destroy($id)
     {
-        $instancia = InstanciaContainer::firstWhere('id', $id);
-        $instancia->delete();
-        return redirect()->route('instance.index')->with('success', 'Container created with sucess!');
+        $cmd = "docker rm $id -f";
+        $process = Process::fromShellCommandline($cmd);
+        $process->run();
+
+        if($process->isSuccessful()) {
+            $instancia = InstanciaContainer::firstWhere('container_docker_id', $id);
+            $instancia->delete();
+            return redirect()->route('instance.index')->with('success', 'Container deleted with sucess!');
+        } else {
+            return redirect()->route('instance.index')->with('error', 'Fail, Container not delete!');
+        }   
     }
 
     private function validar(Request $request)
