@@ -65,7 +65,7 @@
                                     <a href="#" class="btn btn-warning btn-link">
                                       <i class="material-icons">edit</i>
                                     </a>
-                                  {!! Form::open(['route' => ['InstanciaContainers.destroy', $container], 'method' => 'delete']) !!}
+                                  {!! Form::open(['route' => ['InstanciaContainers.destroy', $container->container_docker_id], 'method' => 'delete']) !!}
                                     <button type="submit" class="btn btn-danger btn-link" data-original-title="" title="" onclick="return confirm('Are you sure?')" type="submit">
                                         <i class="material-icons">delete</i>
                                     </button>
