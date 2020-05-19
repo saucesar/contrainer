@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Maquina;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard', ['totalTime' => Maquina::totalTimeAllMachines(2)]);
+        return view('dashboard', ['totalTime' => Maquina::totalTimeAllMachines(2), 'isAdmin' => Auth::user()->isAdmin()]);
     }
 }
