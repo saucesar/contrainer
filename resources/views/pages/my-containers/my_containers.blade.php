@@ -34,12 +34,14 @@
                           @foreach ($mycontainers as $container)
                             <tr>
                               <td>{{ substr($container->hashcode_maquina, 0, 10) }} ...</td>  
-                              <td>{{ substr($container->container_docker_id, 0, 10  ) }}</td>  
+                              <td>{{ substr($container->docker_id, 0, 12) }}</td>  
                               <td>{{ $container->nickname }}</td>
                               <td>{{ $container->dataHora_instanciado }}</td>
-                              <td>
+                              <td class="td-actions text-center">
                                   @if ($container->dataHora_finalizado)
-                                    Stoped
+                                    <a href="#" class="btn btn-danger" data-original-title="" title="">
+                                      <i class=" material-icons">stop</i>
+                                    </a>
                                   @else
                                     <div class="spinner-grow text-success" role="status">
                                         <span class="sr-only">Loading...</span>
@@ -49,11 +51,11 @@
                               <td class="td-actions text-right">
                                 <div class='row'>
                                   @if($container->dataHora_finalizado)
-                                  <a href="{{ route('instance.playStop', $container->container_docker_id) }}" class="btn btn-success" data-original-title="" title="">
+                                  <a href="{{ route('instance.playStop', $container->docker_id) }}" class="btn btn-success" data-original-title="" title="">
                                     <i class=" material-icons">play_circle_outline</i>
                                   </a>
                                   @else
-                                  <a href="{{ route('instance.playStop', $container->container_docker_id) }}" class="btn btn-warning" data-original-title="" title="">
+                                  <a href="{{ route('instance.playStop', $container->docker_id) }}" class="btn btn-warning" data-original-title="" title="">
                                     <i class=" material-icons">pause_circle_outline</i>
                                   </a>
                                   @endif
@@ -65,7 +67,7 @@
                                     <a href="#" class="btn btn-warning btn-link">
                                       <i class="material-icons">edit</i>
                                     </a>
-                                  {!! Form::open(['route' => ['InstanciaContainers.destroy', $container->container_docker_id], 'method' => 'delete']) !!}
+                                  {!! Form::open(['route' => ['InstanciaContainers.destroy', $container->docker_id], 'method' => 'delete']) !!}
                                     <button type="submit" class="btn btn-danger btn-link" data-original-title="" title="" onclick="return confirm('Are you sure?')" type="submit">
                                         <i class="material-icons">delete</i>
                                     </button>
@@ -76,7 +78,7 @@
                             <tr>
                               <td colspan='6'>
                                 <div class="collapse card-header" style="background: gray;" id="{{ $container->id }}">
-                                  @include('pages.my-containers.my_containers_show', ['mycontainer' => $container, 'consoleOuts' => $consoleOuts])
+                                  @include('pages.my-containers.my_containers_show', ['mycontainer' => $container, 'consoleOuts' => $consoleOuts, 'newTab' => false])
                                 </div>
                               </td>
                             </tr>

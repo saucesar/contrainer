@@ -28,6 +28,7 @@ Route::get('/', function () {
 Route::resource('machines','MaquinasController')->except('index')->middleware('auth');
 Route::resource('containers','ContainersController')->except('show')->middleware('auth');
 Route::get("containers-instace","ContainersController@instanceIndex")->name("instance.index");
+Route::get("terminal-tab/{docker_id}","ContainersController@terminalNewTab")->name("container.terminalTab");
 Auth::routes();
 
 Auth::routes();
@@ -49,4 +50,3 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
-
