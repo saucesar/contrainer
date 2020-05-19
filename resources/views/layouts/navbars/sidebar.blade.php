@@ -17,6 +17,14 @@
             <p>{{ __('Dashboard') }}</p>
         </a>
       </li>
+      @if($isAdmin)
+      <li class="nav-item{{ $activePage == 'admin-area' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.area') }}">
+          <i class="material-icons">memory</i>
+            <p>{{ __('Admin Area') }}</p>
+        </a>
+      </li>
+      @endif
       <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('profile.edit') }}">
           <i class="material-icons">account_circle</i>
