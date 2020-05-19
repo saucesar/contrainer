@@ -7,14 +7,14 @@ use App\Models\ConsoleOut;
 use App\Models\InstanciaContainer;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Process\Process;
+use App\Console\ContainerCreateThread;
 
 class InstanciaContainerController extends Controller
 {
     public function playStop($container_id)
     {
-        $instancia = InstanciaContainer::where('container_docker_id', $container_id)->first();
+        $instancia = InstanciaContainer::where('docker_id', $container_id)->first();
         
         if($instancia->dataHora_finalizado){
             $cmd = "docker start $container_id";
@@ -25,8 +25,8 @@ class InstanciaContainerController extends Controller
         }
 
         try{
-            $process_pull = new Process(explode(" ", $cmd));
-            $process_pull->mustRun();
+            $process = Process::fromShellCommandline($cmd);
+            $process->mustRun();
 
             $instancia->dataHora_finalizado = $dataHora_fim;
             $instancia->save();
@@ -38,18 +38,25 @@ class InstanciaContainerController extends Controller
     }
 
     public function execInTerminal(Request $request, $containerId)
-    {
+    {   
+        $newTab = $request->newTab == '1'?true:false;
+        
         $cmd = "docker exec -i $containerId $request->command";
         $process = Process::fromShellCommandline($cmd);
         $process->run();
         $data = [
-            'containerDockerId' => $containerId,
-            'command'           => $request->command,
-            'out'               => $process->getOutput(),
-            'status'            => $process->isSuccessful()
+            'docker_id' => $containerId,
+            'command'   => $request->command,
+            'out'       => $process->getOutput(),
+            'status'    => $process->isSuccessful()
         ];
         ConsoleOut::create($data);
-        return redirect()->back()->with('success', 'Command executed with sucess!');
+        
+        if($newTab) {
+            return redirect()->route("container.terminalTab",$containerId)->with('success', 'Command executed with sucess!');
+        } else {
+            return redirect()->back()->with('success', 'Command executed with sucess!');
+        }
     }
 
     public function store(Request $request)
@@ -60,7 +67,11 @@ class InstanciaContainerController extends Controller
                 'userId'  => $request->user_id,
             ];
 
-            Artisan::call("create:container", $params);
+            //Artisan::call("create:container", $params);
+            $thread = new ContainerCreateThread();
+            $thread->setPreforkWait(true);
+            $thread->run($params);
+            
             return redirect()->route('instance.index')->with('success', 'Container creation is running!');
         } catch(Exception $e) {
             return  $e->getMessage();
@@ -96,7 +107,7 @@ class InstanciaContainerController extends Controller
         $process->run();
 
         if($process->isSuccessful()) {
-            $instancia = InstanciaContainer::firstWhere('container_docker_id', $id);
+            $instancia = InstanciaContainer::firstWhere('docker_id', $id);
             $instancia->delete();
             return redirect()->route('instance.index')->with('success', 'Container deleted with sucess!');
         } else {

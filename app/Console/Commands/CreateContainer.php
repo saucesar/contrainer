@@ -2,12 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Console\ContainerCreateThread;
 use Illuminate\Console\Command;
-use App\Models\Container;
-use App\Models\InstanciaContainer;
-use Exception;
-use Symfony\Component\Process\Process;
-use App\Models\Maquina;
 
 class CreateContainer extends Command
 {
@@ -22,42 +18,12 @@ class CreateContainer extends Command
 
     public function handle()
     {
-
-        $containerImage = Container::findOrFail($this->argument('imageId'));
+        $params = [
+            'imageId' => $this->argument('imageId'),
+            'userId'  => $this->argument('userId'),
+        ];
         
-        $bar = $this->output->createProgressBar(2);
-        $bar->start();
-        $bar->display();
-
-        $cmd = "$containerImage->command_pull && $containerImage->command_run";
-
-        $process = Process::fromShellCommandline($cmd);
-        $process->mustRun();
-        $bar->advance();
-
-        if($process->isSuccessful()){
-            $this->info("Image $containerImage->name successfully downloaded/updated.");
-            
-            $out = explode("\n", $process->getOutput());    
-            $dockerIdIndex = count($out) -2;
-            $container_id = $out[$dockerIdIndex];
-
-            $data = [
-                'hashcode_maquina'     => Maquina::first()->hashcode,
-                'container_docker_id'  => $container_id,
-                'user_id'              => intval($this->argument('userId')),
-                'dataHora_instanciado' => now(),
-                'dataHora_finalizado'  => null
-            ];
-            
-            $bar->advance();
-
-            InstanciaContainer::create($data);
-            $this->info("Container created, id: $container_id");
-        } else {
-            $this->error('Failed to download the image!');
-        }
-
-        $bar->finish();
+        $thread = new ContainerCreateThread();
+        $thread->run($params);
     }
 }
