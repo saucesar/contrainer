@@ -11,10 +11,10 @@ class CreateConsoleOutsTable extends Migration
     {
         Schema::create('console_outs', function (Blueprint $table) {
             $table->id();
-            $table->string('containerDockerId', 128);
+            $table->string('docker_id', 128);
             $table->string('command');
-            $table->foreign('containerDockerId')->references('container_docker_id')->on('instancia_containers');
-            $table->string('out');
+            $table->foreign('docker_id')->references('docker_id')->on('instancia_containers')->onDelete('cascade');
+            $table->string('out', 128000);
             $table->boolean('status');
             $table->timestamps();
         });

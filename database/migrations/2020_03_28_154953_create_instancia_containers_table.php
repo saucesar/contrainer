@@ -16,7 +16,7 @@ class CreateInstanciaContainersTable extends Migration
         Schema::create('instancia_containers', function (Blueprint $table) {
             $table->id();
             $table->string('hashcode_maquina');
-            $table->string('container_docker_id')->unique();
+            $table->string('docker_id')->unique();
             $table->bigInteger('user_id');
             $table->string('nickname', 256)->default('nickname');
             $table->foreign('hashcode_maquina')->references('hashcode')->on('maquinas');
