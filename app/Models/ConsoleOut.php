@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ConsoleOut extends Model
 {
-    protected $fillable = ['containerDockerId', 'command', 'out', 'status'];
+    protected $fillable = ['docker_id', 'command', 'out', 'status'];
 }

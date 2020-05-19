@@ -73,6 +73,14 @@ class ContainersController extends Controller
         return redirect()->route('containers.index')->with('success', 'Container deleted!!!');
     }
 
+    public function terminalNewTab($id)
+    {
+        $container =  InstanciaContainer::firstWhere('docker_id', $id);
+        $outs = ConsoleOut::where('docker_id', $container->docker_id)->orderBy('created_at', 'desc')->take(100)->get();
+        
+        return view('pages/my-containers/my_containers_terminal_tab', ['mycontainer' => $container, 'outs' => $outs]);
+    }
+
     private function validar(Request $request)
     {
         $this->validate($request, [

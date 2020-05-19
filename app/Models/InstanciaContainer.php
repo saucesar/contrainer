@@ -9,11 +9,11 @@ class InstanciaContainer extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['hashcode_maquina', 'container_docker_id', 'user_id', 'dataHora_instanciado', 'dataHora_finalizado', 'nickname'];
+    protected $fillable = ['hashcode_maquina', 'docker_id', 'user_id', 'dataHora_instanciado', 'dataHora_finalizado', 'nickname'];
 
     public static $rules = [
         'hashcode_maquina'     => ['required'],
-        'container_docker_id'  => ['required'],
+        'docker_id'            => ['required'],
         'dataHora_instanciado' => ['required', 'date'],
         'dataHora_finalizado'  => ['nullable', 'date'],
     ];
