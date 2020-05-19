@@ -22,11 +22,13 @@
                             <td>$ {{ $consoleOut->command }}</td>
                             <td width="500px" style="font-size: 12px">{{ $consoleOut->out }}</td>
                             <td>{{ $consoleOut->created_at }}</td>
+                            <td>
                             @if($consoleOut->status)
-                                <td><a class="btn btn-success btn-link"><i class="material-icons">check_circle</i></a></td>
+                                <a class="btn btn-success btn-link"><i class="material-icons">check_circle</i></a>
                             @else
-                                <td><a class="btn btn-danger btn-link" ><i class="material-icons">highlight_off</i></a></td>
+                                <a class="btn btn-danger btn-link" ><i class="material-icons">highlight_off</i></a>
                             @endif
+                            </td>
                         </tr>
                     @endif
                 @endforeach
