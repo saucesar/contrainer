@@ -24,7 +24,7 @@ Route::get('/', function () {
 		return redirect()->route('home');
 	}
 });
-
+Route::get('admin-area', 'AdminAreaController@index')->name('admin.area');
 Route::resource('machines','MaquinasController')->except('index')->middleware('auth');
 Route::resource('containers','ContainersController')->except('show')->middleware('auth');
 Route::get("containers-instace","ContainersController@instanceIndex")->name("instance.index");
