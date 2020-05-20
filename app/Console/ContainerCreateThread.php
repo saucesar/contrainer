@@ -54,8 +54,9 @@ class ContainerCreateThread extends Thread
 
         $data = [
             'hashcode_maquina'     => Maquina::first()->hashcode,
-            'docker_id'  => $container_id,
+            'docker_id'            => $container_id,
             'user_id'              => intval($params['userId']),
+            'image_id'             => intval($params['imageId']),
             'dataHora_instanciado' => now(),
             'dataHora_finalizado'  => null
         ];
