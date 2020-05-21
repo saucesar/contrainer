@@ -18,17 +18,19 @@ use Illuminate\Support\Facades\Auth;
 // Route::post('/','Controller@autenticar')->name('user.auth');
 
 Route::get('/', function () {
-	if (auth()->guest()) {
-		return redirect()->route('login');
-	} else {
-		return redirect()->route('home');
-	}
+    if (auth()->guest()) {
+        return redirect()->route('login');
+    } else {
+        return redirect()->route('home');
+    }
 });
 Route::get('admin-area', 'AdminAreaController@index')->name('admin.area');
-Route::resource('machines','MaquinasController')->except('index')->middleware('auth');
-Route::resource('containers','ContainersController')->except('show')->middleware('auth');
-Route::get("containers-instace","ContainersController@instanceIndex")->name("instance.index");
-Route::get("terminal-tab/{docker_id}","ContainersController@terminalNewTab")->name("container.terminalTab");
+Route::get('admin-area/machines', 'AdminAreaController@machines')->name('admin.area.machines');
+Route::get('admin-area/users', 'AdminAreaController@users')->name('admin.area.users');
+Route::resource('machines', 'MaquinasController')->except('index')->middleware('auth');
+Route::resource('containers', 'ContainersController')->except('show')->middleware('auth');
+Route::get('containers-instace', 'ContainersController@instanceIndex')->name('instance.index');
+Route::get('terminal-tab/{docker_id}', 'ContainersController@terminalNewTab')->name('container.terminalTab');
 Auth::routes();
 
 Auth::routes();
@@ -36,17 +38,16 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::get('table-list', function () {
-		return view('pages.table_list');
-	})->name('table');
-	
+    Route::get('table-list', function () {
+        return view('pages.table_list');
+    })->name('table');
 
-	Route::get('user-machines', 'UserController@machines')->name('user.machines');
+    Route::get('user-machines', 'UserController@machines')->name('user.machines');
 });
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::resource('user', 'UserController', ['except' => ['show']]);
-	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+    Route::resource('user', 'UserController', ['except' => ['show']]);
+    Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
+    Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
+    Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
