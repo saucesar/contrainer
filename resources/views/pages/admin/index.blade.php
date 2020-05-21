@@ -15,11 +15,45 @@
               <div class="collapse card-title" id="machine-details">
                 <br>
                 <p>Active: {{ $inActivity }}</p>
+                <a href="{{ route('admin.area.machines') }}" class="btn btn-warning">full list</a>
               </div>
             </div>
             <div class="card-footer">
                 <a rel="tooltip" class="btn btn-link" data-toggle="collapse" data-target="#machine-details" aria-expanded="false" aria-controls="collapseExample">
                     <i class="material-icons ">expand_more</i>
+                    More Details
+                </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-info card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">people</i>
+              </div>
+              <p class="card-category">Registered Users</p>
+              <h3 class="card-title">{{ $numberOfUsers }}</h3>
+              <div class="collapse" id="users-details">
+                <table class='table'>
+                  <tbody>
+                    <tr>
+                      <td>Today:</td>
+                      <td>{{ $registeredToday }}</td>
+                    </tr>
+                    <tr>
+                      <td>This Month:</td>
+                      <td>{{ $registeredMonth }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <a href="{{ route('admin.area.users') }}" class="btn btn-warning">full list</a>
+              </div>
+            </div>
+            <div class="card-footer">
+                <a rel="tooltip" class="btn btn-link" data-toggle="collapse" data-target="#users-details" aria-expanded="false" aria-controls="collapseExample">  
+                    <i class="material-icons">expand_more</i>
                     More Details
                 </a>
             </div>
@@ -57,40 +91,6 @@
                     <i class="material-icons">expand_more</i>
                     More Details
                 </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card card-stats">
-            <div class="card-header card-header-danger card-header-icon">
-              <div class="card-icon">
-                <i class="material-icons">info_outline</i>
-              </div>
-              <p class="card-category">Fixed Issues</p>
-              <h3 class="card-title">75</h3>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons">local_offer</i> Tracked from Github
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 col-sm-6">
-          <div class="card card-stats">
-            <div class="card-header card-header-info card-header-icon">
-              <div class="card-icon">
-                <i class="fa fa-twitter"></i>
-              </div>
-              <p class="card-category">Followers</p>
-              <h3 class="card-title">+245</h3>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons">update</i> Just Updated
-              </div>
             </div>
           </div>
         </div>
