@@ -30,6 +30,7 @@ Route::get('admin-area/users', 'AdminAreaController@users')->name('admin.area.us
 Route::resource('machines', 'MaquinasController')->except('index')->middleware('auth');
 Route::resource('containers', 'ContainersController')->except('show')->middleware('auth');
 Route::get('containers-instace', 'ContainersController@instanceIndex')->name('instance.index');
+Route::post('containers-instace', 'ContainersController@configureContainer')->name('instance.configure');
 Route::get('terminal-tab/{docker_id}', 'ContainersController@terminalNewTab')->name('container.terminalTab');
 Auth::routes();
 
