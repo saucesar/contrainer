@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\ConsoleOut;
 use Illuminate\Http\Request;
 use App\Models\Container;
@@ -13,8 +12,9 @@ class ContainersController extends Controller
 {
     public function instanceIndex()
     {
-        $containers =  InstanciaContainer::where('user_id', Auth::user()->id)->get();
-        $outs = ConsoleOut::where('created_at','<', now())->orderBy('created_at', 'desc')->take(100)->get();
+        $containers = InstanciaContainer::where('user_id', Auth::user()->id)->get();
+        $outs = ConsoleOut::where('created_at', '<', now())->orderBy('created_at', 'desc')->take(100)->get();
+
         return view('pages/my-containers/my_containers', ['mycontainers' => $containers, 'consoleOuts' => $outs]);
     }
 
@@ -22,7 +22,7 @@ class ContainersController extends Controller
     {
         $data = ['containers' => Container::all(),
                  'isAdmin' => Auth::user()->isAdmin(),
-                 'user_id' => Auth::user()->id
+                 'user_id' => Auth::user()->id,
         ];
 
         return view('pages/containers/containers', $data);
@@ -38,7 +38,7 @@ class ContainersController extends Controller
         $this->validar($request);
         $container = null;
 
-        if( Auth::user()->isAdmin()){
+        if (Auth::user()->isAdmin()) {
             $container = Container::create($request->all());
         }
 
@@ -47,21 +47,22 @@ class ContainersController extends Controller
 
     public function show($id)
     {
-        return view('containers.show',['container' => Container::firstWhere('id', $id)]);
+        return view('containers.show', ['container' => Container::firstWhere('id', $id)]);
     }
 
     public function edit($id)
     {
-        return view('pages/containers/containers_edit',['container' => Container::firstWhere('id', $id)]);   
+        return view('pages/containers/containers_edit', ['container' => Container::firstWhere('id', $id)]);
     }
 
     public function update(Request $request, $id)
     {
         $this->validar($request);
-        if(Auth::user()->isAdmin()){
+        if (Auth::user()->isAdmin()) {
             $container = Container::firstWhere('id', $id);
             $container->update($request->all());
         }
+
         return redirect()->route('containers.index')->with('success', 'Container updated!!!');
     }
 
@@ -70,15 +71,26 @@ class ContainersController extends Controller
         $container = Container::firstWhere('id', $id);
 
         $container->delete();
+
         return redirect()->route('containers.index')->with('success', 'Container deleted!!!');
     }
 
     public function terminalNewTab($id)
     {
-        $container =  InstanciaContainer::firstWhere('docker_id', $id);
+        $container = InstanciaContainer::firstWhere('docker_id', $id);
         $outs = ConsoleOut::where('docker_id', $container->docker_id)->orderBy('created_at', 'desc')->take(100)->get();
-        
+
         return view('pages/my-containers/my_containers_terminal_tab', ['mycontainer' => $container, 'outs' => $outs]);
+    }
+
+    public function configureContainer(Request $request)
+    {
+        $params = [
+            'container' => Container::firstWhere('id', $request->image_id),
+            'userId' => $request->user_id,
+        ];
+
+        return view('pages/containers/containers_config', $params);
     }
 
     private function validar(Request $request)
