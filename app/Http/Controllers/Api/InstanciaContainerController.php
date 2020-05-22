@@ -15,8 +15,8 @@ class InstanciaContainerController extends Controller
     public function playStop($container_id)
     {
         $instancia = InstanciaContainer::where('docker_id', $container_id)->first();
-        
-        if($instancia->dataHora_finalizado){
+
+        if ($instancia->dataHora_finalizado) {
             $cmd = "docker start $container_id";
             $dataHora_fim = null;
         } else {
@@ -24,36 +24,36 @@ class InstanciaContainerController extends Controller
             $dataHora_fim = now();
         }
 
-        try{
+        try {
             $process = Process::fromShellCommandline($cmd);
             $process->mustRun();
 
             $instancia->dataHora_finalizado = $dataHora_fim;
             $instancia->save();
-    
+
             return redirect()->route('instance.index')->with('success', 'Container created with sucess!');
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return redirect()->route('instance.index')->with('error', "Fail to stop the container! $e");
         }
     }
 
     public function execInTerminal(Request $request, $containerId)
-    {   
-        $newTab = $request->newTab == '1'?true:false;
-        
+    {
+        $newTab = $request->newTab == '1' ? true : false;
+
         $cmd = "docker exec -i $containerId $request->command";
         $process = Process::fromShellCommandline($cmd);
         $process->run();
         $data = [
             'docker_id' => $containerId,
-            'command'   => $request->command,
-            'out'       => $process->getOutput(),
-            'status'    => $process->isSuccessful()
+            'command' => $request->command,
+            'out' => $process->getOutput(),
+            'status' => $process->isSuccessful(),
         ];
         ConsoleOut::create($data);
-        
-        if($newTab) {
-            return redirect()->route("container.terminalTab",$containerId)->with('success', 'Command executed with sucess!');
+
+        if ($newTab) {
+            return redirect()->route('container.terminalTab', $containerId)->with('success', 'Command executed with sucess!');
         } else {
             return redirect()->back()->with('success', 'Command executed with sucess!');
         }
@@ -61,19 +61,14 @@ class InstanciaContainerController extends Controller
 
     public function store(Request $request)
     {
-        try{
-            $params = [
-                'imageId' => $request->id,
-                'userId'  => $request->user_id,
-            ];
-
+        try {
             //Artisan::call("create:container", $params);
             $thread = new ContainerCreateThread();
             $thread->setPreforkWait(true);
-            $thread->run($params);
-            
+            $thread->run($request->all());
+
             return redirect()->route('instance.index')->with('success', 'Container creation is running!');
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return  $e->getMessage();
         }
     }
@@ -86,7 +81,7 @@ class InstanciaContainerController extends Controller
     public function edit($id)
     {
         $instancia = InstanciaContainer::firstWhere('id', $id);
-        
+
         $instancia->dataHora_finalizado = now();
         $instancia->save();
 
@@ -106,13 +101,14 @@ class InstanciaContainerController extends Controller
         $process = Process::fromShellCommandline($cmd);
         $process->run();
 
-        if($process->isSuccessful()) {
+        if ($process->isSuccessful()) {
             $instancia = InstanciaContainer::firstWhere('docker_id', $id);
             $instancia->delete();
+
             return redirect()->route('instance.index')->with('success', 'Container deleted with sucess!');
         } else {
             return redirect()->route('instance.index')->with('error', 'Fail, Container not delete!');
-        }   
+        }
     }
 
     private function validar(Request $request)
