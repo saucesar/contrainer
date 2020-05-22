@@ -20,7 +20,7 @@
       @if(Auth::user()->isAdmin())
       <li class="nav-item{{ $activePage == 'admin-area' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('admin.area') }}">
-          <i class="material-icons">memory</i>
+          <i class="material-icons">assessment</i>
             <p>{{ __('Admin Area') }}</p>
         </a>
       </li>
