@@ -34,12 +34,12 @@
                               <td width='550px'>{{ $container->description }}</td>
                               <td class="td-actions text-right">
                                 <div class='row'>
-                                  {!! Form::open(['route' => 'InstanciaContainers.store', 'method' => 'post']) !!}
-                                    <input type="hidden" value="{{ $container->id }}" name='id'>
+                                  {!! Form::open(['route' => 'instance.configure', 'method' => 'post']) !!}
+                                    <input type="hidden" value="{{ $container->id }}" name='image_id'>
                                     <input type="hidden" value="{{ $user_id }}" name='user_id'>
                                     <button type="submit" class="btn btn-sucess btn-link">
                                       <i class="material-icons">play_circle_filled</i>
-                                      Use
+                                      Run
                                     </button>
                                   {!! Form::close() !!}
                                   @if ($isAdmin)
