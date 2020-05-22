@@ -19,49 +19,27 @@ class ContainerCreateThread extends Thread
     {
         $params = $this->getParam(0);
 
-        $containerImage = Container::findOrFail($params['imageId']);
+        $containerImage = Container::findOrFail($params['image_id']);
 
         $cmd = "$containerImage->command_pull && $containerImage->command_run";
-        /*
+
         $process = Process::fromShellCommandline($cmd);
         $process->setTimeout(null);
         $process->start();
         $process->wait();
 
-        if($process->isSuccessful()){
-            
-            $out = explode("\n", $process->getOutput());    
-            $dockerIdIndex = count($out) -2;
-            $container_id = $out[$dockerIdIndex];
+        if ($process->isSuccessful()) {
+            $out = explode("\n", $process->getOutput());
+            $dockerIdIndex = count($out) - 2;
 
-            $data = [
-                'hashcode_maquina'     => Maquina::first()->hashcode,
-                'container_docker_id'  => $container_id,
-                'user_id'              => intval($params['userId']),
-                'dataHora_instanciado' => now(),
-                'dataHora_finalizado'  => null
-            ];
+            $params['hashcode_maquina'] = Maquina::first()->hashcode;
+            $params['docker_id'] = $out[$dockerIdIndex];
+            $params['dataHora_instanciado'] = now();
+            $params['dataHora_finalizado'] = null;
 
-            InstanciaContainer::create($data);
-
-            return $process->getOutput();
-        }*/
-        $str = shell_exec($cmd);
-
-        $out = explode("\n", $str);
-        $dockerIdIndex = count($out) -2;
-        $container_id = $out[$dockerIdIndex];
-
-        $data = [
-            'hashcode_maquina'     => Maquina::first()->hashcode,
-            'docker_id'            => $container_id,
-            'user_id'              => intval($params['userId']),
-            'image_id'             => intval($params['imageId']),
-            'dataHora_instanciado' => now(),
-            'dataHora_finalizado'  => null
-        ];
-        InstanciaContainer::create($data);
-        $this->cleanup();
-        return $str;
+            //dd($params);
+            InstanciaContainer::create($params);
+            $this->cleanup();
+        }
     }
 }
