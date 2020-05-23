@@ -60,3 +60,4 @@
         @endforeach
     </tbody>
 </table>
+{!! $machines->links() !!}

@@ -29,7 +29,7 @@ class AdminAreaController extends Controller
     public function machines()
     {
         if (Auth::user()->isAdmin()) {
-            return view('pages/admin/machines', ['machines' => Maquina::all()]);
+            return view('pages/admin/machines', ['machines' => Maquina::orderBy('id')->paginate(5)]);
         } else {
             return redirect()->back()->with('error', 'User not Authorized!!!');
         }
@@ -38,7 +38,7 @@ class AdminAreaController extends Controller
     public function users()
     {
         if (Auth::user()->isAdmin()) {
-            $users = User::all()->sortBy('id');
+            $users = User::orderBy('id')->paginate(10);
             $params = [
                 'users' => $users,
                 'machinesCount' => $this->getMachinesCount($users),
