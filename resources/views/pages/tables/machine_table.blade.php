@@ -27,16 +27,19 @@
             </td>
             <td class="td-actions text-right">
                 <div class='row' style=" margin-top: 12px;">
-                    <a rel="tooltip" class="btn btn-success btn-link" data-toggle="collapse" data-target="#{{ $machine->id }}" aria-expanded="false" aria-controls="collapseExample">
+                    <a rel="tooltip" class="btn btn-success btn-link" data-toggle="collapse"
+                        data-target="#{{ $machine->id }}" aria-expanded="false" aria-controls="collapseExample">
                         <i class="material-icons">details</i>
                         <div class="ripple-container"></div>
                     </a>
-                    <a rel="tooltip" class="btn btn-success btn-link" href="{{ route('machines.edit', $machine) }}" data-original-title="" title="">
+                    <a rel="tooltip" class="btn btn-success btn-link" href="{{ route('machines.edit', $machine) }}"
+                        data-original-title="" title="">
                         <i class="material-icons">edit</i>
                         <div class="ripple-container"></div>
                     </a>
                     {!! Form::open(['route' => ['machines.destroy', $machine], 'method' => 'delete']) !!}
-                    <button type="button" class="btn btn-danger btn-link" data-original-title="" title="" onclick="return confirm('Are you sure?')" type="submit">
+                    <button type="button" class="btn btn-danger btn-link" data-original-title="" title=""
+                        onclick="return confirm('Are you sure?')" type="submit">
                         <i class=" material-icons">delete</i>
                         <div class="ripple-container"></div>
                     </button>
@@ -51,7 +54,8 @@
                     <a href="{{ route('machines.show', $machine) }}" class="btn btn-sm btn-outline-info">
                         More Details
                     </a>
-                    <button class="btn btn-sm btn-outline" type="button" data-toggle="collapse" data-target="#{{ $machine->id }}" aria-expanded="false" aria-controls="collapseExample">
+                    <button class="btn btn-sm btn-outline" type="button" data-toggle="collapse"
+                        data-target="#{{ $machine->id }}" aria-expanded="false" aria-controls="collapseExample">
                         Ocult
                     </button>
                 </div>
