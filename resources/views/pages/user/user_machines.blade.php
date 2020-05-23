@@ -12,7 +12,7 @@
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              @include('pages/user/machine_table', ['machines' => $machines])
+              @include('pages/tables/machine_table', ['machines' => $machines])
             </div>
           </div>
         </div>
