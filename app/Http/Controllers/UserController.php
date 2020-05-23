@@ -12,9 +12,9 @@ class UserController extends Controller
     public function machines()
     {
         $user = Auth::user();
-        $machines = Maquina::where('user_id', $user->id)->orderby('id')->get();
+        $machines = Maquina::where('user_id', $user->id)->orderby('id')->paginate(5);
 
-		return view('pages.user.user_machines', ['machines' => $machines, 'user_name' => $user->name]);
+        return view('pages.user.user_machines', ['machines' => $machines, 'user_name' => $user->name]);
     }
 
     public function index(User $model)
@@ -50,23 +50,22 @@ class UserController extends Controller
     {
         $this->validate($request, $request->rules());
 
-        $user = User::firstWhere('id',$id);
+        $user = User::firstWhere('id', $id);
         $result = $user->update($request->all());
 
-        if($result) {
+        if ($result) {
             return redirect()->route('home.index');
         } else {
             return redirect()->back()->withInput();
         }
-
     }
 
     public function destroy($id)
     {
-        $user = User::firstWhere('id',$id);
+        $user = User::firstWhere('id', $id);
         $result = $user->delete();
 
-        if($result) {
+        if ($result) {
             return redirect()->route('home.index');
         } else {
             return redirect()->back();
