@@ -18,24 +18,26 @@ class AtividadeMaquinasController extends Controller
     {
         $hash = $request->input('hashcode_maquina');
         $data = [
-            'hashcode_maquina'  => $hash,
-            'dataHoraInicio'    => now(),
-            'last_notification' => now()
+            'hashcode_maquina' => $hash,
+            'dataHoraInicio' => now(),
+            'last_notification' => now(),
         ];
-        
+
         $machine = Maquina::firstWhere('hashcode', $hash);
         $activity = AtividadeMaquina::firstWhere(['dataHoraFim' => null, 'hashcode_maquina' => $hash]);
 
-        if($machine){
-            if($activity){
+        if ($machine) {
+            if ($activity) {
+                $machine->ip = $request->server()['REMOTE_ADDR'];
+                $machine->save();
                 $activity->last_notification = now();
                 $activity->save();
             } else {
                 AtividadeMaquina::create($data);
 
                 $machine->disponivel = true;
-                $machine->save();    
-            }   
+                $machine->save();
+            }
         }
     }
 
@@ -51,7 +53,7 @@ class AtividadeMaquinasController extends Controller
         $machine = Maquina::firstWhere('hashcode', $hash);
         $activity = AtividadeMaquina::firstWhere(['dataHoraFim' => null, 'hashcode_maquina' => $hash]);
 
-        if($machine && $activity){
+        if ($machine && $activity) {
             $activity->dataHoraFim = now();
             $activity->save();
 
