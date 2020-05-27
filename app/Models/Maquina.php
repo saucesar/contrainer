@@ -10,7 +10,7 @@ class Maquina extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['cpu_utilizavel', 'ram_utilizavel', 'hashcode', 'user_id', 'disponivel'];
+    protected $fillable = ['cpu_utilizavel', 'ram_utilizavel', 'hashcode', 'user_id', 'ip', 'disponivel'];
 
     public function user():User
     {

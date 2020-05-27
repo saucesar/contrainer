@@ -8,19 +8,18 @@ class CreateMaquinasTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
         Schema::create('maquinas', function (Blueprint $table) {
             $table->id();
-            $table->integer('cpu_utilizavel')->default(25);// percentual(%)
-            $table->integer('ram_utilizavel');// em MB
+            $table->integer('cpu_utilizavel')->default(25); // percentual(%)
+            $table->integer('ram_utilizavel'); // em MB
             $table->string('hashcode')->unique();
             $table->boolean('disponivel')->default(false);
             $table->bigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->ipAddress('ip');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,8 +27,6 @@ class CreateMaquinasTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
