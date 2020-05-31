@@ -21,6 +21,10 @@ class AdminAreaController extends Controller
             'registeredToday' => User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->whereDay('created_at', date('d'))->count(),
             'registeredMonth' => User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->count(),
             'instacesOfeachImage' => $this->getInstacesOfEachImage(),
+            'graficDataUsers' => $this->getGraficDataUsers(),
+            'graficDataMachines' => $this->getGraficDataMachines(),
+            'imagesLabel' => $this->getImagesLabels(),
+            'graficDataImages' => $this->getInstacesCountImages(),
         ];
 
         return view('pages/admin/index', $params);
@@ -33,6 +37,43 @@ class AdminAreaController extends Controller
         } else {
             return redirect()->back()->with('error', 'User not Authorized!!!');
         }
+    }
+
+    public function getGraficDataUsers()
+    {
+        return json_encode([
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('1'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('2'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('3'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('4'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('5'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('6'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('7'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('8'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('9'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('10'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('11'))->count(),
+            User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('12'))->count(),
+        ]);
+    }
+
+    public function getGraficDataMachines()
+    {
+        return json_encode(
+            [
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('1'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('2'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('3'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('4'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('5'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('6'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('7'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('8'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('9'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('10'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('11'))->count(),
+            Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('12'))->count(),
+        ]);
     }
 
     public function users()
@@ -84,5 +125,28 @@ class AdminAreaController extends Controller
         }
 
         return $array;
+    }
+
+    private function getInstacesCountImages()
+    {
+        $containers = Container::all();
+
+        $array = [];
+
+        foreach ($containers as $container) {
+            $array[] = InstanciaContainer::where('image_id', $container->id)->get()->count() + 2;
+        }
+
+        return json_encode($array);
+    }
+
+    public function getImagesLabels()
+    {
+        $array = [];
+        foreach (Container::all() as $container) {
+            $array[] = $container->name;
+        }
+
+        return json_encode($array);
     }
 }
