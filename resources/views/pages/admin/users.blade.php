@@ -12,7 +12,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            @include('pages/tables/users_table', ['users' => $users]);
+                            @include('pages/tables/users_table', ['users' => $users])
                         </div>
                     </div>
                 </div>
