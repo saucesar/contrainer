@@ -134,7 +134,7 @@ class AdminAreaController extends Controller
         $array = [];
 
         foreach ($containers as $container) {
-            $array[] = InstanciaContainer::where('image_id', $container->id)->get()->count() + 2;
+            $array[] = InstanciaContainer::where('image_id', $container->id)->get()->count();
         }
 
         return json_encode($array);
