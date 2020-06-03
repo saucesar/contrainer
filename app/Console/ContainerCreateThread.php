@@ -21,7 +21,43 @@ class ContainerCreateThread extends Thread
 
         $containerImage = Container::findOrFail($params['image_id']);
 
-        $cmd = "$containerImage->command_pull && $containerImage->command_run";
+        $cmd_run = 'docker run -d ';
+        if ($params['external-port']) {
+            $cmd_run .= $params['external-port'];
+            $cmd_run .= ' ';
+        }
+        if ($params['ip']) {
+            $cmd_run .= '--ip=';
+            $cmd_run .= '"';
+            $cmd_run .= $params['ip'];
+            $cmd_run .= '"';
+            $cmd_run .= ' ';
+        }
+        if ($params['add-host']) {
+            $cmd_run .= '--add-host=';
+            $cmd_run .= '"';
+            $cmd_run .= $params['add-host'];
+            $cmd_run .= '"';
+            $cmd_run .= ' ';
+        }
+        if ($params['dns']) {
+            $cmd_run .= '--dns=';
+            $cmd_run .= $params['dns'];
+            $cmd_run .= ' ';
+        }
+        if ($params['envVariables']) {
+            $variables = explode(';', $params['envVariables']);
+            foreach ($variables as $var) {
+                $cmd_run .= '-e ';
+                $cmd_run .= $var;
+            }
+            $cmd_run .= $params['dns'];
+            $cmd_run .= ' ';
+        }
+
+        $cmd_run .= ' --restart=always ';
+        $cmd_run .= $containerImage->name;
+        $cmd = "$containerImage->command_pull && $cmd_run";
 
         $process = Process::fromShellCommandline($cmd);
         $process->setTimeout(null);

@@ -22,7 +22,9 @@
                     <span class="sr-only">Loading...</span>
                 </div>
                 @else
-                Stopped
+                <div class="text-danger">
+                    <span class="material-icons">crop_square</span>
+                </div>
                 @endif
             </td>
             <td class="td-actions text-right">
