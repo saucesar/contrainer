@@ -20,13 +20,6 @@
 </div>
 <br>
 <div class="row">
-    {!! Form::label('Command run', null, ['class'=>"col-sm-2 col-form-label"]) !!}
-    <div class="col-sm">
-        {!! Form::text('command_run', $container->command_run ?? null, ['class'=>"form-control", 'placeholder' =>"Command to create a container", 'required'=>"true"]) !!}
-    </div>
-</div>
-<br>
-<div class="row">
     {!! Form::label('Programs', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">
         {!! Form::text('programs', $container->programs ?? null, ['class'=>"form-control", 'placeholder' =>"programs contained in this image"]) !!}
