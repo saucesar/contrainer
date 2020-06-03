@@ -19,7 +19,7 @@ class MaquinasController extends Controller
         $this->validar($request);
         $maquina = Maquina::create($this->getData($request));
 
-        if($maquina){
+        if ($maquina) {
             return redirect()->route('user.machines');
         } else {
             return redirect()->back()->withInput();
@@ -30,18 +30,18 @@ class MaquinasController extends Controller
     {
         $machine = Maquina::firstWhere('id', $id);
         $params = [
-            'machine'    => $machine,
-            'activities' => AtividadeMaquina::where('hashcode_maquina', $machine->hashcode )
-                                                    ->orderBy('created_at','desc')->limit(20)
-                                                    ->get()
+            'machine' => $machine,
+            'activities' => AtividadeMaquina::where('hashcode_maquina', $machine->hashcode)
+                                                    ->orderBy('created_at', 'desc')
+                                                    ->paginate(5),
         ];
-        //dd($params);
+
         return view('pages.user.machine_show', $params);
     }
 
     public function edit($id)
     {
-        return view('pages.user.user_machines_edit', ['machine' =>  Maquina::firstWhere('id', $id)]);
+        return view('pages.user.user_machines_edit', ['machine' => Maquina::firstWhere('id', $id)]);
     }
 
     public function update(MachineRequest $request, $id)
@@ -50,7 +50,7 @@ class MaquinasController extends Controller
         $maquina = Maquina::firstWhere('id', $id);
         $result = $maquina->update($request->all());
 
-        if($result){
+        if ($result) {
             return redirect()->route('user.machines');
         } else {
             return redirect()->back()->withInput();
@@ -59,10 +59,10 @@ class MaquinasController extends Controller
 
     public function destroy($id)
     {
-        $maquina = Maquina::firstWhere('id',$id);
-        if($maquina->delete()){
+        $maquina = Maquina::firstWhere('id', $id);
+        if ($maquina->delete()) {
             return redirect()->route('user.machines');
-        } else { 
+        } else {
             return redirect()->back()->with('error', 'Falha ao deletar!');
         }
     }
@@ -73,7 +73,7 @@ class MaquinasController extends Controller
     }
 
     private function getData(MachineRequest $request)
-    {   
+    {
         $data = $request->all();
         $data['user_id'] = Auth::user()->id;
         $data['hashcode'] = $this->getHashCode($data);
@@ -83,9 +83,9 @@ class MaquinasController extends Controller
 
     private function getHashCode($data)
     {
-        $hash = "";
+        $hash = '';
 
-        foreach($data as $d){
+        foreach ($data as $d) {
             $hash .= $d;
         }
 

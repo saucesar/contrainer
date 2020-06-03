@@ -44,18 +44,19 @@
                               <td>{{ $activity->dataHoraInicio }}</td>
                               <td>
                                 @if ($activity->dataHoraFim)
-                                  {{ $activity->dataHoraFim }}  
+                                  {{ $activity->dataHoraFim }}
                                 @else
                                   <div class="spinner-grow text-success" role="status">
                                     <span class="sr-only">Loading...</span>
-                                  </div>  
+                                  </div>
                                 @endif
                               </td>
                               <td>{{ $activity->activityTime(2)}} hours</td>
-                          </tr>                
+                          </tr>
                         @endforeach
                     </tbody>
                 </table>
+                {!!$activities->links()!!}
               </div>
             </div>
           </div>
