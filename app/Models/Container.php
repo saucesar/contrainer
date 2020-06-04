@@ -9,10 +9,10 @@ class Container extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'programs', 'command_pull', 'command_run'];
+    protected $fillable = ['name', 'description', 'programs', 'command_pull'];
 
     public function programas()
     {   //Tranforma a string programas em um array
-        return explode(',',$this->programs);
+        return explode(',', $this->programs);
     }
 }
