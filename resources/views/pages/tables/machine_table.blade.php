@@ -34,7 +34,7 @@
                         <i class="material-icons">details</i>
                         <div class="ripple-container"></div>
                     </a>
-                    <a rel="tooltip" class="btn btn-success btn-link" href="{{ route('machines.edit', $machine) }}"
+                    <a rel="tooltip" class="btn btn-warning btn-link" href="{{ route('machines.edit', $machine) }}"
                         data-original-title="" title="">
                         <i class="material-icons">edit</i>
                         <div class="ripple-container"></div>
