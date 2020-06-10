@@ -13,6 +13,7 @@ class AdminAreaController extends Controller
     public function index()
     {
         $params = [
+            'machines' => Maquina::paginate(4),
             'numberOfMach' => Maquina::all()->count(),
             'inActivity' => Maquina::where('disponivel', true)->get()->count(),
             'numberOfCont' => Container::all()->count(),

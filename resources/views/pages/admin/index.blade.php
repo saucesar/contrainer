@@ -162,7 +162,6 @@
         </div>
 
         <div class="row">
-
             <div class="col-lg-12">
                 <div class="card card-stats">
                     <div class="card-header card-header-info card-header-icon">
@@ -173,7 +172,29 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-stats">
+                    <div class="card-header card-header-info card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">laptop</i>
+                        </div>
+                        <p class="card-title"></p>
+                        <h3 class="card-title">Machines</h3>
+                    </div>
+                    <div class="collapse" id="machines">
+                        @include('pages/tables/machine_table', ['machines' => $machines])
+                    </div>
+                    <div class="card-footer">
+                        <a rel="tooltip" class="btn btn-info btn-lg" data-toggle="collapse"
+                            data-target="#machines" aria-expanded="false">
+                            <i class="material-icons">details</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
