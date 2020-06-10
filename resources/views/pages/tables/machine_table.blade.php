@@ -1,5 +1,6 @@
 <table class='table'>
     <thead>
+        <th>#</th>
         <th>Hashcode</th>
         <th>CPU/RAM Available</th>
         <th>Time Activity</th>
@@ -9,6 +10,7 @@
     <tbody>
         @foreach ($machines as $machine)
         <tr>
+            <td><span class="material-icons">computer</span></td>
             <td>{{ $machine->hashcode }}</td>
             <td>
                 {{ $machine->cpu_utilizavel }}%
@@ -50,7 +52,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="6">
                 <div class="collapse" id="{{ $machine->id }}">
                     @include('pages.user.machine_show_form', ['machine' => $machine])
                     <a href="{{ route('machines.show', $machine) }}" class="btn btn-sm btn-outline-info">
