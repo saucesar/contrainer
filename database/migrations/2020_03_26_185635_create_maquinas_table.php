@@ -19,8 +19,8 @@ class CreateMaquinasTable extends Migration
             $table->boolean('disponivel')->default(false);
             $table->bigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->ipAddress('ip');
-            $table->timestamps();
+            $table->ipAddress('ip')->nullable();
+            -$table->timestamps();
             $table->softDeletes();
         });
     }
