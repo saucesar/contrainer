@@ -68,8 +68,8 @@
                                                     <i class="material-icons">details</i>
                                                     <div class="ripple-container"></div>
                                                 </a>
-                                                <a href="#" class="btn btn-warning btn-link">
-                                                    <i class="material-icons">edit</i>
+                                                <a href="{{ route('containers.show' , [$container->docker_id]) }}" class="btn btn-link">
+                                                    <i class="material-icons">error</i>
                                                 </a>
                                                 {!! Form::open(['route' => ['InstanciaContainers.destroy',
                                                 $container->docker_id], 'method' => 'delete']) !!}
@@ -88,10 +88,6 @@
                                                 id="{{ $container->id }}">
                                                 @include('pages.my-containers.my_containers_show', ['mycontainer' =>
                                                 $container, 'consoleOuts' => $consoleOuts, 'newTab' => false])
-                                                <!--
-                                                <object width="800px" height="300" data="http://localhost:9000/">
-                                                    <p>conteúdo alternativo para tecnologias que não suportam OBJECT</p>
-                                                </object>-->
                                             </div>
                                         </td>
                                     </tr>
