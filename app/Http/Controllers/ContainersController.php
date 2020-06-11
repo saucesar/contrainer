@@ -7,15 +7,18 @@ use Illuminate\Http\Request;
 use App\Models\Container;
 use Illuminate\Support\Facades\Auth;
 use App\Models\InstanciaContainer;
+use Illuminate\Support\Facades\Http;
 
 class ContainersController extends Controller
 {
     public function instanceIndex()
     {
-        $containers = InstanciaContainer::where('user_id', Auth::user()->id)->get();
-        $outs = ConsoleOut::where('created_at', '<', now())->orderBy('created_at', 'desc')->take(100)->get();
+        $params = [
+            'mycontainers' => InstanciaContainer::where('user_id', Auth::user()->id)->get(),
+            'consoleOuts' => ConsoleOut::where('created_at', '<', now())->orderBy('created_at', 'desc')->take(100)->get(),
+        ];
 
-        return view('pages/my-containers/my_containers', ['mycontainers' => $containers, 'consoleOuts' => $outs]);
+        return view('pages/my-containers/my_containers', $params);
     }
 
     public function index()
@@ -47,7 +50,17 @@ class ContainersController extends Controller
 
     public function show($id)
     {
-        return view('containers.show', ['container' => Container::firstWhere('id', $id)]);
+        $url = env('DOCKER_HOST');
+        $response = Http::get("$url/containers/$id/top");
+
+        $params = [
+            'mycontainer' => InstanciaContainer::firstWhere('docker_id', $id),
+            'newTab' => false,
+            'consoleOuts' => ConsoleOut::where('docker_id', $id)->orderBy('created_at', 'desc')->take(20)->get(),
+            'processes' => $response->json(),
+        ];
+
+        return view('pages/my-containers/my_containers_details', $params);
     }
 
     public function edit($id)
