@@ -8,8 +8,6 @@ class CreateInstanciaContainersTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -22,7 +20,7 @@ class CreateInstanciaContainersTable extends Migration
             $table->string('nickname', 256)->default('nickname');
             $table->foreign('hashcode_maquina')->references('hashcode')->on('maquinas');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('image_id')->references('id')->on('maquinas');
+            $table->foreign('image_id')->references('id')->on('containers');
             //$table->foreign('container_id')->references('id')->on('containers');
 
             $table->dateTime('dataHora_instanciado');
@@ -34,8 +32,6 @@ class CreateInstanciaContainersTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
