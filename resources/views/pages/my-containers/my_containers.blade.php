@@ -51,31 +51,26 @@
                                         <td class="td-actions text-right">
                                             <div class='row'>
                                                 @if($container->dataHora_finalizado)
-                                                <a href="{{ route('instance.playStop', $container->docker_id) }}"
-                                                    class="btn btn-success" data-original-title="" title="">
+                                                <a href="{{ route('instance.playStop', $container->docker_id) }}" class="btn btn-link btn-success" data-original-title="" title="Play/Pause this container.">
                                                     <i class=" material-icons">play_circle_outline</i>
                                                 </a>
                                                 @else
-                                                <a href="{{ route('instance.playStop', $container->docker_id) }}"
-                                                    class="btn btn-warning" data-original-title="" title="">
+                                                <a href="{{ route('instance.playStop', $container->docker_id) }}" class="btn btn-link btn-warning" data-original-title="" title="Play/Pause this container.">
                                                     <i class=" material-icons">pause_circle_outline</i>
                                                 </a>
                                                 @endif
-
-                                                <a rel="tooltip" class="btn btn-success btn-link" data-toggle="collapse"
-                                                    data-target="#{{ $container->id }}" aria-expanded="false"
-                                                    aria-controls="collapseExample">
-                                                    <i class="material-icons">details</i>
-                                                    <div class="ripple-container"></div>
+                                                <a href="{{$dockerHost}}/containers/{{$container->docker_id}}/export" class="btn btn-link" title="Download your container.">
+                                                    <i class=" material-icons">get_app</i>
                                                 </a>
-                                                <a href="{{ route('containers.show' , [$container->docker_id]) }}" class="btn btn-link">
+                                                <a rel="tooltip" class="btn btn-success btn-link" data-toggle="collapse" data-target="#{{ $container->id }}" aria-expanded="false" title="Show console.">
+                                                    <i class="material-icons">details</i>
+                                                </a>
+                                                <a href="{{ route('containers.show' , [$container->docker_id]) }}" class="btn btn-link" title="Container details page.">
                                                     <i class="material-icons">error</i>
                                                 </a>
                                                 {!! Form::open(['route' => ['InstanciaContainers.destroy',
                                                 $container->docker_id], 'method' => 'delete']) !!}
-                                                <button type="submit" class="btn btn-danger btn-link"
-                                                    data-original-title="" title=""
-                                                    onclick="return confirm('Are you sure?')" type="submit">
+                                                <button type="submit" class="btn btn-danger btn-link" title="Detele this container." onclick="return confirm('Are you sure?')" type="submit">
                                                     <i class="material-icons">delete</i>
                                                 </button>
                                                 {!! Form::close() !!}
@@ -84,10 +79,8 @@
                                     </tr>
                                     <tr>
                                         <td colspan='6'>
-                                            <div class="collapse card-header" style="background: gray;"
-                                                id="{{ $container->id }}">
-                                                @include('pages.my-containers.my_containers_show', ['mycontainer' =>
-                                                $container, 'consoleOuts' => $consoleOuts, 'newTab' => false])
+                                            <div class="collapse card-header" style="background: gray;" id="{{ $container->id }}">
+                                                @include('pages.my-containers.my_containers_show', ['mycontainer' => $container, 'consoleOuts' => $consoleOuts, 'newTab' => false])
                                             </div>
                                         </td>
                                     </tr>
