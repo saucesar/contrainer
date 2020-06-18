@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('atividadeMaquinas','Api\AtividadeMaquinasController');
-Route::apiResource('InstanciaContainers','Api\InstanciaContainerController')->except(['create', 'index']);
-Route::get('InstanciaContainers/stop/{containerId}','Api\InstanciaContainerController@playStop')->name('instance.playStop');
-Route::post('InstanciaContainers/exec-in-terminal/{containerId}','Api\InstanciaContainerController@execInTerminal')->name('instance.execInTerminal');
+Route::apiResource('atividadeMaquinas', 'Api\AtividadeMaquinasController');
+Route::apiResource('InstanciaContainers', 'Api\InstanciaContainerController')->except(['create', 'index', 'show']);
+Route::get('InstanciaContainers/stop/{containerId}', 'Api\InstanciaContainerController@playStop')->name('instance.playStop');
+Route::post('InstanciaContainers/exec-in-terminal/{containerId}', 'Api\InstanciaContainerController@execInTerminal')->name('instance.execInTerminal');
