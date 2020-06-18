@@ -7,26 +7,26 @@ use App\Models\ConsoleOut;
 use App\Models\InstanciaContainer;
 use Exception;
 use Illuminate\Http\Request;
-use Symfony\Component\Process\Process;
-use App\Console\ContainerCreateThread;
+use Illuminate\Support\Facades\Http;
+use App\Models\Maquina;
 
 class InstanciaContainerController extends Controller
 {
     public function playStop($container_id)
     {
         $instancia = InstanciaContainer::where('docker_id', $container_id)->first();
+        $url = env('DOCKER_HOST');
 
         if ($instancia->dataHora_finalizado) {
-            $cmd = "docker start $container_id";
+            $host = "$url/containers/$container_id/start";
             $dataHora_fim = null;
         } else {
-            $cmd = "docker stop $container_id";
+            $host = "$url/containers/$container_id/stop";
             $dataHora_fim = now();
         }
 
         try {
-            $process = Process::fromShellCommandline($cmd);
-            $process->mustRun();
+            Http::post($host);
 
             $instancia->dataHora_finalizado = $dataHora_fim;
             $instancia->save();
@@ -39,16 +39,31 @@ class InstanciaContainerController extends Controller
 
     public function execInTerminal(Request $request, $containerId)
     {
-        $newTab = $request->newTab == '1' ? true : false;
+        $newTab = ($request->newTab == '1');
 
-        $cmd = "docker exec -i $containerId $request->command";
-        $process = Process::fromShellCommandline($cmd);
-        $process->run();
+        $url = env('DOCKER_HOST');
+
+        $data = [
+            'Cmd' => [
+                $request->command,
+            ],
+            'AttachStdin' => true,
+            'AttachStdout' => true,
+            'AttachStderr' => true,
+        ];
+
+        $response = Http::asJson()->post("$url/containers/$containerId/exec", $data);
+        $id = $response->json()['Id'];
+
+        $response = Http::asJson()->post("$url/exec/$id/start", ['Detach' => false, 'Tty' => false]);
+
+        dd($response);
+
         $data = [
             'docker_id' => $containerId,
             'command' => $request->command,
-            'out' => $process->getOutput(),
-            'status' => $process->isSuccessful(),
+            //'out' => $process->getOutput(),
+            //'status' => $process->isSuccessful(),
         ];
         ConsoleOut::create($data);
 
@@ -62,20 +77,16 @@ class InstanciaContainerController extends Controller
     public function store(Request $request)
     {
         try {
-            //Artisan::call("create:container", $params);
-            $thread = new ContainerCreateThread();
-            $thread->setPreforkWait(true);
-            $thread->run($request->all());
+            $url = env('DOCKER_HOST');
+
+            $data = $this->setDefaultDockerParams($request->all());
+            $this->pullImage($url, $data['Image']);
+            $this->createContainer($url, $data);
 
             return redirect()->route('instance.index')->with('success', 'Container creation is running!');
         } catch (Exception $e) {
             return  $e->getMessage();
         }
-    }
-
-    public function show($id)
-    {
-        return InstanciaContainer::firstWhere('id', $id);
     }
 
     public function edit($id)
@@ -97,17 +108,57 @@ class InstanciaContainerController extends Controller
 
     public function destroy($id)
     {
-        $cmd = "docker rm $id -f";
-        $process = Process::fromShellCommandline($cmd);
-        $process->run();
+        $url = env('DOCKER_HOST');
+        $response = Http::delete("$url/containers/$id");
 
-        if ($process->isSuccessful()) {
+        if ($response->getStatusCode() == 204) {
             $instancia = InstanciaContainer::firstWhere('docker_id', $id);
             $instancia->delete();
 
             return redirect()->route('instance.index')->with('success', 'Container deleted with sucess!');
         } else {
             return redirect()->route('instance.index')->with('error', 'Fail, Container not delete!');
+        }
+    }
+
+    private function setDefaultDockerParams(array $data)
+    {
+        $data['RestartPolicy'] = ['name' => 'always'];
+        $data['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0;
+
+        $data['Env'] = $data['envVariables'] ? explode(';', $data['envVariables']) : [];
+        array_pop($data['Env']); // Para remover string vazia no ultimo item do array, evitando erro na criação do container.
+
+        $data['HostConfig'] = ['PublishAllPorts' => true];
+
+        return $data;
+    }
+
+    private function pullImage($url, $image)
+    {
+        $response = Http::post("$url/images/create?fromImage=$image&tag=latest");
+
+        if ($response->getStatusCode() != 200) {
+            dd($response->json());
+        }
+    }
+
+    private function createContainer($url, $data)
+    {
+        $response = Http::asJson()->post("$url/containers/create", $data);
+
+        if ($response->getStatusCode() == 201) {
+            $container_id = $response->json()['Id'];
+            $response = Http::asJson()->post("$url/containers/$container_id/start");
+
+            $data['hashcode_maquina'] = Maquina::first()->hashcode;
+            $data['docker_id'] = $container_id;
+            $data['dataHora_instanciado'] = now();
+            $data['dataHora_finalizado'] = null;
+
+            InstanciaContainer::create($data);
+        } else {
+            dd($response->json());
         }
     }
 
