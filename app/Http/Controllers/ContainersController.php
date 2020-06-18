@@ -16,6 +16,7 @@ class ContainersController extends Controller
         $params = [
             'mycontainers' => InstanciaContainer::where('user_id', Auth::user()->id)->get(),
             'consoleOuts' => ConsoleOut::where('created_at', '<', now())->orderBy('created_at', 'desc')->take(100)->get(),
+            'dockerHost' => env('DOCKER_HOST'),
         ];
 
         return view('pages/my-containers/my_containers', $params);
@@ -23,9 +24,10 @@ class ContainersController extends Controller
 
     public function index()
     {
-        $data = ['containers' => Container::all(),
-                 'isAdmin' => Auth::user()->isAdmin(),
-                 'user_id' => Auth::user()->id,
+        $data = [
+            'containers' => Container::all(),
+            'isAdmin' => Auth::user()->isAdmin(),
+            'user_id' => Auth::user()->id,
         ];
 
         return view('pages/containers/containers', $data);
@@ -51,14 +53,17 @@ class ContainersController extends Controller
     public function show($id)
     {
         $url = env('DOCKER_HOST');
-        $response = Http::get("$url/containers/$id/top");
+        $processesResponse = Http::get("$url/containers/$id/top");
+        $detailsResponse = Http::get("$url/containers/$id/json");
 
         $params = [
             'mycontainer' => InstanciaContainer::firstWhere('docker_id', $id),
             'newTab' => false,
             'consoleOuts' => ConsoleOut::where('docker_id', $id)->orderBy('created_at', 'desc')->take(20)->get(),
-            'processes' => $response->json(),
+            'processes' => $processesResponse->json(),
+            'details' => $detailsResponse->json(),
         ];
+        //dd($params['details']);
 
         return view('pages/my-containers/my_containers_details', $params);
     }
@@ -99,8 +104,9 @@ class ContainersController extends Controller
     public function configureContainer(Request $request)
     {
         $params = [
-            'container' => Container::firstWhere('id', $request->image_id),
-            'userId' => $request->user_id,
+            'image' => Container::firstWhere('id', $request->image_id),
+            'user' => Auth::user()->name,
+            'user_id' => Auth::user()->id,
         ];
 
         return view('pages/containers/containers_config', $params);
@@ -112,7 +118,6 @@ class ContainersController extends Controller
             'name' => ['required'],
             'description' => ['required '],
             'command_pull' => ['required'],
-            'command_run' => ['required'],
         ]);
     }
 }
