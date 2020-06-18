@@ -19,8 +19,7 @@
                             <div class="alert alert-success">{{ session('success') }}</div>
                             @endif
                             <div id="{{ $mycontainer->id }}">
-                                @include('pages.my-containers.my_containers_show', ['mycontainer' => $mycontainer,
-                                'consoleOuts' => $consoleOuts, 'newTab' => $newTab])
+                                @include('pages.my-containers.my_containers_show', ['mycontainer' => $mycontainer, 'consoleOuts' => $consoleOuts, 'newTab' => $newTab])
                             </div>
                         </div>
                     </div>
@@ -33,7 +32,6 @@
                                 @foreach($processes['Titles'] as $title)
                                 <th>{{$title}}</th>
                                 @endforeach
-
                             </thead>
                             <tbody>
                                 @foreach($processes['Processes'] as $process)
@@ -45,6 +43,25 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title ">Details of {{ $mycontainer->nickname }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                        <table class='table'>
+                            <thead>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                @foreach($processes['Processes'] as $process)
+                                <tr>
+                                    <td></td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+
+                        </div>
                     </div>
                 </div>
             </div>
