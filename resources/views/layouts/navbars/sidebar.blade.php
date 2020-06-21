@@ -39,7 +39,7 @@
       </li>
       <li class="nav-item{{ $activePage == 'user-container' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('containers.index') }}">
-          <i class="material-icons">album</i>
+            <i class="fab fa-docker"></i>
             <span class="sidebar-normal"> {{ __('Container Images') }} </span>
         </a>
       </li>
@@ -57,7 +57,7 @@
           </p>
         </a>
         <div class="collapse show" id="laravelExample">
-          <ul class="nav">    
+          <ul class="nav">
           </ul>
         </div>
       </li> -->

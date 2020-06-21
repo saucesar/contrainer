@@ -23,6 +23,7 @@
                   @endif
                   <table class='table'>
                       <thead>
+                          <th>#</th>
                           <th>Name</th>
                           <th>Description</th>
                           <th>Options</th>
@@ -30,6 +31,7 @@
                       <tbody>
                           @foreach ($containers as $container)
                             <tr>
+                              <td><i class="fab fa-docker card-header-info ml-auto"></i></td>
                               <td>{{ $container->name }}</td>
                               <td width='550px'>{{ $container->description }}</td>
                               <td class="td-actions text-right">

@@ -23,7 +23,7 @@
                             @endif
                             <table class='table'>
                                 <thead>
-                                    <th>Machine Hashcode</th>
+                                    <th>#</th>
                                     <th>Container Id</th>
                                     <th>Nickname</th>
                                     <th>Iniciated at</th>
@@ -33,7 +33,7 @@
                                 <tbody>
                                     @foreach ($mycontainers as $container)
                                     <tr>
-                                        <td>{{ substr($container->hashcode_maquina, 0, 10) }} ...</td>
+                                        <td><i class="fas fa-box"></i></td>
                                         <td>{{ substr($container->docker_id, 0, 12) }}</td>
                                         <td>{{ $container->nickname }}</td>
                                         <td>{{ $container->dataHora_instanciado }}</td>
