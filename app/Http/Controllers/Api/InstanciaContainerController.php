@@ -50,6 +50,8 @@ class InstanciaContainerController extends Controller
             'AttachStdin' => true,
             'AttachStdout' => true,
             'AttachStderr' => true,
+            'OpenStdin' => true,
+            'StdinOnce' => false,
         ];
 
         $response = Http::asJson()->post("$url/containers/$containerId/exec", $data);
@@ -109,27 +111,54 @@ class InstanciaContainerController extends Controller
     public function destroy($id)
     {
         $url = env('DOCKER_HOST');
-        $response = Http::delete("$url/containers/$id");
 
-        if ($response->getStatusCode() == 204) {
-            $instancia = InstanciaContainer::firstWhere('docker_id', $id);
-            $instancia->delete();
+        $responseStop = Http::post("$url/containers/$id/stop");
+        if ($responseStop->getStatusCode() == 204) {
+            $responseDelete = Http::delete("$url/containers/$id");
+            if ($responseDelete->getStatusCode() == 204) {
+                $instancia = InstanciaContainer::firstWhere('docker_id', $id);
+                $instancia->delete();
 
-            return redirect()->route('instance.index')->with('success', 'Container deleted with sucess!');
+                return redirect()->route('instance.index')->with('success', 'Container deleted with sucess!');
+            } else {
+                dd($responseDelete->json());
+
+                return redirect()->route('instance.index')->with('error', 'Fail, Container not delete!');
+            }
         } else {
-            return redirect()->route('instance.index')->with('error', 'Fail, Container not delete!');
+            dd($responseStop->json());
         }
     }
 
     private function setDefaultDockerParams(array $data)
     {
-        $data['RestartPolicy'] = ['name' => 'always'];
         $data['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0;
 
         $data['Env'] = $data['envVariables'] ? explode(';', $data['envVariables']) : [];
         array_pop($data['Env']); // Para remover string vazia no ultimo item do array, evitando erro na criação do container.
 
-        $data['HostConfig'] = ['PublishAllPorts' => true];
+        $data['AttachStdin'] = true;
+        $data['AttachStdout'] = true;
+        $data['AttachStderr'] = true;
+        $data['OpenStdin'] = true;
+        $data['StdinOnce'] = false;
+        $data['Tty'] = true;
+
+        $data['Cmd'] = [
+            '/bin/bash',
+        ];
+
+        $data['HostConfig'] = [
+            'PublishAllPorts' => true,
+            'Privileged' => true,
+            'RestartPolicy' => [
+                'name' => 'always',
+            ],
+            'Binds' => [
+                '/var/run/docker.sock:/var/run/docker.sock',
+                '/tmp:/tmp',
+             ],
+        ];
 
         return $data;
     }
