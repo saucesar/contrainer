@@ -59,28 +59,20 @@
                                                     <i class=" material-icons">pause_circle_outline</i>
                                                 </a>
                                                 @endif
+                                                <a href="{{ route('container.terminalTab', $container->docker_id) }}" class="btn btn-info btn-link" target="_black" title="Open terminal to this container.">
+                                                    <i class="fas fa-terminal"></i>
+                                                </a>
                                                 <a href="{{$dockerHost}}/containers/{{$container->docker_id}}/export" class="btn btn-link" title="Download your container.">
                                                     <i class=" material-icons">get_app</i>
-                                                </a>
-                                                <a rel="tooltip" class="btn btn-success btn-link" data-toggle="collapse" data-target="#{{ $container->id }}" aria-expanded="false" title="Show console.">
-                                                    <i class="material-icons">details</i>
                                                 </a>
                                                 <a href="{{ route('containers.show' , [$container->docker_id]) }}" class="btn btn-link" title="Container details page.">
                                                     <i class="material-icons">error</i>
                                                 </a>
-                                                {!! Form::open(['route' => ['InstanciaContainers.destroy',
-                                                $container->docker_id], 'method' => 'delete']) !!}
+                                                {!! Form::open(['route' => ['InstanciaContainers.destroy', $container->docker_id], 'method' => 'delete']) !!}
                                                 <button type="submit" class="btn btn-danger btn-link" title="Detele this container." onclick="return confirm('Are you sure?')" type="submit">
                                                     <i class="material-icons">delete</i>
                                                 </button>
                                                 {!! Form::close() !!}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan='6'>
-                                            <div class="collapse card-header" style="background: gray;" id="{{ $container->id }}">
-                                                @include('pages.my-containers.my_containers_show', ['mycontainer' => $container, 'consoleOuts' => $consoleOuts, 'newTab' => false])
                                             </div>
                                         </td>
                                     </tr>
