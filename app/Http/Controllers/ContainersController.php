@@ -58,8 +58,6 @@ class ContainersController extends Controller
 
         $params = [
             'mycontainer' => InstanciaContainer::firstWhere('docker_id', $id),
-            'newTab' => false,
-            'consoleOuts' => ConsoleOut::where('docker_id', $id)->orderBy('created_at', 'desc')->take(20)->get(),
             'processes' => $processesResponse->json(),
             'details' => $detailsResponse->json(),
         ];
@@ -96,9 +94,16 @@ class ContainersController extends Controller
     public function terminalNewTab($id)
     {
         $container = InstanciaContainer::firstWhere('docker_id', $id);
-        $outs = ConsoleOut::where('docker_id', $container->docker_id)->orderBy('created_at', 'desc')->take(100)->get();
 
-        return view('pages/my-containers/my_containers_terminal_tab', ['mycontainer' => $container, 'outs' => $outs]);
+        $params = [
+            'mycontainer' => $container,
+            'socketParams' => json_encode([
+                'dockerHost' => env('DOCKER_HOST_WS'),
+                'container_id' => $id,
+            ]),
+        ];
+
+        return view('pages/my-containers/my_containers_terminal_tab', $params);
     }
 
     public function configureContainer(Request $request)
