@@ -23,8 +23,14 @@
 
 @push('js')
 <script>
-const url = "ws://localhost:12345/v1.27/containers/37fa431533f1/attach/ws?logs=1&stream=1&stdin=1&stdout=1&stderr=1";
-//const url = "ws://echo.websocket.org";
+var socketParams = <?= $socketParams; ?>;
+var host = socketParams['dockerHost'];
+var containerId = socketParams['container_id'];
+var endpoint = "/attach/ws?logs=1&stream=1&stdin=1&stdout=1&stderr=1";
+
+const url = host+'/containers/'+containerId+endpoint;
+
+console.log('url => ' + url);
 const webSocket = new WebSocket(url);
 
 const attachAddon = new AttachAddon.AttachAddon(webSocket);
