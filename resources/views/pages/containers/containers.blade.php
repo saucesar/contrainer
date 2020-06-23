@@ -63,7 +63,7 @@
                               </tr>
                               <tr>
                                 <td></td>
-                                <td colspan="2">
+                                <td colspan="3">
                                   <div class="collapse" id="{{ $container->id }}">
                                     @include('pages.containers.containers_show_form', ['container' => $container, 'isAdmin' => $isAdmin])
                                   </div>
