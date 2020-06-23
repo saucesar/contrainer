@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\ConsoleOut;
 use App\Models\InstanciaContainer;
 use Exception;
 use Illuminate\Http\Request;
@@ -34,45 +33,6 @@ class InstanciaContainerController extends Controller
             return redirect()->route('instance.index')->with('success', 'Container created with sucess!');
         } catch (Exception $e) {
             return redirect()->route('instance.index')->with('error', "Fail to stop the container! $e");
-        }
-    }
-
-    public function execInTerminal(Request $request, $containerId)
-    {
-        $newTab = ($request->newTab == '1');
-
-        $url = env('DOCKER_HOST');
-
-        $data = [
-            'Cmd' => [
-                $request->command,
-            ],
-            'AttachStdin' => true,
-            'AttachStdout' => true,
-            'AttachStderr' => true,
-            'OpenStdin' => true,
-            'StdinOnce' => false,
-        ];
-
-        $response = Http::asJson()->post("$url/containers/$containerId/exec", $data);
-        $id = $response->json()['Id'];
-
-        $response = Http::asJson()->post("$url/exec/$id/start", ['Detach' => false, 'Tty' => false]);
-
-        dd($response);
-
-        $data = [
-            'docker_id' => $containerId,
-            'command' => $request->command,
-            //'out' => $process->getOutput(),
-            //'status' => $process->isSuccessful(),
-        ];
-        ConsoleOut::create($data);
-
-        if ($newTab) {
-            return redirect()->route('container.terminalTab', $containerId)->with('success', 'Command executed with sucess!');
-        } else {
-            return redirect()->back()->with('success', 'Command executed with sucess!');
         }
     }
 
@@ -144,7 +104,7 @@ class InstanciaContainerController extends Controller
         $data['StdinOnce'] = false;
         $data['Tty'] = true;
 
-        $data['Cmd'] = [
+        $data['Entrypoint'] = [
             '/bin/bash',
         ];
 
