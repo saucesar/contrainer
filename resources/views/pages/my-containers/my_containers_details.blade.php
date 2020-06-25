@@ -77,9 +77,24 @@
                                     </p>
                                     <p><b> NetworkMode: </b>{{$details['HostConfig']['NetworkMode']}}</p>
                                     <p><b> VolumeDriver: </b>{{$details['HostConfig']['VolumeDriver']}}</p>
-                                    <p><b> Dns: </b>{{$details['HostConfig']['Dns']}}</p>
-                                    <p><b> DnsOptions: </b>{{$details['HostConfig']['DnsOptions']}}</p>
-                                    <p><b> DnsSearch: </b>{{$details['HostConfig']['DnsSearch']}}</p>
+                                    <p>
+                                        <b> Dns: </b>
+                                        @foreach($details['HostConfig']['Dns'] as $dns)
+                                            {{$dns}} <br>
+                                        @endforeach
+                                    </p>
+                                    <p>
+                                        <b> DnsOptions: </b>
+                                        @foreach($details['HostConfig']['DnsOptions'] as $dns)
+                                            {{$dns}} <br>
+                                        @endforeach
+                                    </p>
+                                    <p>
+                                        <b> DnsSearch: </b>
+                                        @foreach($details['HostConfig']['DnsSearch'] as $dns)
+                                            {{$dns}} <br>
+                                        @endforeach
+                                    </p>
                                     <p><b> ExtraHosts: </b>{{$details['HostConfig']['ExtraHosts']}}</p>
                                     <p><b> Privileged: </b>{{$details['HostConfig']['Privileged'] ? 'True' : 'False'}}</p>
                                     <p><b> PublishAllPorts: </b>{{$details['HostConfig']['PublishAllPorts'] ? 'True' : 'False'}}</p>
