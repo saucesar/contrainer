@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ConsoleOut;
 use Illuminate\Http\Request;
 use App\Models\Container;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +14,6 @@ class ContainersController extends Controller
     {
         $params = [
             'mycontainers' => InstanciaContainer::where('user_id', Auth::user()->id)->get(),
-            'consoleOuts' => ConsoleOut::where('created_at', '<', now())->orderBy('created_at', 'desc')->take(100)->get(),
             'dockerHost' => env('DOCKER_HOST'),
         ];
 
