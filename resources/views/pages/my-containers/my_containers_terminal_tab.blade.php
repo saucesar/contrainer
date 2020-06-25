@@ -26,7 +26,7 @@
 var socketParams = <?= $socketParams; ?>;
 var host = socketParams['dockerHost'];
 var containerId = socketParams['container_id'];
-var endpoint = "/attach/ws?logs=1&stream=1&stdin=1&stdout=1&stderr=1";
+var endpoint = "/attach/ws?logs=0&stream=1&stdin=1&stdout=1&stderr=1";
 
 const url = host+'/containers/'+containerId+endpoint;
 
