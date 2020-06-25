@@ -14,7 +14,7 @@
                         <p class="card-category">Add parameters before initializing your container</p>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="">
                             @if(session('error'))
                             <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif

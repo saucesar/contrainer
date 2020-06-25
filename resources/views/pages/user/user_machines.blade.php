@@ -11,7 +11,7 @@
             <p class="card-category">List of {{ $user_name }} machines</p>
           </div>
           <div class="card-body">
-            <div class="table-responsive">
+            <div class="">
               @include('pages/tables/machine_table', ['machines' => $machines])
             </div>
           </div>

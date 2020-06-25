@@ -14,7 +14,7 @@
               <p class="card-category">List of Available Container Images</p>
             </div>
             <div class="card-body">
-              <div class="table-responsive">
+              <div class="">
                   @if(session('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
                   @endif
