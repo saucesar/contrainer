@@ -7,8 +7,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Machines List</h4>
-                        <p class="card-category">List of registered machines</p>
+                        <h4 class="card-title ">Users List</h4>
+                        <p class="card-category">List of registered users</p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
