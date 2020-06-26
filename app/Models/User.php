@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public function containers()
     {
-        return InstanciaContainer::where('user_id', $this->id);
+        return Container::where('user_id', $this->id);
     }
 
     public function isAdmin()
