@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,7 +16,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'phone','user_type'];
+    protected $fillable = ['name', 'email', 'password', 'phone', 'user_type'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -35,11 +34,16 @@ class User extends Authenticatable
 
     public function machines()
     {
-        return $this->hasMany(Maquina::class);
+        return Maquina::where('user_id', $this->id);
+    }
+
+    public function containers()
+    {
+        return InstanciaContainer::where('user_id', $this->id);
     }
 
     public function isAdmin()
     {
-        return ($this->user_type == 'admin');
+        return $this->user_type == 'admin';
     }
 }
