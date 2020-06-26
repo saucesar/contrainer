@@ -3,21 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
-use App\Models\InstanciaContainer;
+use App\Models\Container;
 use App\Models\Maquina;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class AdminAreaController extends Controller
 {
+    private const PAGE_LIMITE = 10;
+
     public function index()
     {
         $params = [
-            'machines' => Maquina::paginate(10),
-            'users' => User::orderBy('id')->paginate(10),
+            'machines' => Maquina::paginate($this::PAGE_LIMITE),
+            'users' => User::orderBy('id')->paginate($this::PAGE_LIMITE),
+            'containers' => Container::paginate($this::PAGE_LIMITE),
+            'dockerHost' => env('DOCKER_HOST'),
             'numberOfMach' => Maquina::all()->count(),
             'inActivity' => Maquina::where('disponivel', true)->count(),
-            'images' => Image::paginate(10),
+            'images' => Image::paginate($this::PAGE_LIMITE),
             'isAdmin' => Auth::user()->isAdmin(),
             'registeredToday' => User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->whereDay('created_at', date('d'))->count(),
             'registeredMonth' => User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->count(),
@@ -60,8 +64,7 @@ class AdminAreaController extends Controller
 
     public function getGraficDataMachines()
     {
-        return json_encode(
-            [
+        return json_encode([
             Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('1'))->count(),
             Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('2'))->count(),
             Maquina::whereYear('created_at', date('Y'))->whereMonth('created_at', date('3'))->count(),
@@ -109,7 +112,7 @@ class AdminAreaController extends Controller
         $array = [];
 
         foreach ($users as $user) {
-            $array[$user->id] = InstanciaContainer::where('user_id', $user->id)->count();
+            $array[$user->id] = Container::where('user_id', $user->id)->count();
         }
 
         return $array;
@@ -122,7 +125,7 @@ class AdminAreaController extends Controller
         $array = [];
 
         foreach ($images as $container) {
-            $array[$container->id] = InstanciaContainer::where('image_id', $container->id)->get()->count();
+            $array[$container->id] = Container::where('image_id', $container->id)->get()->count();
         }
 
         return $array;
@@ -135,7 +138,7 @@ class AdminAreaController extends Controller
         $array = [];
 
         foreach ($images as $image) {
-            $array[] = InstanciaContainer::where('image_id', $image->id)->get()->count();
+            $array[] = Container::where('image_id', $image->id)->get()->count();
         }
 
         return json_encode($array);
