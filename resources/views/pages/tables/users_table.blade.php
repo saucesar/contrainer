@@ -14,8 +14,8 @@
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
             <td>{{ $user->user_type }}</td>
-            <td>{{ $machinesCount[$user->id]}}</td>
-            <td>{{ $containersCount[$user->id] }}</td>
+            <td>{{ $user->machines()->count()}}</td>
+            <td>{{ $user->containers()->count() }}</td>
         </tr>
         @endforeach
     </tbody>
