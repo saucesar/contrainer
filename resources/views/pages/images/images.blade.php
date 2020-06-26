@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'user-container', 'titlePage' => __("Images")])
+@extends('layouts.app', ['activePage' => 'images', 'titlePage' => __("Images")])
 
 @push('js')
 @endpush
