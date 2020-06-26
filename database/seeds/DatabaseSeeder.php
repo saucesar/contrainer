@@ -39,13 +39,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('containers')->insert([
-            'name' => 'nginx',
+            'name' => 'Nginx:latest',
             'description' => 'Nginx (pronounced "engine-x") is an open source
-                               reverse proxy server for HTTP, HTTPS, SMTP, POP3, and IMAP
-                               protocols, as well as a load balancer, HTTP cache, and a web
-                               server (origin server).',
-            'programs' => '',
-            'command_pull' => 'docker pull nginx',
+                              reverse proxy server for HTTP, HTTPS, SMTP, POP3, and IMAP
+                              protocols, as well as a load balancer, HTTP cache, and a web
+                              server (origin server).',
+            'fromImage' => 'nginx',
+            'tag' => 'latest',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
