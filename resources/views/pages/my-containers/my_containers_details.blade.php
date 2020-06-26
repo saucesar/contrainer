@@ -79,21 +79,28 @@
                                     <p><b> VolumeDriver: </b>{{$details['HostConfig']['VolumeDriver']}}</p>
                                     <p>
                                         <b> Dns: </b>
-                                        @foreach($details['HostConfig']['Dns'] as $dns)
-                                            {{$dns}} <br>
-                                        @endforeach
+                                        @if($details['HostConfig']['Dns'])
+                                            @foreach($details['HostConfig']['Dns'] as $dns)
+                                                {{$dns}} <br>
+                                            @endforeach
+                                        @endif
                                     </p>
                                     <p>
                                         <b> DnsOptions: </b>
-                                        @foreach($details['HostConfig']['DnsOptions'] as $dns)
-                                            {{$dns}} <br>
-                                        @endforeach
+                                        @if($details['HostConfig']['DnsOptions'])
+
+                                            @foreach($details['HostConfig']['DnsOptions'] as $dns)
+                                                {{$dns}} <br>
+                                            @endforeach
+                                        @endif
                                     </p>
                                     <p>
                                         <b> DnsSearch: </b>
-                                        @foreach($details['HostConfig']['DnsSearch'] as $dns)
-                                            {{$dns}} <br>
-                                        @endforeach
+                                        @if($details['HostConfig']['DnsSearch'])
+                                            @foreach($details['HostConfig']['DnsSearch'] as $dns)
+                                                {{$dns}} <br>
+                                            @endforeach
+                                        @endif
                                     </p>
                                     <p><b> ExtraHosts: </b>{{$details['HostConfig']['ExtraHosts']}}</p>
                                     <p><b> Privileged: </b>{{$details['HostConfig']['Privileged'] ? 'True' : 'False'}}</p>
