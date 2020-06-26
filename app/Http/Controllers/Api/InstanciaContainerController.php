@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\InstanciaContainer;
+use App\Models\Container;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -40,9 +41,8 @@ class InstanciaContainerController extends Controller
     {
         try {
             $url = env('DOCKER_HOST');
-
             $data = $this->setDefaultDockerParams($request->all());
-            $this->pullImage($url, $data['Image']);
+            $this->pullImage($url, Container::find($data['image_id']));
             $this->createContainer($url, $data);
 
             return redirect()->route('instance.index')->with('success', 'Container creation is running!');
@@ -73,7 +73,7 @@ class InstanciaContainerController extends Controller
         $url = env('DOCKER_HOST');
 
         $responseStop = Http::post("$url/containers/$id/stop");
-        if ($responseStop->getStatusCode() == 204) {
+        if ($responseStop->getStatusCode() == 204 || $responseStop->getStatusCode() == 304) {
             $responseDelete = Http::delete("$url/containers/$id");
             if ($responseDelete->getStatusCode() == 204) {
                 $instancia = InstanciaContainer::firstWhere('docker_id', $id);
@@ -92,6 +92,7 @@ class InstanciaContainerController extends Controller
 
     private function setDefaultDockerParams(array $data)
     {
+        $data['Image'] = Container::find($data['image_id'])->fromImage;
         $data['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0;
 
         $data['Env'] = $data['envVariables'] ? explode(';', $data['envVariables']) : [];
@@ -123,9 +124,14 @@ class InstanciaContainerController extends Controller
         return $data;
     }
 
-    private function pullImage($url, $image)
+    private function pullImage($url, Container $image)
     {
-        $response = Http::post("$url/images/create?fromImage=$image&tag=latest");
+        $uri = "images/create?fromImage=$image->fromImage&tag=$image->tag";
+        $image->fromSrc ? $uri .= "&fromSrc=$image->fromSrc" : $uri;
+        $image->repo ? $uri .= "&repo=$image->repo" : $uri;
+        $image->message ? $uri .= "&message=$image->message" : $uri;
+
+        $response = Http::post("$url/$uri");
 
         if ($response->getStatusCode() != 200) {
             dd($response->json());
@@ -143,7 +149,7 @@ class InstanciaContainerController extends Controller
             $data['hashcode_maquina'] = Maquina::first()->hashcode;
             $data['docker_id'] = $container_id;
             $data['dataHora_instanciado'] = now();
-            $data['dataHora_finalizado'] = null;
+            $data['dataHora_finalizado'] = $response->getStatusCode() == 204 ? null : now();
 
             InstanciaContainer::create($data);
         } else {
