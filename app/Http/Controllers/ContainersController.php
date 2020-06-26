@@ -39,13 +39,14 @@ class ContainersController extends Controller
     public function store(Request $request)
     {
         $this->validar($request);
-        $container = null;
 
         if (Auth::user()->isAdmin()) {
-            $container = Container::create($request->all());
-        }
+            Container::create($request->all());
 
-        return redirect()->route('containers.index')->with('success', 'Container created!!!');
+            return redirect()->route('containers.index')->with('success', 'Container created!!!');
+        } else {
+            return redirect()->route('containers.index')->with('error', 'User not have permition for this!!!');
+        }
     }
 
     public function show($id)
@@ -59,7 +60,6 @@ class ContainersController extends Controller
             'processes' => $processesResponse->json(),
             'details' => $detailsResponse->json(),
         ];
-        //dd($params['details']);
 
         return view('pages/my-containers/my_containers_details', $params);
     }
@@ -120,7 +120,8 @@ class ContainersController extends Controller
         $this->validate($request, [
             'name' => ['required'],
             'description' => ['required '],
-            'command_pull' => ['required'],
+            'fromImage' => ['required '],
+            'tag' => ['required '],
         ]);
     }
 }

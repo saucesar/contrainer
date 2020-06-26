@@ -9,10 +9,5 @@ class Container extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'programs', 'command_pull'];
-
-    public function programas()
-    {   //Tranforma a string programas em um array
-        return explode(',', $this->programs);
-    }
+    protected $fillable = ['name', 'description', 'fromImage', 'fromSrc', 'repo', 'tag', 'message'];
 }
