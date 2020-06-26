@@ -37,7 +37,7 @@
             <span class="sidebar-normal"> {{ __('Machines') }} </span>
         </a>
       </li>
-      <li class="nav-item{{ $activePage == 'user-container' ? ' active' : '' }}">
+      <li class="nav-item{{ $activePage == 'images' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('images.index') }}">
             <i class="fab fa-docker"></i>
             <span class="sidebar-normal"> {{ __('Images') }} </span>
