@@ -3,47 +3,8 @@
 @section('content')
 <div class="content">
     <div class="container-fluid">
-        <div class="row">
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card card-stats">
-                    <div class="card-header card-header-info card-header-icon">
-                        <div class="card-icon">
-                            <i class="material-icons">album</i>
-                        </div>
-                        <p class="card-category">Instances</p>
-                        <h3 class="card-title">{{ $images->count() }}</h3>
-                        <div class="collapse card-title" id="container-details">
-                            <table class='table'>
-                                <thead>
-                                    <th>Image</th>
-                                    <th>Instances</th>
-                                </thead>
-                                <tbody>
-                                    @foreach($images as $image)
-                                    <tr>
-                                        <td>{{ $image->name }}</td>
-                                        <td>{{ $instacesOfeachImage[$image->id] }}</td>
-                                    </tr>
-                                    @endforeach
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a rel="tooltip" class="btn btn-link" data-toggle="collapse" data-target="#container-details"
-                            aria-expanded="false" aria-controls="collapseExample">
-                            <i class="material-icons">expand_more</i>
-                            More Details
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="row">
-
             <div class="col-lg-6">
                 <div class="card card-stats">
                     <div class="card-header card-header-info card-header-icon">
@@ -143,6 +104,29 @@
                     <div class="card-footer">
                         <p class="card-category"></p>
                         <p class="card-category">Total:{{ $images->count() }}</p>
+                        <p class="card-category"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-stats">
+                    <div class="card-header card-header-info">
+
+                        <h3 class="card-title">
+                            <i class="fab fa-docker"></i>
+                            Containers List
+                        </h3>
+                        <p class="card-category"></p>
+                    </div>
+                    <div class="" id="images">
+                        @include('pages/tables/containers_table', ['mycontainers' => $containers, 'dockerHost' => $dockerHost, 'isAdminArea' => true])
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-category"></p>
+                        <p class="card-category">Total:{{ $containers->count() }}</p>
                         <p class="card-category"></p>
                     </div>
                 </div>
