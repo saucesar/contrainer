@@ -50,3 +50,4 @@
         @endforeach
     </tbody>
 </table>
+{!! $images->links() !!}

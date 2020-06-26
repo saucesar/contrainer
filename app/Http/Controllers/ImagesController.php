@@ -11,7 +11,7 @@ class ImagesController extends Controller
     public function index()
     {
         $data = [
-            'images' => Image::all(),
+            'images' => Image::paginate(10),
             'isAdmin' => Auth::user()->isAdmin(),
             'user_id' => Auth::user()->id,
         ];
