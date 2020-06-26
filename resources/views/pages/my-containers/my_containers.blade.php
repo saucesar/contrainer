@@ -10,7 +10,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Containers Instance Table</h4>
+                        <h4 class="card-title ">Containers Table</h4>
                         <p class="card-category">List of Instace Container Images</p>
                     </div>
                     <div class="card-body">
@@ -70,12 +70,12 @@
                                                 class="btn btn-link" title="Download.">
                                                 <i class=" material-icons">get_app</i>
                                             </a>
-                                            <a href="{{ route('containers.show' , [$container->docker_id]) }}"
+                                            <a href="{{ route('mycontainers.show' , [$container->docker_id]) }}"
                                                 class="btn btn-link" title="Details.">
                                                 <i class="material-icons">error</i>
                                             </a>
                                             <a href="{{$dockerHost}}/containers/{{$container->docker_id}}/logs?timestamps=1&stdout=1&stderr=1"
-                                                class="btn btn-link" title="Logs.">
+                                                class="btn btn-link" target="_black" title="Logs.">
                                                 <i class="fas fa-file-alt"></i>
                                             </a>
                                             {!! Form::open(['route' => ['InstanciaContainers.destroy',
@@ -99,7 +99,7 @@
     </div>
     <div class="col-lg-11 text-right" style="margin-left: 48px;">
         <button class="btn btn-primary btn-fab btn-round">
-            <a href="{{ route('containers.index') }}">
+            <a href="{{ route('images.index') }}">
                 <i class="material-icons" style="color:white">add_to_queue</i>
             </a>
         </button>
