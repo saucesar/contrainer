@@ -2,6 +2,7 @@
     <thead>
         <th>#</th>
         <th>Hashcode</th>
+        <th>User</th>
         <th>CPU/RAM Available</th>
         <th>Time Activity</th>
         <th>Running</th>
@@ -12,6 +13,7 @@
         <tr>
             <td><span class="material-icons">computer</span></td>
             <td>{{ $machine->hashcode }}</td>
+            <td>{{ $machine->user()->name }}</td>
             <td>
                 {{ $machine->cpu_utilizavel }}%
                 <span>/</span>
@@ -52,7 +54,7 @@
             </td>
         </tr>
         <tr>
-            <td colspan="6">
+            <td colspan="7">
                 <div class="collapse" id="{{ $machine->id }}">
                     @include('pages.user.machine_show_form', ['machine' => $machine])
                     <a href="{{ route('machines.show', $machine) }}" class="btn btn-sm btn-outline-info">
