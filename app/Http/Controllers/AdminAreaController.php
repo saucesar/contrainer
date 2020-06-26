@@ -14,11 +14,11 @@ class AdminAreaController extends Controller
     {
         $params = [
             'machines' => Maquina::paginate(4),
+            'users' => User::orderBy('id')->paginate(10),
             'numberOfMach' => Maquina::all()->count(),
-            'inActivity' => Maquina::where('disponivel', true)->get()->count(),
-            'numberOfCont' => Container::all()->count(),
-            'containers' => Container::all(),
-            'numberOfUsers' => User::all()->count(),
+            'inActivity' => Maquina::where('disponivel', true)->count(),
+            'images' => Container::all(),
+            'isAdmin' => Auth::user()->isAdmin(),
             'registeredToday' => User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->whereDay('created_at', date('d'))->count(),
             'registeredMonth' => User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->count(),
             'instacesOfeachImage' => $this->getInstacesOfEachImage(),
@@ -34,7 +34,7 @@ class AdminAreaController extends Controller
     public function machines()
     {
         if (Auth::user()->isAdmin()) {
-            return view('pages/admin/machines', ['machines' => Maquina::orderBy('id')->paginate(5)]);
+            return view('pages/admin/machines', ['machines' => Maquina::orderBy('id')->paginate(10)]);
         } else {
             return redirect()->back()->with('error', 'User not Authorized!!!');
         }
