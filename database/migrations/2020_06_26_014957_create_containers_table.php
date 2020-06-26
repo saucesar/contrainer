@@ -4,14 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInstanciaContainersTable extends Migration
+class CreateContainersTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up()
     {
-        Schema::create('instancia_containers', function (Blueprint $table) {
+        Schema::create('containers', function (Blueprint $table) {
             $table->id();
             $table->string('hashcode_maquina');
             $table->string('docker_id')->unique();
@@ -35,6 +35,6 @@ class CreateInstanciaContainersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('instancia_containers');
+        Schema::dropIfExists('containers');
     }
 }

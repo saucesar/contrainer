@@ -40,22 +40,22 @@
                                 <a rel="tooltip" class="btn btn-info" data-toggle="collapse"
                                     data-target="#state" aria-expanded="false" style="width: 220px;">
                                     State
-                                    <i class="material-icons">details</i>
+                                    <i class="material-icons">swap_vert</i>
                                 </a>
                                 <a rel="tooltip" class="btn btn-info" data-toggle="collapse"
                                     data-target="#hostconfig" aria-expanded="false" style="width: 220px;">
                                     Host Config
-                                    <i class="material-icons">details</i>
+                                    <i class="material-icons">swap_vert</i>
                                 </a>
                                 <a rel="tooltip" class="btn btn-info" data-toggle="collapse"
                                     data-target="#config" aria-expanded="false" style="width: 220px;">
                                     Config
-                                    <i class="material-icons">details</i>
+                                    <i class="material-icons">swap_vert</i>
                                 </a>
                                 <a rel="tooltip" class="btn btn-info" data-toggle="collapse"
                                     data-target="#network" aria-expanded="false" style="width: 220px;">
                                     Network Settings
-                                    <i class="material-icons">details</i>
+                                    <i class="material-icons">swap_vert</i>
                                 </a>
                             </p>
                             <p>

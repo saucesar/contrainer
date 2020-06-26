@@ -29,10 +29,10 @@ Route::get('admin-area/machines', 'AdminAreaController@machines')->name('admin.a
 Route::get('admin-area/users', 'AdminAreaController@users')->name('admin.area.users');
 Route::resource('machines', 'MaquinasController')->except('index')->middleware('auth');
 Route::resource('images', 'ImagesController')->middleware('auth');
-Route::get('containers-instace', 'MyContainersController@instanceIndex')->name('instance.index');
-Route::get('containers-show/{id}', 'MyContainersController@show')->name('mycontainers.show');
+Route::get('containers-instace', 'Api\ContainersController@index')->name('instance.index');
+Route::resource('containers', 'Api\ContainersController');
 Route::post('containers-instace', 'ImagesController@configureContainer')->name('instance.configure');
-Route::get('terminal-tab/{docker_id}', 'MyContainersController@terminalNewTab')->name('container.terminalTab');
+Route::get('terminal-tab/{docker_id}', 'Api\ContainersController@terminalNewTab')->name('container.terminalTab');
 Auth::routes();
 
 Auth::routes();

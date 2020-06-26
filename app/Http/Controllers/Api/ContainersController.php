@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\InstanciaContainer;
-use App\Models\Image;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use App\Models\Image;
 use App\Models\Maquina;
+use App\Models\Container;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
-class InstanciaContainerController extends Controller
+class ContainersController extends Controller
 {
     public function playStop($container_id)
     {
-        $instancia = InstanciaContainer::where('docker_id', $container_id)->first();
+        $instancia = Container::where('docker_id', $container_id)->first();
         $url = env('DOCKER_HOST');
 
         if ($instancia->dataHora_finalizado) {
@@ -37,6 +38,46 @@ class InstanciaContainerController extends Controller
         }
     }
 
+    public function index()
+    {
+        $params = [
+            'mycontainers' => Container::where('user_id', Auth::user()->id)->paginate(10),
+            'dockerHost' => env('DOCKER_HOST'),
+        ];
+
+        return view('pages/my-containers/my_containers', $params);
+    }
+
+    public function terminalNewTab($id)
+    {
+        $container = Container::firstWhere('docker_id', $id);
+
+        $params = [
+            'mycontainer' => $container,
+            'socketParams' => json_encode([
+                'dockerHost' => env('DOCKER_HOST_WS'),
+                'container_id' => $id,
+            ]),
+        ];
+
+        return view('pages/my-containers/my_containers_terminal_tab', $params);
+    }
+
+    public function show($id)
+    {
+        $url = env('DOCKER_HOST');
+        $processesResponse = Http::get("$url/containers/$id/top");
+        $detailsResponse = Http::get("$url/containers/$id/json");
+
+        $params = [
+            'mycontainer' => Container::firstWhere('docker_id', $id),
+            'processes' => $processesResponse->json(),
+            'details' => $detailsResponse->json(),
+        ];
+
+        return view('pages/my-containers/my_containers_details', $params);
+    }
+
     public function store(Request $request)
     {
         try {
@@ -53,19 +94,19 @@ class InstanciaContainerController extends Controller
 
     public function edit($id)
     {
-        $instancia = InstanciaContainer::firstWhere('id', $id);
-
-        $instancia->dataHora_finalizado = now();
-        $instancia->save();
-
-        return redirect()->route('instance.index')->with('success', 'Container created with sucess!');
+        return view('pages/my-containers/my_containers_edit', ['container' => Container::firstWhere('docker_id', $id)]);
     }
 
     public function update(Request $request, $id)
     {
-        $this->validar($request);
-        $instancia = InstanciaContainer::firstWhere('id', $id);
-        $instancia->update($request->all());
+        if ($request->nickname) {
+            $instancia = Container::firstWhere('docker_id', $id);
+            $instancia->update($request->all());
+
+            return redirect()->route('containers.index')->with('success', 'Container updated!!!');
+        } else {
+            return redirect()->route('containers.index')->with('error', "Nickname can't be blank!!!");
+        }
     }
 
     public function destroy($id)
@@ -76,7 +117,7 @@ class InstanciaContainerController extends Controller
         if ($responseStop->getStatusCode() == 204 || $responseStop->getStatusCode() == 304) {
             $responseDelete = Http::delete("$url/containers/$id");
             if ($responseDelete->getStatusCode() == 204) {
-                $instancia = InstanciaContainer::firstWhere('docker_id', $id);
+                $instancia = Container::firstWhere('docker_id', $id);
                 $instancia->delete();
 
                 return redirect()->route('instance.index')->with('success', 'Container deleted with sucess!');
@@ -151,7 +192,7 @@ class InstanciaContainerController extends Controller
             $data['dataHora_instanciado'] = now();
             $data['dataHora_finalizado'] = $response->getStatusCode() == 204 ? null : now();
 
-            InstanciaContainer::create($data);
+            Container::create($data);
         } else {
             dd($response->json());
         }
@@ -159,6 +200,6 @@ class InstanciaContainerController extends Controller
 
     private function validar(Request $request)
     {
-        $this->validate($request, InstanciaContainer::$rules);
+        $this->validate($request, Container::$rules);
     }
 }
