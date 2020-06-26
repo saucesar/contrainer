@@ -35,10 +35,12 @@ const webSocket = new WebSocket(url);
 
 const attachAddon = new AttachAddon.AttachAddon(webSocket);
 const fitAddon = new FitAddon.FitAddon();
+const webLinksAddon = new WebLinksAddon.WebLinksAddon();
 const term = new Terminal();
 
 term.loadAddon(attachAddon);
 term.loadAddon(fitAddon);
+term.loadAddon(webLinksAddon);
 
 term.open(document.getElementById('terminal'));
 fitAddon.fit();

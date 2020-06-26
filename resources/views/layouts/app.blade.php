@@ -27,6 +27,9 @@
     <script src="{{ asset('xterm-addon-fit') }}/lib/xterm-addon-fit.js"></script>
     <script src="{{ asset('xterm-addon-fit') }}/out/FitAddon.js"></script>
 
+    <script src="{{ asset('xterm-addon-web-links') }}/lib/xterm-addon-web-links.js"></script>
+    <script src="{{ asset('xterm-addon-web-links') }}/out/WebLinksAddon.js"></script>
+    
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()
