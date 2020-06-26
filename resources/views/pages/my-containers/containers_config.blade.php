@@ -21,7 +21,7 @@
                             @if(session('success'))
                             <div class="alert alert-success">{{ session('success') }}</div>
                             @endif
-                            {!! Form::open(['route' => 'InstanciaContainers.store', 'method' => 'post']) !!}
+                            {!! Form::open(['route' => 'containers.store', 'method' => 'post']) !!}
                             <input type="hidden" value="{{ $image->id }}" name='image_id'>
                             <input type="hidden" value="{{ $user_id }}" name='user_id'>
                             <h4 class="card-title">Image Selected : {{ $image->name }}</h4>
