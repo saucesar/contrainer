@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'user-container', 'titlePage' => __("Avaiable Container")])
+@extends('layouts.app', ['activePage' => 'user-image', 'titlePage' => __("Avaiable image")])
 
 @push('js')
 @endpush
@@ -10,11 +10,11 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title ">Container Images Table</h4>
-              <p class="card-category">Create New Container Image</p>
+              <h4 class="card-title ">Images Table</h4>
+              <p class="card-category">Edit Image</p>
             </div>
             <div class="card-body">
-              <div class="">
+              <div class="table-responsive">
                   @if(session('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
                   @endif
@@ -27,8 +27,8 @@
                       </ul>
                   </div>
                   @endif
-                  {!! Form::open(['route' => 'containers.store', 'method' => 'post']) !!}
-                    @include('pages/containers/containers_form')
+                  {!! Form::open(['route' => ['images.update', $image], 'method' => 'put']) !!}
+                    @include('pages/images/images_form', ['image' => $image])
                   {!! Form::close() !!}
               </div>
             </div>

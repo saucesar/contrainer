@@ -10,11 +10,11 @@
         <div class="col-md-12">
           <div class="card">
             <div class="card-header card-header-primary">
-              <h4 class="card-title ">Container Images Table</h4>
-              <p class="card-category">Edit Container Image</p>
+              <h4 class="card-title ">Images Table</h4>
+              <p class="card-category">Create New Container Image</p>
             </div>
             <div class="card-body">
-              <div class="table-responsive">
+              <div class="">
                   @if(session('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
                   @endif
@@ -27,8 +27,8 @@
                       </ul>
                   </div>
                   @endif
-                  {!! Form::open(['route' => ['containers.update', $container], 'method' => 'put']) !!}
-                    @include('pages/containers/containers_form', ['container' => $container])
+                  {!! Form::open(['route' => 'images.store', 'method' => 'post']) !!}
+                    @include('pages/images/images_form')
                   {!! Form::close() !!}
               </div>
             </div>

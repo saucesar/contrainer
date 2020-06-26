@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\InstanciaContainer;
-use App\Models\Container;
+use App\Models\Image;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -42,7 +42,7 @@ class InstanciaContainerController extends Controller
         try {
             $url = env('DOCKER_HOST');
             $data = $this->setDefaultDockerParams($request->all());
-            $this->pullImage($url, Container::find($data['image_id']));
+            $this->pullImage($url, Image::find($data['image_id']));
             $this->createContainer($url, $data);
 
             return redirect()->route('instance.index')->with('success', 'Container creation is running!');
@@ -92,7 +92,7 @@ class InstanciaContainerController extends Controller
 
     private function setDefaultDockerParams(array $data)
     {
-        $data['Image'] = Container::find($data['image_id'])->fromImage;
+        $data['Image'] = Image::find($data['image_id'])->fromImage;
         $data['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0;
 
         $data['Env'] = $data['envVariables'] ? explode(';', $data['envVariables']) : [];
@@ -124,7 +124,7 @@ class InstanciaContainerController extends Controller
         return $data;
     }
 
-    private function pullImage($url, Container $image)
+    private function pullImage($url, Image $image)
     {
         $uri = "images/create?fromImage=$image->fromImage&tag=$image->tag";
         $image->fromSrc ? $uri .= "&fromSrc=$image->fromSrc" : $uri;

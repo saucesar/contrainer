@@ -1,14 +1,14 @@
 <div class="row">
     {!! Form::label('Name', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">
-        {!! Form::text('name', $container->name ?? null, ['class'=>"form-control", 'placeholder' =>"Image name", 'required'=>"true"]) !!}
+        {!! Form::text('name', $image->name ?? null, ['class'=>"form-control", 'placeholder' =>"Image name", 'required'=>"true"]) !!}
     </div>
 </div>
 <br>
 <div class="row">
     {!! Form::label('Description', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">
-        {!! Form::textarea('description', $container->description ?? null,
+        {!! Form::textarea('description', $image->description ?? null,
             [
                 'class'=>"form-control",
                 'placeholder' =>"Enter a description.",
@@ -23,7 +23,7 @@
 <div class="row">
     {!! Form::label('From Image', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">
-        {!! Form::text('fromImage', $container->fromImage ?? null,
+        {!! Form::text('fromImage', $image->fromImage ?? null,
             [
                 'class'=>"form-control",
                 'placeholder'=>"Name of the image to pull.",
@@ -40,7 +40,7 @@
 <div class="row">
     {!! Form::label('From Source', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">
-        {!! Form::text('fromSrc', $container->fromSrc ?? null,
+        {!! Form::text('fromSrc', $image->fromSrc ?? null,
             [
                 'class' => "form-control",
                 'placeholder' => "Source to import.",
@@ -56,7 +56,7 @@
 <div class="row">
     {!! Form::label('Repository', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">
-        {!! Form::text('repo', $container->repo ?? null,
+        {!! Form::text('repo', $image->repo ?? null,
             [
                 'class'=>"form-control",
                 'placeholder'=>"Repository name given to an image when it is imported.",
@@ -71,7 +71,7 @@
 <div class="row">
     {!! Form::label('Tag', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">
-        {!! Form::text('tag', $container->tag ?? null,
+        {!! Form::text('tag', $image->tag ?? null,
             [
                 'class'=>"form-control",
                 'placeholder' => "Tag or digest. ",
@@ -87,7 +87,7 @@
 <div class="row">
     {!! Form::label('Message', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">
-        {!! Form::text('message', $container->message ?? null,
+        {!! Form::text('message', $image->message ?? null,
             [
                 'class'=>"form-control",
                 'placeholder' => "Set commit message for imported image.",

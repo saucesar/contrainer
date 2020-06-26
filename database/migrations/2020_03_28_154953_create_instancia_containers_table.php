@@ -18,10 +18,10 @@ class CreateInstanciaContainersTable extends Migration
             $table->bigInteger('user_id');
             $table->bigInteger('image_id');
             $table->string('nickname', 256)->default('nickname');
+
             $table->foreign('hashcode_maquina')->references('hashcode')->on('maquinas');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('image_id')->references('id')->on('containers');
-            //$table->foreign('container_id')->references('id')->on('containers');
+            $table->foreign('image_id')->references('id')->on('images');
 
             $table->dateTime('dataHora_instanciado');
             $table->dateTime('dataHora_finalizado')->nullable();

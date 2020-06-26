@@ -38,9 +38,9 @@
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'user-container' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('containers.index') }}">
+        <a class="nav-link" href="{{ route('images.index') }}">
             <i class="fab fa-docker"></i>
-            <span class="sidebar-normal"> {{ __('Container Images') }} </span>
+            <span class="sidebar-normal"> {{ __('Images') }} </span>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'my-containers' ? ' active' : '' }}">

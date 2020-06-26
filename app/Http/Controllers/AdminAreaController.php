@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Container;
+use App\Models\Image;
 use App\Models\InstanciaContainer;
 use App\Models\Maquina;
 use App\Models\User;
@@ -13,11 +13,11 @@ class AdminAreaController extends Controller
     public function index()
     {
         $params = [
-            'machines' => Maquina::paginate(4),
+            'machines' => Maquina::paginate(10),
             'users' => User::orderBy('id')->paginate(10),
             'numberOfMach' => Maquina::all()->count(),
             'inActivity' => Maquina::where('disponivel', true)->count(),
-            'images' => Container::all(),
+            'images' => Image::paginate(10),
             'isAdmin' => Auth::user()->isAdmin(),
             'registeredToday' => User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->whereDay('created_at', date('d'))->count(),
             'registeredMonth' => User::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->count(),
@@ -84,7 +84,7 @@ class AdminAreaController extends Controller
             $params = [
                 'users' => $users,
                 'machinesCount' => $this->getMachinesCount($users),
-                'containersCount' => $this->getInstanceContainersCount($users),
+                'imagesCount' => $this->getInstanceImagesCount($users),
             ];
 
             return view('pages/admin/users', $params);
@@ -104,7 +104,7 @@ class AdminAreaController extends Controller
         return $array;
     }
 
-    public function getInstanceContainersCount($users)
+    public function getInstanceImagesCount($users)
     {
         $array = [];
 
@@ -117,11 +117,11 @@ class AdminAreaController extends Controller
 
     private function getInstacesOfEachImage()
     {
-        $containers = Container::all();
+        $images = Image::all();
 
         $array = [];
 
-        foreach ($containers as $container) {
+        foreach ($images as $container) {
             $array[$container->id] = InstanciaContainer::where('image_id', $container->id)->get()->count();
         }
 
@@ -130,12 +130,12 @@ class AdminAreaController extends Controller
 
     private function getInstacesCountImages()
     {
-        $containers = Container::all();
+        $images = Image::all();
 
         $array = [];
 
-        foreach ($containers as $container) {
-            $array[] = InstanciaContainer::where('image_id', $container->id)->get()->count();
+        foreach ($images as $image) {
+            $array[] = InstanciaContainer::where('image_id', $image->id)->get()->count();
         }
 
         return json_encode($array);
@@ -144,8 +144,8 @@ class AdminAreaController extends Controller
     public function getImagesLabels()
     {
         $array = [];
-        foreach (Container::all() as $container) {
-            $array[] = $container->name;
+        foreach (Image::all() as $image) {
+            $array[] = $image->name;
         }
 
         return json_encode($array);

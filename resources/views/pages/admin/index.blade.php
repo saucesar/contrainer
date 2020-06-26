@@ -4,99 +4,6 @@
 <div class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card card-stats">
-                    <div class="card-header card-header-info card-header-icon">
-                        <div class="card-icon">
-                            <i class="material-icons">laptop</i>
-                        </div>
-                        <p class="card-category">Machines</p>
-                        <h3 class="card-title">{{ $numberOfMach }}</h3>
-                        <div class="collapse card-title" id="machine-details">
-                            <br>
-                            <p>Active: {{ $inActivity }}</p>
-                            <a href="{{ route('admin.area.machines') }}" class="btn btn-warning">full list</a>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a rel="tooltip" class="btn btn-link" data-toggle="collapse" data-target="#machine-details"
-                            aria-expanded="false" aria-controls="collapseExample">
-                            <i class="material-icons ">expand_more</i>
-                            More Details
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card card-stats">
-                    <div class="card-header card-header-info card-header-icon">
-                        <div class="card-icon">
-                            <i class="material-icons">people</i>
-                        </div>
-                        <p class="card-category">Users</p>
-                        <h3 class="card-title">{{ $numberOfUsers }}</h3>
-                        <div class="collapse" id="users-details">
-                            <table class='table'>
-                                <tbody>
-                                    <tr>
-                                        <td>Today:</td>
-                                        <td>{{ $registeredToday }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>This Month:</td>
-                                        <td>{{ $registeredMonth }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <a href="{{ route('admin.area.users') }}" class="btn btn-warning">full list</a>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a rel="tooltip" class="btn btn-link" data-toggle="collapse" data-target="#users-details"
-                            aria-expanded="false" aria-controls="collapseExample">
-                            <i class="material-icons">expand_more</i>
-                            More Details
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card card-stats">
-                    <div class="card-header card-header-info card-header-icon">
-                        <div class="card-icon">
-                            <i class="material-icons">album</i>
-                        </div>
-                        <p class="card-category">Images</p>
-                        <h3 class="card-title">{{ $numberOfCont }}</h3>
-                        <div class="collapse card-title" id="container-details">
-                            <table class='table'>
-                                <thead>
-                                    <th>Image</th>
-                                    <th>Instances</th>
-                                </thead>
-                                <tbody>
-                                    @foreach($containers as $container)
-                                    <tr>
-                                        <td>{{ $container->name }}</td>
-                                        <td>{{ $instacesOfeachImage[$container->id] }}</td>
-                                    </tr>
-                                    @endforeach
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a rel="tooltip" class="btn btn-link" data-toggle="collapse" data-target="#container-details"
-                            aria-expanded="false" aria-controls="collapseExample">
-                            <i class="material-icons">expand_more</i>
-                            More Details
-                        </a>
-                    </div>
-                </div>
-            </div>
 
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card card-stats">
@@ -105,7 +12,7 @@
                             <i class="material-icons">album</i>
                         </div>
                         <p class="card-category">Instances</p>
-                        <h3 class="card-title">{{ $numberOfCont }}</h3>
+                        <h3 class="card-title">{{ $images->count() }}</h3>
                         <div class="collapse card-title" id="container-details">
                             <table class='table'>
                                 <thead>
@@ -113,10 +20,10 @@
                                     <th>Instances</th>
                                 </thead>
                                 <tbody>
-                                    @foreach($containers as $container)
+                                    @foreach($images as $image)
                                     <tr>
-                                        <td>{{ $container->name }}</td>
-                                        <td>{{ $instacesOfeachImage[$container->id] }}</td>
+                                        <td>{{ $image->name }}</td>
+                                        <td>{{ $instacesOfeachImage[$image->id] }}</td>
                                     </tr>
                                     @endforeach
 
@@ -177,31 +84,78 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-stats">
-                    <div class="card-header card-header-info card-header-icon">
-                        <div class="card-icon">
+                    <div class="card-header card-header-info">
+                        <h3 class="card-title">
                             <i class="material-icons">laptop</i>
-                        </div>
-                        <p class="card-title"></p>
-                        <h3 class="card-title">Machines</h3>
+                            Machines List
+                        </h3>
+                        <p class="card-category"></p>
                     </div>
-                    <div class="collapse" id="machines">
+                    <div class="" id="machines">
                         @include('pages/tables/machine_table', ['machines' => $machines])
                     </div>
                     <div class="card-footer">
-                        <a rel="tooltip" class="btn btn-info btn-lg" data-toggle="collapse"
-                            data-target="#machines" aria-expanded="false">
-                            <i class="material-icons">details</i>
-                        </a>
+                        <p class="card-category">In Activity: {{ $inActivity }}</p>
+                        <p class="card-category">Total: {{ $numberOfMach }}</p>
+                        <p class="card-category"></p>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-stats">
+                    <div class="card-header card-header-info">
+
+                        <h3 class="card-title">
+                            <i class="material-icons">people</i>
+                            Users List
+                        </h3>
+                        <p class="card-category"></p>
+                    </div>
+                    <div class="" id="users">
+                        @include('pages/tables/users_table', ['users' => $users])
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-category">Registered this Mouth: {{ $registeredMonth }}</p>
+                        <p class="card-category">Registered Today: {{ $registeredToday }}</p>
+                        <p class="card-category">Total: {{ $users->count() }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-stats">
+                    <div class="card-header card-header-info">
+
+                        <h3 class="card-title">
+                            <i class="fab fa-docker"></i>
+                            Images List
+                        </h3>
+                        <p class="card-category"></p>
+                    </div>
+                    <div class="" id="images">
+                        @include('pages/tables/images_table', ['images' => $images, 'user_id' => '', 'isAdmin' => $isAdmin])
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-category"></p>
+                        <p class="card-category">Total:{{ $images->count() }}</p>
+                        <p class="card-category"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
 
 @push('js')
+<script>
+    var
+</script>
 <script>
 $(document).ready(function() {
     // Javascript method's body can be found in assets/js/demos.js
