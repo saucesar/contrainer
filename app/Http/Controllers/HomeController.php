@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Container;
 use App\Models\Maquina;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,8 +10,6 @@ class HomeController extends Controller
 {
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -24,6 +23,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard', ['totalTime' => Maquina::totalTimeAllMachines(2), 'isAdmin' => Auth::user()->isAdmin()]);
+        $params = [
+            'machines' => Maquina::where('user_id', Auth::user()->id)->get(),
+            'containers' => Container::where('user_id', Auth::user()->id)->get(),
+            'isAdmin' => Auth::user()->isAdmin(),
+        ];
+        //dd($params['containers']);
+
+        return view('dashboard', $params);
     }
 }
