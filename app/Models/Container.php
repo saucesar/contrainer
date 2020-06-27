@@ -22,4 +22,9 @@ class Container extends Model
     {
         return User::firstWhere('id', $this->user_id);
     }
+
+    public function image()
+    {
+        return Image::firstWhere('id', $this->image_id);
+    }
 }
