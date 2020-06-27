@@ -13,8 +13,9 @@
     <div class="collapse navbar-collapse justify-content-end">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('home') }}">
+          <a class="nav-link btn btn-info" href="{{ route('home') }}">
             <i class="material-icons">dashboard</i>
+            Dashboard
             <p class="d-lg-none d-md-block">
               {{ __('Stats') }}
             </p>
@@ -50,8 +51,9 @@
           </div>
         </li>-->
         <li class="nav-item dropdown">
-          <a class="nav-link" href="{{ route('logout') }} }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">{{ __('') }}
+          <a class="nav-link btn btn-danger" href="{{ route('logout') }} }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">{{ __('') }}
             <i class="material-icons">input</i>
+            logout
           </a>
         </li>
       </ul>
