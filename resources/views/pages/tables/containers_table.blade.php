@@ -13,7 +13,7 @@
     <tbody>
         @foreach ($mycontainers as $container)
         <tr>
-            <td><i class="fas fa-box"></i></td>
+            <td><i class="fas fa-server"></i></td>
             <td>{{ substr($container->docker_id, 0, 12) }}</td>
             <td>{{ $container->nickname }}</td>
             @if($isAdminArea)
@@ -48,21 +48,21 @@
                         target="_black" title="Open terminal.">
                         <i class="fas fa-terminal"></i>
                     </a>
-                    <a href="{{$dockerHost}}/containers/{{$container->docker_id}}/export" class="btn btn-link"
+                    <a href="{{$dockerHost}}/containers/{{$container->docker_id}}/export" class="btn btn-info btn-link"
                         title="Download.">
                         <i class=" material-icons">get_app</i>
                     </a>
+                    <a href="{{$dockerHost}}/containers/{{$container->docker_id}}/logs?timestamps=1&stdout=1&stderr=1"
+                        class="btn btn-info btn-link" target="_black" title="Logs.">
+                        <i class="fas fa-file-alt"></i>
+                    </a>
                     <a href="{{ route('containers.show' , [$container->docker_id]) }}" class="btn btn-link"
                         title="Details.">
-                        <i class="material-icons">error</i>
+                        <i class="material-icons">visibility</i>
                     </a>
-                    <a href="{{ route('containers.edit' , [$container->docker_id]) }}" class="btn btn-link"
+                    <a href="{{ route('containers.edit' , [$container->docker_id]) }}" class="btn btn-warning btn-link"
                         title="Edit nickname.">
                         <i class="material-icons">edit</i>
-                    </a>
-                    <a href="{{$dockerHost}}/containers/{{$container->docker_id}}/logs?timestamps=1&stdout=1&stderr=1"
-                        class="btn btn-link" target="_black" title="Logs.">
-                        <i class="fas fa-file-alt"></i>
                     </a>
                     {!! Form::open(['route' => ['containers.destroy', $container->docker_id], 'method' => 'delete']) !!}
                     <button type="submit" class="btn btn-danger btn-link" title="Detele the container."

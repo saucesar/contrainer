@@ -116,7 +116,7 @@
                     <div class="card-header card-header-info">
 
                         <h3 class="card-title">
-                            <i class="fab fa-docker"></i>
+                            <i class="fas fa-server"></i>
                             Containers List
                         </h3>
                         <p class="card-category"></p>
