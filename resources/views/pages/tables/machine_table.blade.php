@@ -58,7 +58,7 @@
                 <div class="collapse" id="{{ $machine->id }}">
                     @include('pages.user.machine_show_form', ['machine' => $machine])
                     <a href="{{ route('machines.show', $machine) }}" class="btn btn-sm btn-outline-info">
-                        More Details
+                        More
                     </a>
                     <button class="btn btn-sm btn-outline" type="button" data-toggle="collapse"
                         data-target="#{{ $machine->id }}" aria-expanded="false" aria-controls="collapseExample">
