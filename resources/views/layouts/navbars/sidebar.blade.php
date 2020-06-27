@@ -45,7 +45,7 @@
       </li>
       <li class="nav-item{{ $activePage == 'my-containers' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('instance.index') }}">
-          <i class="material-icons">ondemand_video</i>
+            <i class="fas fa-server"></i>
             <span class="sidebar-normal"> {{ __('My Containers') }} </span>
         </a>
       </li>
