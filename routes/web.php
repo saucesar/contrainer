@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
         return view('pages.table_list');
     })->name('table');
 
-    Route::get('user-machines', 'UserController@machines')->name('user.machines');
+    Route::get('user-machines', 'MaquinasController@machines')->name('user.machines');
 });
 
 Route::group(['middleware' => 'auth'], function () {
