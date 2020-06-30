@@ -3,20 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Maquina;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
-    public function machines()
-    {
-        $user = Auth::user();
-        $machines = Maquina::where('user_id', $user->id)->orderby('id')->paginate(5);
-
-        return view('pages.user.user_machines', ['machines' => $machines, 'user_name' => $user->name]);
-    }
-
     public function index(User $model)
     {
         return view('users.index', ['users' => $model->paginate(15)]);
@@ -43,7 +33,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        return view('users.edit', ['user' => User::where('id', $id)->first()]);
+        return view('users.edit', ['user' => User::where('id', $id)->first(), 'title' => 'User Profile']);
     }
 
     public function update(UserRequest $request, $id)
