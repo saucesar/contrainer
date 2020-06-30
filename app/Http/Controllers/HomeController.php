@@ -27,8 +27,8 @@ class HomeController extends Controller
             'machines' => Maquina::where('user_id', Auth::user()->id)->get(),
             'containers' => Container::where('user_id', Auth::user()->id)->get(),
             'isAdmin' => Auth::user()->isAdmin(),
+            'title' => 'Cloud Dashboard',
         ];
-        //dd($params['containers']);
 
         return view('dashboard', $params);
     }

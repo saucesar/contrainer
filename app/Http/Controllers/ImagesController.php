@@ -14,6 +14,7 @@ class ImagesController extends Controller
             'images' => Image::paginate(10),
             'isAdmin' => Auth::user()->isAdmin(),
             'user_id' => Auth::user()->id,
+            'title' => 'Images',
         ];
 
         return view('pages/images/images', $data);

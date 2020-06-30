@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\Auth;
 
 class MaquinasController extends Controller
 {
+    public function machines()
+    {
+        $user = Auth::user();
+        $params = [
+            'machines' => Maquina::where('user_id', $user->id)->orderby('id')->paginate(5),
+            'user_name' => $user->name,
+            'title' => 'Machines',
+        ];
+
+        return view('pages.user.user_machines', $params);
+    }
+
     public function create()
     {
         return view('pages.user.user_machines_new');

@@ -30,6 +30,7 @@ class AdminAreaController extends Controller
             'graficDataMachines' => $this->getGraficDataMachines(),
             'imagesLabel' => $this->getImagesLabels(),
             'graficDataImages' => $this->getInstacesCountImages(),
+            'title' => 'Admin Area',
         ];
 
         return view('pages/admin/index', $params);

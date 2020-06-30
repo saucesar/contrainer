@@ -43,6 +43,7 @@ class ContainersController extends Controller
         $params = [
             'mycontainers' => Container::where('user_id', Auth::user()->id)->paginate(10),
             'dockerHost' => env('DOCKER_HOST'),
+            'title' => 'My Containers',
         ];
 
         return view('pages/my-containers/my_containers', $params);
