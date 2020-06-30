@@ -67,13 +67,13 @@ class ContainersController extends Controller
     public function show($id)
     {
         $url = env('DOCKER_HOST');
-        $processesResponse = Http::get("$url/containers/$id/top");
-        $detailsResponse = Http::get("$url/containers/$id/json");
+        $processes = Http::get("$url/containers/$id/top");
+        $details = Http::get("$url/containers/$id/json");
 
         $params = [
             'mycontainer' => Container::firstWhere('docker_id', $id),
-            'processes' => $processesResponse->json(),
-            'details' => $detailsResponse->json(),
+            'processes' => ($processes->getStatusCode() == 200 ? $processes->json() : null),
+            'details' => $details->getStatusCode() == 200 ? $details->json() : null,
         ];
 
         return view('pages/my-containers/my_containers_details', $params);
@@ -197,10 +197,5 @@ class ContainersController extends Controller
         } else {
             dd($response->json());
         }
-    }
-
-    private function validar(Request $request)
-    {
-        $this->validate($request, Container::$rules);
     }
 }

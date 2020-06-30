@@ -14,6 +14,7 @@
                         <h4 class="card-title ">Processes running in {{ $mycontainer->nickname }}</h4>
                     </div>
                     <div class="card-body">
+                        @if($processes)
                         <table class='table'>
                             <thead>
                                 @foreach($processes['Titles'] as $title)
@@ -30,12 +31,16 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        @else
+                        <div class="alert alert-danger">Container not Running</div>
+                        @endif
                     </div>
                     <div class="card-body">
                         <h4 class="card-title ">Details of {{ $mycontainer->nickname }}</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+                            @if($details)
                             <p>
                                 <a rel="tooltip" class="btn btn-info" data-toggle="collapse"
                                     data-target="#state" aria-expanded="false" style="width: 220px;">
@@ -183,6 +188,9 @@
                                     <p><b>MacAddress: </b>{{ $details['NetworkSettings']['MacAddress'] }}</p>
                                 </div>
                             </p>
+                            @else
+                            <div class="alert alert-danger">Error to get details</div>
+                            @endif
                         </div>
                     </div>
                 </div>
