@@ -129,19 +129,6 @@
                                 </tbody>
                             </table>
 
-                            <h3>Services</h3>
-
-                            <table class="table table-bordered">
-                                <thead class="">
-                                    <th></th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="col"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            
                             <form action="{{ route('docker-swarm.leave') }}" method="post">
                                 @csrf
                                 <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('are you sure?q')">
