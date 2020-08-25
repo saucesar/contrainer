@@ -24,7 +24,19 @@
             <p>{{ __('Admin Area') }}</p>
         </a>
       </li>
+      <li class="nav-item{{ $activePage == 'docker-swarm' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('docker-swarm.index') }}">
+          <i class="fas fa-network-wired"></i>
+            <p>{{ __('Docker Swarm') }}</p>
+        </a>
+      </li>
       @endif
+      <li class="nav-item{{ $activePage == 'services' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('services.index') }}">
+            <i class="material-icons">group_work</i>
+            <span class="sidebar-normal"> {{ __('Services') }} </span>
+        </a>
+      </li>
       <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('profile.edit') }}">
           <i class="material-icons">account_circle</i>
