@@ -53,3 +53,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
     Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
+
+Route::resource('services', 'ServiceController');
+Route::get('docker-swarm', 'DockerSwarmController@index')->name('docker-swarm.index');
+Route::post('docker-swarm', 'DockerSwarmController@swarmInit')->name('docker-swarm.init');
+Route::post('docker-swarm/leave', 'DockerSwarmController@swarmLeave')->name('docker-swarm.leave');
