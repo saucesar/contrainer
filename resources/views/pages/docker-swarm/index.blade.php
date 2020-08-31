@@ -45,13 +45,11 @@
                             <table class="table table-bordered">
                                 <thead class="">
                                     <th>IP</th>
-                                    <th>Reachability</th>
                                     <th>State</th>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td scope="col">{{ $nodes[0]['ManagerStatus']['Addr'] }}</td>
-                                        <td scope="col">{{ $nodes[0]['ManagerStatus']['Reachability'] }}</td>
+                                        <td scope="col">{{ $nodes[0]['Status']['Addr'] }}</td>
                                         <td scope="col">{{ $nodes[0]['Status']['State'] }}</td>
                                     </tr>
                                 </tbody>
@@ -79,7 +77,7 @@
                                 <tbody>
                                     <tr>
                                         <td scope="col">
-                                            <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Worker'].' '.$nodes[0]['ManagerStatus']['Addr'] }}</b></small>
+                                            <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Worker'].' '.$nodes[0]['Status']['Addr'] }}</b></small>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -92,7 +90,7 @@
                                 <tbody>
                                     <tr>
                                         <td scope="col">
-                                            <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Manager'].' '.$nodes[0]['ManagerStatus']['Addr'] }}</b></small>
+                                            <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Manager'].' '.$nodes[0]['Status']['Addr'] }}</b></small>
                                         </td>
                                     </tr>
                                 </tbody>
