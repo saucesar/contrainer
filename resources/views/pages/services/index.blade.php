@@ -75,14 +75,19 @@
                                                 @endforeach
                                             @endif
                                         </td>
-                                        <td>
-                                            <form action="{{ route('services.destroy', $service['ID']) }}" method="post">
-                                                @method('delete')
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-primary btn-link" onclick="return confirm('Are you sure? This action not be undone.');">
-                                                    <i class="material-icons">delete</i>
-                                                </button>
-                                            </form>
+                                        <td class="td-actions">
+                                            <div class="row d-flex justify-content-center">
+                                                <a href="{{ route('services.edit' , $service['ID']) }}" class="btn btn-link btn-warning" title="Edit a service.">
+                                                    <i class="material-icons">edit</i>
+                                                </a>
+                                                <form action="{{ route('services.destroy', $service['ID']) }}" method="post">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-link btn-primary" onclick="return confirm('Are you sure? This action not be undone.');">
+                                                        <i class="material-icons">delete</i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
