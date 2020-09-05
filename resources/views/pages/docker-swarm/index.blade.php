@@ -34,9 +34,9 @@
                                 <tbody>
                                     <tr>
                                         <td scope="col">{{ $swarm['ID'] }}</td>
-                                        <td scope="col">{{ $nodes[0]['Description']['Hostname']  }}</td>
+                                        <td scope="col">{{ $manager['Description']['Hostname']  }}</td>
                                         <td scope="col">
-                                            {{ $nodes[0]['Description']['Platform']['OS'].'_'.$nodes[0]['Description']['Platform']['Architecture'] }}
+                                            {{ $manager['Description']['Platform']['OS'].'_'.$manager['Description']['Platform']['Architecture'] }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -49,8 +49,8 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td scope="col">{{ $nodes[0]['Status']['Addr'] }}</td>
-                                        <td scope="col">{{ $nodes[0]['Status']['State'] }}</td>
+                                        <td scope="col">{{ $manager['Status']['Addr'] }}</td>
+                                        <td scope="col">{{ $manager['Status']['State'] }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -77,7 +77,7 @@
                                 <tbody>
                                     <tr>
                                         <td scope="col">
-                                            <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Worker'].' '.$nodes[0]['Status']['Addr'] }}</b></small>
+                                            <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Worker'].' '.$manager['Status']['Addr'] }}</b></small>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -90,7 +90,7 @@
                                 <tbody>
                                     <tr>
                                         <td scope="col">
-                                            <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Manager'].' '.$nodes[0]['Status']['Addr'] }}</b></small>
+                                            <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Manager'].' '.$manager['Status']['Addr'] }}</b></small>
                                         </td>
                                     </tr>
                                 </tbody>
