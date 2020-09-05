@@ -16,10 +16,22 @@ class DockerSwarmController extends Controller
         $params = [
             'swarm' => $swarm->getStatusCode() == 200 ? $swarm->json() : null,
             'nodes' => $nodes->getStatusCode() == 200 ? $nodes->json() : null,
+            'manager' => $this->getSwarmManager($nodes),
             'error' => $swarm->getStatusCode() != 200 ? ($swarm->json())['message'] : null,
         ];
         
         return view('pages/docker-swarm/index', $params);
+    }
+
+    private function getSwarmManager($nodesJson){
+        $nodes = $nodesJson->getStatusCode() == 200 ? $nodesJson->json() : null;
+        if(!isset($nodes)){ return null; }
+        foreach($nodes as $node){
+            if($node['Spec']['Role'] == 'manager' && $node['Spec']['Availability'] == 'active') {
+                return $node;
+            }
+        }
+        return null;
     }
 
     public function swarmInit(Request $request)
