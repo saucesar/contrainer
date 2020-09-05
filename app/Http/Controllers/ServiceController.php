@@ -24,16 +24,29 @@ class ServiceController extends Controller
     {   
         $request->validate(['serviceName' => 'required|min:5', 'imageName' => 'required']);
 
+        $url = env('DOCKER_HOST');
+        $createService = Http::asJson()->post("$url/services/create", $this->getParams($request));
+
+        if($createService->getStatusCode() == 201) {
+            return redirect()->route('services.index')->with('success', 'Service has be created!');
+        } else {
+            dd($createService->json());
+        }
+    }
+
+    private function getParams($request)
+    {
         $data = [
             'Name' => $request->serviceName,
             'TaskTemplate' => [
                 'ContainerSpec' => [
                     'Image' => $request->imageName,
-                    'User' => isset($request->user) ? $request->user : 'user' ,
-                    'Args' => explode(' ',$request->args),
-                    'Nameservers' => isset($request->dnsNameServers) ? explode(';', $request->dnsNameServers): ['8.8.8.8'],
-                    'Search' => [ $request->dnsSearch],
-                    'Options' => [ $request->dnsOptions],
+                    'Env' => isset($request->env) ? explode(';', $request->env) : [],
+                    'DNSConfig' => [
+                        'Nameservers' => isset($request->dnsNameServers) ? explode(';', $request->dnsNameServers): [],
+                        'Search' => isset($request->dnsSearch) ? explode(';', $request->dnsSearch) : [],
+                        'Options' => isset($request->dnsOptions) ? $request->dnsOptions : [],
+                    ],
                     'TTY' => true,
                     'OpenStdin' => true,
                 ],
@@ -46,7 +59,9 @@ class ServiceController extends Controller
                     "Condition" => "any",
                     "Delay" => 50000000000,
                     "MaxAttempts" => 0,
-                ]
+                ],
+                'ForceUpdate' => 0,
+                'Runtime' => 'container',
             ],
             'Mode' => [
                 'Replicated' => [
@@ -66,21 +81,16 @@ class ServiceController extends Controller
             'Labels' => $this->getLabels($request->labels),
         ];
 
-        $url = env('DOCKER_HOST');
-        $createService = Http::asJson()->post("$url/services/create", $data);
-
-        if($createService->getStatusCode() == 201) {
-            return redirect()->route('services.index')->with('success', 'Service has be created!');
-        } else {
-            dd($createService->json());
-        }
+        return $data;
     }
 
     private function getPorts($ports)
     {
         $array = [];
         if(isset($ports)){
-            foreach(explode(';', $ports) as $port){
+            $arrayPorts = explode(';', $ports) ;
+            array_pop($arrayPorts);
+            foreach($arrayPorts as $port){
                 $portData = explode(',', $port);
                 $array[] = [
                     'Protocol' => $portData[0],
@@ -96,13 +106,16 @@ class ServiceController extends Controller
     private function getLabels($labels)
     {
         $array = [];
-        if(isset($label)){
-            foreach(explode(';', $labels) as $label){
+
+        if(isset($labels)){
+            $labelsArray = explode(';', $labels);
+            array_pop($labelsArray);
+
+            foreach($labelsArray as $label){
                 $labelData = explode(':', $label);
                 $array[$labelData[0]] = $labelData[1];
             }
         }
-        
         return count($array) > 0 ? $array : null;
     }
 
@@ -113,12 +126,45 @@ class ServiceController extends Controller
 
     public function edit($id)
     {
-        //
+        $url = env('DOCKER_HOST');
+        $service = Http::get("$url/services/$id");
+        
+        if($service->getStatusCode() == 200){
+            $ports = [];
+            if(isset($service->json()['Endpoint']['Ports'])){
+                foreach($service->json()['Endpoint']['Ports'] as $port){
+                    $ports[] = $port['Protocol'].','.$port['PublishedPort'].','.$port['TargetPort'];
+                }
+                return view('pages/services/edit', [ 'service' => $service->json(), 'ports' => implode(';', $ports)]);
+            } else {
+                return view('pages/services/edit', [ 'service' => $service->json()]);
+            }
+        } else {
+            dd($service->json());
+        }
     }
 
     public function update(Request $request, $id)
     {
-        //
+        $request->validate(['serviceName' => 'required|min:5', 'imageName' => 'required']);
+        
+        $url = env('DOCKER_HOST');
+        $service = Http::get("$url/services/$id");
+        $version = null;
+        if($service->getStatusCode() == 200){
+            $version = $service->json()['Version']['Index'];
+            $name = $service->json()['Spec']['Name'];
+        } else {
+            dd($service->json());
+        }
+        
+        $createService = Http::asJson()->post("$url/services/$id/update?version=$version", $this->getParams($request));
+
+        if($createService->getStatusCode() == 200) {
+            return redirect()->route('services.index')->with('success', "The Service $name has be updated!");
+        } else {
+            dd($createService->json());
+        }
     }
 
     public function destroy($id)
