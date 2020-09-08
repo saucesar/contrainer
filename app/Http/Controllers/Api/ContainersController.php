@@ -40,11 +40,21 @@ class ContainersController extends Controller
 
     public function index()
     {
+        $containers = Container::where('user_id', Auth::user()->id)->paginate(10);
         $params = [
-            'mycontainers' => Container::where('user_id', Auth::user()->id)->paginate(10),
+            'mycontainers' => $containers,
             'dockerHost' => env('DOCKER_HOST'),
             'title' => 'My Containers',
         ];
+
+        $url = env('DOCKER_HOST');
+
+        foreach($containers as $container){
+            $details = Http::get("$url/containers/$container->docker_id/json");
+
+            $container->dataHora_finalizado = $details->getStatusCode() == 200 && $details->json()['State']['Running'] ? null : now();
+            $container->save();
+        }
 
         return view('pages/my-containers/my_containers', $params);
     }
@@ -72,8 +82,8 @@ class ContainersController extends Controller
 
         $params = [
             'mycontainer' => Container::firstWhere('docker_id', $id),
-            'processes' => ($processes->getStatusCode() == 200 ? $processes->json() : null),
-            'details' => $details->getStatusCode() == 200 ? $details->json() : null,
+            'processes' => ($processes->getStatusCode() == 200 ? $processes->json() : []),
+            'details' => $details->getStatusCode() == 200 ? $details->json() : [],
         ];
 
         return view('pages/my-containers/my_containers_details', $params);
