@@ -36,11 +36,10 @@
         </div>
     </div>
     <div class="col-lg-11 text-right" style="margin-left: 48px;">
-        <button class="btn btn-primary btn-fab btn-round">
-            <a href="{{ route('images.index') }}">
-                <i class="material-icons" style="color:white">add_to_queue</i>
-            </a>
+        <button class="btn btn-primary btn-fab btn-round" data-toggle="modal" data-target="#modalContainers">
+            <i class="material-icons" style="color:white">add_to_queue</i>
         </button>
+        @include('pages/my-containers/modal_containers')
     </div>
 </div>
 @endsection
