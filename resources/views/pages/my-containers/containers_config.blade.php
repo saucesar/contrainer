@@ -15,6 +15,15 @@
                     </div>
                     <div class="card-body">
                         <div class="">
+                            @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>                                    
+                            </div>
+                            @endif
                             @if(session('error'))
                             <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
@@ -29,17 +38,17 @@
 
                             <div class="row">
                                 <div class="col-sm-10">
-                                    {!! Form::text('nickname', null, ['class'=>"form-control", 'placeholder' =>"Nickname to container", 'required'=>"true"]) !!}
+                                    {!! Form::text('nickname', old('nickname'), ['class'=>"form-control", 'placeholder' =>"Nickname to container", 'required'=>"true"]) !!}
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-sm-10">
-                                    {!! Form::text('envVariables', null, ['class'=>"form-control",
+                                    {!! Form::text('envVariables', old('envVariables'), ['class'=>"form-control",
                                         'placeholder' =>"Environment variables (Optional) - Use ';' (semicolon) to separate, Ex: PASSWORD=password;POSTGRES_USER=user;"]) !!}
                                 </div>
                                 <div class="col-sm-10">
-                                    {!! Form::text('Labels', "", ['class'=>"form-control",
+                                    {!! Form::text('Labels', old('Labels'), ['class'=>"form-control",
                                         'placeholder' =>"Labels (Optional) - Use ';' (semicolon) to separate, Ex: PASSWORD=password;POSTGRES_USER=user;"]) !!}
                                 </div>
                             </div>
