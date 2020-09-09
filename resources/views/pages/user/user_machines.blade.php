@@ -16,7 +16,7 @@
             @endif
             <div class="">
               @include('pages/tables/machine_table', ['machines' => $machines])
-              @include('pages.my-containers.machines_modal')
+              @include('pages.user.machines_modal')
             </div>
           </div>
         </div>
@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="col-lg-11 text-right" style="margin-left: 48px;">
-    <button class="btn btn-primary btn-fab btn-round"  data-toggle="modal" data-target="#machineModal">
+    <button class="btn btn-primary btn-fab btn-round" data-toggle="modal" data-target="#machineModal">
         <i class="material-icons" style="color:white">add_to_queue</i>
     </button>
   </div>

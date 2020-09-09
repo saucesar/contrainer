@@ -40,7 +40,7 @@
                     <button type="button" class="btn btn-warning btn-link btn-sm" data-toggle="modal" data-target="#machineModal{{$machine->id}}">
                         <i class="material-icons">edit</i>
                     </button>
-                    @include('pages.my-containers.machines_modal', ['machine' => $machine])
+                    @include('pages.user.machines_modal', ['machine' => $machine])
                     {!! Form::open(['route' => ['machines.destroy', $machine], 'method' => 'delete']) !!}
                     <button type="submit" class="btn btn-danger btn-link btn-sm" data-original-title="" title=""
                         onclick="return confirm('Are you sure?')" type="submit">
