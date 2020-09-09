@@ -12,7 +12,7 @@
                         <p class="card-category">Command to container {{ $mycontainer->nickname }}</p>
                     </div>
                     <div class="card-body">
-                        Tecle Enter
+                        Press Enter
                         <div id="terminal"></div>
                     </div>
                 </div>
