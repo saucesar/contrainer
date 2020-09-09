@@ -57,6 +57,7 @@ class ContainersController extends Controller
             'mycontainers' => $containers,
             'dockerHost' => env('DOCKER_HOST'),
             'title' => 'My Containers',
+            'images' => Image::all(),
         ];
 
         return view('pages/my-containers/my_containers', $params);
@@ -117,7 +118,11 @@ class ContainersController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['nickname' => 'required|min:5|unique:containers']);
+        $request->validate([
+            'nickname' => 'required|min:5|unique:containers',
+            'IPAddress' => 'nullable|ipv4',
+            'IPPrefixLen' => 'nullable|ipv4',
+        ]);
         
         $url = env('DOCKER_HOST');
             
@@ -162,7 +167,7 @@ class ContainersController extends Controller
     private function setDefaultDockerParams(array $data)
     {
         $data['Image'] = Image::find($data['image_id'])->fromImage;
-        $data['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0;
+        $data['user_id'] = Auth::user()->id;
 
         $data['Env'] = $data['envVariables'] ? explode(';', $data['envVariables']) : [];
         array_pop($data['Env']); // Para remover string vazia no ultimo item do array, evitando erro na criação do container.
@@ -184,6 +189,8 @@ class ContainersController extends Controller
             'RestartPolicy' => [
                 'name' => 'always',
             ],
+            'NetworkMode' => $data['NetworkMode'],
+            $data['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0,    
             'Binds' => [
                 '/var/run/docker.sock:/var/run/docker.sock',
                 '/tmp:/tmp',
