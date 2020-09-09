@@ -19,5 +19,3 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('atividadeMaquinas', 'Api\AtividadeMaquinasController');
-Route::apiResource('containers', 'Api\ContainersController')->except(['create', 'index', 'show']);
-Route::get('InstanciaContainers/stop/{containerId}', 'Api\ContainersController@playStop')->name('instance.playStop');
