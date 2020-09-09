@@ -63,17 +63,6 @@ class ImagesController extends Controller
         return redirect()->route('images.index')->with('success', 'Container deleted!!!');
     }
 
-    public function configureContainer(Request $request)
-    {
-        $params = [
-            'image' => Image::firstWhere('id', $request->image_id),
-            'user' => Auth::user()->name,
-            'user_id' => Auth::user()->id,
-        ];
-
-        return view('pages/my-containers/containers_config', $params);
-    }
-
     private function validar(Request $request)
     {
         $this->validate($request, [
