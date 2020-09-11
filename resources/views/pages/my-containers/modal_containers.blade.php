@@ -93,10 +93,10 @@
                         <div class='col-sm-1'>
                             <i class="material-icons">public</i>
                         </div>
-                        <div class=col-sm-6>
-                            <label for="#external-port">Add external communication port</label>
+                        <div class=col-sm-4>
+                            <label for="#external-port">Publish all Ports</label>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-5">
                             {{ Form::checkbox('external-port', '-P', true, ['id' => 'external-port']) }}
                         </div>
                     </div>
@@ -147,10 +147,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Close
+                </button>
                 <button type="submit" class="btn btn-success">
-                    <i class="material-icons">archive</i>
-                    Confirme
+                    Create
                 </button>
             </div>
             {!! Form::close() !!}
