@@ -27,7 +27,11 @@ class DockerSwarmController extends Controller
         $nodes = $nodesJson->getStatusCode() == 200 ? $nodesJson->json() : null;
         if(!isset($nodes)){ return null; }
         foreach($nodes as $node){
-            if($node['Spec']['Role'] == 'manager' && $node['Spec']['Availability'] == 'active') {
+            $isManager = $node['Spec']['Role'] == 'manager';
+            $isActive = $node['Spec']['Availability'] == 'active';
+            $isLeader = isset($node['ManagerStatus']['Leader']) && $node['ManagerStatus']['Leader'];
+
+            if($isManager && $isActive && $isLeader) {
                 return $node;
             }
         }
@@ -47,7 +51,7 @@ class DockerSwarmController extends Controller
                 "20.20.0.0/8"
             ],
             "SubnetSize" => 24,
-            "ForceNewCluster" => false,
+            "ForceNewCluster" => true,
         ];
         $url = env('DOCKER_HOST');
         
