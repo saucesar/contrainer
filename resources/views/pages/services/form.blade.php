@@ -36,9 +36,23 @@
     <div class="form-card">
         <h2 class="fs-title">Endpoint Spec</h2>
         <h4 class="">Ports to Expose</h4>
-        <label for="ports">Ports to expose</label>
-        <textarea name="ports" cols="30" rows="4" class="form-control"
-            placeholder="(optional) To use this option do: Protocol, PublishedPort, TargetPort. Ex: tcp,8080,80;tcp,8181,8000">{{ old('ports') ?? $ports ?? '' }}</textarea>
+        <div class="row">
+            <div class="col">
+                <label for="portProtocol">Protocol</label>
+                <select name="portProtocol" class="form-control">
+                    <option value="tcp" {{ old('port-protocol') == 'tcp' ? 'selected' : '' }}>TCP</option>
+                    <option value="udp" {{ old('port-protocol') == 'udp' ? 'selected' : '' }}>UDP</option>
+                </select>
+            </div>
+            <div class="col">
+                <label for="publishedPort">Published Port</label>
+                <input type="number" name="publishedPort" class="form-control" value="{{ old('publishedPort') }}" min="1">
+            </div>
+            <div class="col">
+                <label for="targetPort">Target Port</label>
+                <input type="number" name="targetPort" class="form-control" value="{{ old('targetPort') }}" min="1">
+            </div>
+        </div>
         <h4 class="">DNSConfig</h4>
         <label for="dnsNameServers">Name Servers</label>
         <textarea name="dnsNameServers" cols="30" rows="2" class="form-control"
