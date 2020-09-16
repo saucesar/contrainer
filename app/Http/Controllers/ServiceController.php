@@ -164,7 +164,7 @@ class ServiceController extends Controller
         $deleteService = Http::delete("$url/services/$id");
         
         if($deleteService->getStatusCode() == 200){
-            return redirect()->route('services.index');
+            return redirect()->route('services.index')->with('success', 'Service has been deleted!');
         } else {
             dd($deleteService->json());
         }
