@@ -10,9 +10,13 @@ class ServiceController extends Controller
     public function index()
     {
         $url = env('DOCKER_HOST');
-        $services = Http::get("$url/services")->json();
+        $services = Http::get("$url/services");
+        $params = [
+            'services' => $services->getStatusCode() == 200 ? $services->json() : [],
+            'error' => $services->getStatusCode() != 200 ? $services->json()['message'] : null,
+        ];
 
-        return view('pages/services/index', ['services' => $services]);
+        return view('pages/services/index', $params);
     }
 
     public function create()
@@ -43,9 +47,9 @@ class ServiceController extends Controller
                     'Image' => $request->imageName,
                     'Env' => isset($request->env) ? explode(';', $request->env) : [],
                     'DNSConfig' => [
-                        'Nameservers' => isset($request->dnsNameServers) ? explode(';', $request->dnsNameServers): [],
+                        'Nameservers' => isset($request->dnsNameServers) ? explode(';', $request->dnsNameServers) : ['8.8.8.8', '1.1.1.1'],
                         'Search' => isset($request->dnsSearch) ? explode(';', $request->dnsSearch) : [],
-                        'Options' => isset($request->dnsOptions) ? $request->dnsOptions : [],
+                        'Options' => isset($request->dnsOptions) ? $request->dnsOptions : ["timeout:3"],
                     ],
                     'TTY' => true,
                     'OpenStdin' => true,
@@ -76,31 +80,18 @@ class ServiceController extends Controller
                 "Order" => "stop-first",
             ],
             'EndpointSpec' => [
-                'Ports' => $this->getPorts($request->ports),
+                'Ports' => [
+                    [
+                        'Protocol' => $request->portProtocol,
+                        'PublishedPort' => intval($request->publishedPort),
+                        'TargetPort' => intval($request->targetPort)
+                    ],
+                ],
             ],
             'Labels' => $this->getLabels($request->labels),
         ];
 
         return $data;
-    }
-
-    private function getPorts($ports)
-    {
-        $array = [];
-        if(isset($ports)){
-            $arrayPorts = explode(';', $ports) ;
-            array_pop($arrayPorts);
-            foreach($arrayPorts as $port){
-                $portData = explode(',', $port);
-                $array[] = [
-                    'Protocol' => $portData[0],
-                    'PublishedPort' => intval($portData[1]),
-                    'TargetPort' => intval($portData[2]),
-                ];
-            }
-        }
-
-        return count($array) > 0 ? $array : null;
     }
 
     private function getLabels($labels)
