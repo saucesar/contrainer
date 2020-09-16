@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="table-responsive">
+                    <div class="">
                         <div class="card-header card-header-primary">
                             <h4 class="card-title ">Docker Swarm</h4>
                             <p class="card-category">Your Nodes</p>
