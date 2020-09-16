@@ -16,13 +16,28 @@
                     <div class="card-body table-responsive">
                         <div class="">
                             @if(isset($error))
-                            <div class="alert alert-danger">{{ $error }}</div>
+                            <div class="alert alert-danger">
+                                {{ $error }}
+                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
                             @endif
                             @if(session('error'))
-                            <div class="alert alert-danger">{{ session('error') }}</div>
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
                             @endif
                             @if(session('success'))
-                            <div class="alert alert-success">{{ session('success') }}</div>
+                            <div class="alert alert-success"role="alert">
+                                {{ session('success') }}
+                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
                             @endif
                             @if(count($services) == 0)
                                 <h3>No Services Found</h3>
@@ -67,14 +82,14 @@
                                         <td scope="col">
                                             @if(isset($service['Spec']['EndpointSpec']['Ports']))
                                                 @foreach($service['Spec']['EndpointSpec']['Ports'] as $port)
-                                                    {{ $port['TargetPort'] }}<br>
+                                                    {{ $port['TargetPort'] ?? '' }}<br>
                                                 @endforeach    
                                             @endif
                                         </td>
                                         <td scope="col">
                                             @if(isset($service['Spec']['EndpointSpec']['Ports']))
                                                 @foreach($service['Spec']['EndpointSpec']['Ports'] as $port)
-                                                    {{ $port['PublishedPort'] }}<br>
+                                                    <a href="http://0.0.0.0:{{ $port['PublishedPort'] ?? '' }}" target="_blank">{{ $port['PublishedPort'] ?? '' }}</a><br>
                                                 @endforeach
                                             @endif
                                         </td>
