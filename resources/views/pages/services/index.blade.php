@@ -15,6 +15,9 @@
                     </div>
                     <div class="card-body table-responsive">
                         <div class="">
+                            @if(isset($error))
+                            <div class="alert alert-danger">{{ $error }}</div>
+                            @endif
                             @if(session('error'))
                             <div class="alert alert-danger">{{ session('error') }}</div>
                             @endif
@@ -44,7 +47,7 @@
                                     <tr>
                                         <td scope="col"
                                             rowspan="{{ isset($service['Spec']['EndpointSpec']['Ports']) ? count($service['Spec']['EndpointSpec']['Ports'])*2 : 2 }}">
-                                            {{ $service['Spec']['Name'] }}
+                                            {{ $service['Spec'] ? $service['Spec']['Name'] : ''}}
                                         </td>
                                         <td scope="col"
                                             rowspan="{{ isset($service['Spec']['EndpointSpec']['Ports']) ? count($service['Spec']['EndpointSpec']['Ports'])*2 : 2 }}">
