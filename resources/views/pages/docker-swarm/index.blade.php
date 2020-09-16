@@ -16,11 +16,28 @@
                         </div>
                         <div class="card-body">
                             @if(isset($error))
-                            <div class="alert alert-danger">{{ $error }}</div>
-                            @elseif(session('error'))
-                            <div class="alert alert-danger">{{ session('error') }}</div>
-                            @elseif(session('success'))
-                            <div class="alert alert-success">{{ session('success') }}</div>
+                            <div class="alert alert-danger">
+                                {{ $error }}
+                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
+                            @endif
+                            @if(session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
+                            @endif
+                            @if(session('success'))
+                            <div class="alert alert-success"role="alert">
+                                {{ session('success') }}
+                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
                             @endif
 
                             @if($swarm)
