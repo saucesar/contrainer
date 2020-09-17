@@ -14,6 +14,15 @@
                         <p class="card-category">List of Instace Container Images</p>
                     </div>
                     <div class="card-body">
+                        @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>                                    
+                        </div>
+                        @endif
                         @if(session('error'))
                         <div class="alert alert-danger">{{ session('error') }}</div>
                         @endif
@@ -27,11 +36,10 @@
         </div>
     </div>
     <div class="col-lg-11 text-right" style="margin-left: 48px;">
-        <button class="btn btn-primary btn-fab btn-round">
-            <a href="{{ route('images.index') }}">
-                <i class="material-icons" style="color:white">add_to_queue</i>
-            </a>
+        <button class="btn btn-primary btn-fab btn-round" data-toggle="modal" data-target="#modalContainers">
+            <i class="material-icons" style="color:white">add_to_queue</i>
         </button>
+        @include('pages/my-containers/modal_containers')
     </div>
 </div>
 @endsection

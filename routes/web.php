@@ -27,13 +27,17 @@ Route::get('/', function () {
 Route::get('admin-area', 'AdminAreaController@index')->name('admin.area');
 Route::get('admin-area/machines', 'AdminAreaController@machines')->name('admin.area.machines');
 Route::get('admin-area/users', 'AdminAreaController@users')->name('admin.area.users');
+
 Route::resource('machines', 'MaquinasController')->except('index')->middleware('auth');
 Route::resource('images', 'ImagesController')->middleware('auth');
-Route::get('containers-instace', 'Api\ContainersController@index')->name('instance.index');
-Route::resource('containers', 'Api\ContainersController');
+
 Route::post('containers-instace', 'ImagesController@configureContainer')->name('instance.configure');
-Route::get('terminal-tab/{docker_id}', 'Api\ContainersController@terminalNewTab')->name('container.terminalTab');
-Auth::routes();
+
+Route::get('containers-instace', 'ContainersController@index')->name('instance.index');
+Route::post('containers-instace', 'ContainersController@configureContainer')->name('instance.configure');
+Route::get('terminal-tab/{docker_id}', 'ContainersController@terminalNewTab')->name('container.terminalTab');
+Route::resource('containers', 'ContainersController')->except(['create', 'index']);
+Route::get('containers/stop/{containerId}', 'ContainersController@playStop')->name('instance.playStop');
 
 Auth::routes();
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Image;
@@ -27,26 +27,44 @@ class ContainersController extends Controller
         }
 
         try {
-            Http::post($host);
+            $response = Http::post($host);
 
             $instancia->dataHora_finalizado = $dataHora_fim;
             $instancia->save();
+            
+            $message = isset($dataHora_fim) ? 'Container has be stoped!' : 'Container has be started!';
 
-            return redirect()->route('instance.index')->with('success', 'Container created with sucess!');
+            if($response->getStatusCode() == 204 || $response->getStatusCode() == 304){
+                return back()->with('success', $message);
+            } else {
+                return back()->with('error', $response->json()['message']);
+            }
         } catch (Exception $e) {
-            return redirect()->route('instance.index')->with('error', "Fail to stop the container! $e");
+            return back()->with('error', "Fail to stop the container! $e");
         }
     }
 
     public function index()
     {
+        $user = Auth::user();
+        if(!isset($user)){
+            return redirect()->route('login');
+        }
         $containers = Container::where('user_id', Auth::user()->id)->paginate(10);
+        $this->checkActiveStatus($containers);
+
         $params = [
             'mycontainers' => $containers,
             'dockerHost' => env('DOCKER_HOST'),
             'title' => 'My Containers',
+            'images' => Image::all(),
         ];
 
+        return view('pages/my-containers/my_containers', $params);
+    }
+
+    private function checkActiveStatus($containers)
+    {
         $url = env('DOCKER_HOST');
 
         foreach($containers as $container){
@@ -55,8 +73,6 @@ class ContainersController extends Controller
             $container->dataHora_finalizado = $details->getStatusCode() == 200 && $details->json()['State']['Running'] ? null : now();
             $container->save();
         }
-
-        return view('pages/my-containers/my_containers', $params);
     }
 
     public function terminalNewTab($id)
@@ -89,18 +105,32 @@ class ContainersController extends Controller
         return view('pages/my-containers/my_containers_details', $params);
     }
 
+    public function configureContainer(Request $request)
+    {
+        $params = [
+            'image' => Image::firstWhere('id', $request->image_id),
+            'user' => Auth::user()->name,
+            'user_id' => Auth::user()->id,
+        ];
+
+        return view('pages/my-containers/containers_config', $params);
+    }
+
     public function store(Request $request)
     {
-        try {
-            $url = env('DOCKER_HOST');
-            $data = $this->setDefaultDockerParams($request->all());
-            $this->pullImage($url, Image::find($data['image_id']));
-            $this->createContainer($url, $data);
+        $request->validate([
+            'nickname' => 'required|min:5|unique:containers',
+            'IPAddress' => 'nullable|ipv4',
+            'IPPrefixLen' => 'nullable|ipv4',
+        ]);
+        
+        $url = env('DOCKER_HOST');
+            
+        $data = $this->setDefaultDockerParams($request->all());
+        $this->pullImage($url, Image::find($data['image_id']));
+        $this->createContainer($url, $data);
 
-            return redirect()->route('instance.index')->with('success', 'Container creation is running!');
-        } catch (Exception $e) {
-            return  $e->getMessage();
-        }
+        return redirect()->route('instance.index')->with('success', 'Container creation is running!');
     }
 
     public function edit($id)
@@ -123,29 +153,21 @@ class ContainersController extends Controller
     public function destroy($id)
     {
         $url = env('DOCKER_HOST');
+        $responseDelete = Http::delete("$url/containers/$id?force=1");
+        if($responseDelete->getStatusCode() == 204 || $responseDelete->getStatusCode() == 404) {
+            $instancia = Container::firstWhere('docker_id', $id);
+            $instancia->delete();
 
-        $responseStop = Http::post("$url/containers/$id/stop");
-        if ($responseStop->getStatusCode() == 204 || $responseStop->getStatusCode() == 304) {
-            $responseDelete = Http::delete("$url/containers/$id");
-            if ($responseDelete->getStatusCode() == 204) {
-                $instancia = Container::firstWhere('docker_id', $id);
-                $instancia->delete();
-
-                return redirect()->route('instance.index')->with('success', 'Container deleted with sucess!');
-            } else {
-                dd($responseDelete->json());
-
-                return redirect()->route('instance.index')->with('error', 'Fail, Container not delete!');
-            }
+            return back()->with('success', 'Container deleted with sucess!');
         } else {
-            dd($responseStop->json());
+            return back()->with('error', $responseDelete->json()['message']);
         }
     }
 
     private function setDefaultDockerParams(array $data)
     {
         $data['Image'] = Image::find($data['image_id'])->fromImage;
-        $data['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0;
+        $data['user_id'] = Auth::user()->id;
 
         $data['Env'] = $data['envVariables'] ? explode(';', $data['envVariables']) : [];
         array_pop($data['Env']); // Para remover string vazia no ultimo item do array, evitando erro na criação do container.
@@ -167,6 +189,8 @@ class ContainersController extends Controller
             'RestartPolicy' => [
                 'name' => 'always',
             ],
+            'NetworkMode' => $data['NetworkMode'],
+            $data['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0,    
             'Binds' => [
                 '/var/run/docker.sock:/var/run/docker.sock',
                 '/tmp:/tmp',
