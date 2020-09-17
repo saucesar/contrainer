@@ -24,10 +24,20 @@
                         </div>
                         @endif
                         @if(session('error'))
-                        <div class="alert alert-danger">{{ session('error') }}</div>
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
                         @endif
                         @if(session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
+                            <div class="alert alert-success"role="alert">
+                                {{ session('success') }}
+                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
                         @endif
                         @include('pages/tables/containers_table', ['$mycontainers' => $mycontainers, 'isAdminArea' => false])
                     </div>

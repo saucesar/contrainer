@@ -33,11 +33,11 @@ Route::resource('images', 'ImagesController')->middleware('auth');
 
 Route::post('containers-instace', 'ImagesController@configureContainer')->name('instance.configure');
 
-Route::get('containers-instace', 'ContainersController@index')->name('instance.index');
-Route::post('containers-instace', 'ContainersController@configureContainer')->name('instance.configure');
+Route::get('containers-instace', 'ContainersController@index')->name('containers.index');
+Route::post('containers-instace', 'ContainersController@configureContainer')->name('containers.configure');
 Route::get('terminal-tab/{docker_id}', 'ContainersController@terminalNewTab')->name('container.terminalTab');
 Route::resource('containers', 'ContainersController')->except(['create', 'index']);
-Route::get('containers/stop/{containerId}', 'ContainersController@playStop')->name('instance.playStop');
+Route::get('containers/play-stop/{containerId}', 'ContainersController@playStop')->name('containers.playStop');
 
 Auth::routes();
 

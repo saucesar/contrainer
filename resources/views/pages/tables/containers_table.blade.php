@@ -34,12 +34,12 @@
             <td class="td-actions text-right">
                 <div class='row'>
                     @if($container->dataHora_finalizado)
-                    <a href="{{ route('instance.playStop', $container->docker_id) }}" class="btn btn-link btn-success"
+                    <a href="{{ route('containers.playStop', $container->docker_id) }}" class="btn btn-link btn-success"
                         data-original-title="" title="Play/Pause the container.">
                         <i class=" material-icons">play_circle_outline</i>
                     </a>
                     @else
-                    <a href="{{ route('instance.playStop', $container->docker_id) }}" class="btn btn-link btn-warning"
+                    <a href="{{ route('containers.playStop', $container->docker_id) }}" class="btn btn-link btn-warning"
                         data-original-title="" title="Play/Pause the container.">
                         <i class=" material-icons">pause_circle_outline</i>
                     </a>
