@@ -13,7 +13,7 @@
             <td width='550px'>{{ $image->description }}</td>
             <td class="td-actions text-right">
                 <div class='row'>
-                    {!! Form::open(['route' => 'instance.configure', 'method' => 'post']) !!}
+                    {!! Form::open(['route' => 'containers.configure', 'method' => 'post']) !!}
                     <input type="hidden" value="{{ $image->id }}" name='image_id'>
                     <input type="hidden" value="{{ $user_id }}" name='user_id'>
                     <button type="submit" class="btn btn-sucess btn-link">
