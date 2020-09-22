@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'my-containers', 'titlePage' => __("Container name: $mycontainer->nickname")])
+@extends('layouts.app', ['activePage' => 'my-containers', 'title' => 'Container Terminal','titlePage' => __("Container name: $mycontainer->nickname")])
 
 @section('content')
 
