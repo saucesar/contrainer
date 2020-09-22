@@ -31,8 +31,6 @@ Route::get('admin-area/users', 'AdminAreaController@users')->name('admin.area.us
 Route::resource('machines', 'MaquinasController')->except('index')->middleware('auth');
 Route::resource('images', 'ImagesController')->middleware('auth');
 
-Route::post('containers-instace', 'ImagesController@configureContainer')->name('instance.configure');
-
 Route::get('containers-instace', 'ContainersController@index')->name('containers.index');
 Route::post('containers-instace', 'ContainersController@configureContainer')->name('containers.configure');
 Route::get('terminal-tab/{docker_id}', 'ContainersController@terminalNewTab')->name('container.terminalTab');
