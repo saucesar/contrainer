@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'my-containers', 'titlePage' => __("Container name: $mycontainer->nickname")])
+@extends('layouts.app', ['activePage' => 'my-containers', 'title' => 'Container Details', 'titlePage' => __("Container name: $mycontainer->nickname")])
 
 @section('content')
 <div class="content">
@@ -7,8 +7,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Container Terminal Tab to {{ $mycontainer->nickname }}</h4>
-                        <p class="card-category">Command to container {{ $mycontainer->nickname }}</p>
+                        <h4 class="card-title ">Container Details</h4>
+                        <p class="card-category"> {{ $mycontainer->nickname }}</p>
                     </div>
                     <div class="card-body">
                         <h4 class="card-title ">Processes running in {{ $mycontainer->nickname }}</h4>
