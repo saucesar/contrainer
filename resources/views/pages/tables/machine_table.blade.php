@@ -32,22 +32,19 @@
                 @endif
             </td>
             <td class="td-actions text-right">
-                <div class='row' style=" margin-top: 12px;">
-                    <a rel="tooltip" class="btn btn-success btn-link" data-toggle="collapse"
+                <div class='row'>
+                    <a rel="tooltip" class="btn btn-success btn-link btn-sm" data-toggle="collapse"
                         data-target="#{{ $machine->id }}" aria-expanded="false" aria-controls="collapseExample">
                         <i class="material-icons">details</i>
-                        <div class="ripple-container"></div>
                     </a>
-                    <a rel="tooltip" class="btn btn-warning btn-link" href="{{ route('machines.edit', $machine) }}"
-                        data-original-title="" title="">
+                    <button type="button" class="btn btn-warning btn-link btn-sm" data-toggle="modal" data-target="#machineModal{{$machine->id}}">
                         <i class="material-icons">edit</i>
-                        <div class="ripple-container"></div>
-                    </a>
+                    </button>
+                    @include('pages.user.machines_modal', ['machine' => $machine])
                     {!! Form::open(['route' => ['machines.destroy', $machine], 'method' => 'delete']) !!}
-                    <button type="button" class="btn btn-danger btn-link" data-original-title="" title=""
+                    <button type="submit" class="btn btn-danger btn-link btn-sm" data-original-title="" title=""
                         onclick="return confirm('Are you sure?')" type="submit">
                         <i class=" material-icons">delete</i>
-                        <div class="ripple-container"></div>
                     </button>
                     {!! Form::close() !!}
                 </div>

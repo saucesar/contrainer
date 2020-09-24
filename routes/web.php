@@ -24,6 +24,7 @@ Route::get('/', function () {
         return redirect()->route('home');
     }
 });
+
 Route::get('admin-area', 'AdminAreaController@index')->name('admin.area');
 Route::get('admin-area/machines', 'AdminAreaController@machines')->name('admin.area.machines');
 Route::get('admin-area/users', 'AdminAreaController@users')->name('admin.area.users');
