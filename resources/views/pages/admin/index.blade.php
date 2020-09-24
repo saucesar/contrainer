@@ -3,6 +3,7 @@
 @section('content')
 <div class="content">
     <div class="container-fluid">
+        @include('pages.components.messages')
 
         <div class="row">
             <div class="col-lg-6">

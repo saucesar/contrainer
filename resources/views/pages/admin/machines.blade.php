@@ -12,6 +12,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+                            @include('pages.components.messages')
                             @include('pages/tables/machine_table', ['machines' => $machines])
                         </div>
                     </div>

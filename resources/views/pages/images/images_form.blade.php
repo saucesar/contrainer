@@ -1,3 +1,4 @@
+@include('pages.components.messages')
 <div class="row">
     {!! Form::label('Name', null, ['class'=>"col-sm-2 col-form-label"]) !!}
     <div class="col-sm">

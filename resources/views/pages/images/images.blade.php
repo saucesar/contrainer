@@ -15,12 +15,7 @@
             </div>
             <div class="card-body">
               <div class="">
-                  @if(session('error'))
-                    <div class="alert alert-danger">{{ session('error') }}</div>
-                  @endif
-                  @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                  @endif
+                  @include('pages.components.messages')
                   @include('pages/tables/images_table', ['images' => $images, 'user_id' => $user_id])
               </div>
             </div>

@@ -14,31 +14,7 @@
                         <p class="card-category">List of Instace Container Images</p>
                     </div>
                     <div class="card-body">
-                        @if($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>                                    
-                        </div>
-                        @endif
-                        @if(session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                        @endif
-                        @if(session('success'))
-                            <div class="alert alert-success"role="alert">
-                                {{ session('success') }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                        @endif
+                        @include('pages.components.messages')
                         @include('pages/tables/containers_table', ['$mycontainers' => $mycontainers, 'isAdminArea' => false])
                     </div>
                 </div>

@@ -15,31 +15,8 @@
                             <p class="card-category">Your Nodes</p>
                         </div>
                         <div class="card-body">
-                            @if(isset($error))
-                            <div class="alert alert-danger">
-                                {{ $error }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                            @endif
-                            @if(session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                            @endif
-                            @if(session('success'))
-                            <div class="alert alert-success"role="alert">
-                                {{ session('success') }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                            @endif
-
+                            @include('pages.components.messages')
+                            
                             @if($swarm)
                             <h3>Manager Info</h3>
                             <table class="table table-bordered">
@@ -156,7 +133,7 @@
                                 <input type="text" class="form-control" name="ip" value=""
                                     placeholder="enter the ip or leave it blank to try to get it automatically.">
                                 <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-plus-circle"> Initialize a Swarm </i>
+                                    <i class="fas fa-plus-circle"> Initialize new Swarm </i>
                                 </button>
                             </form>
                             @endif

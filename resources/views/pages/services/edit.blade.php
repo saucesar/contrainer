@@ -17,15 +17,8 @@
                                     <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
                                         <h2><strong>Follow the Steps to Edit a Service</strong></h2>
                                         <p>Fill de required params</p>
-                                        @if ($errors->any())
-                                        <div class="alert alert-danger text-left">
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                        @endif
+                                        @include('pages.components.messages')
+                                        
                                         <div class="row">
                                             <div class="col-md-12 mx-0">
                                                 <form id="msform" action="{{ route('services.update', $service['ID']) }}" method="{{'POST'}}">

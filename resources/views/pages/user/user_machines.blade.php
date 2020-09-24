@@ -24,9 +24,8 @@
       <a href="{{ route('machines.create') }}">
         <i class="material-icons" style="color:white">add_to_queue</i>
       </a>
-      @if(session('error'))
-      <div class="alert alert-danger">{{ session('error') }}</div>
-      @endif
+      @include('pages.components.messages')
+      
     </button>
   </div>
 </div>

@@ -15,22 +15,8 @@
                     </div>
                     <div class="card-body">
                         <div class="">
-                            @if(session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                            @endif
-                            @if(session('success'))
-                            <div class="alert alert-success"role="alert">
-                                {{ session('success') }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                            @endif
+                            @include('pages.components.messages')
+
                             <div class="row">
                                 <div class="col-sm-10">
                                     {!! Form::open(['route' => ['containers.update', $container->docker_id], 'method' => 'put']) !!}

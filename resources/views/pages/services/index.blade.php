@@ -15,30 +15,8 @@
                     </div>
                     <div class="card-body table-responsive">
                         <div class="">
-                            @if(isset($error))
-                            <div class="alert alert-danger">
-                                {{ $error }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                            @endif
-                            @if(session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                            @endif
-                            @if(session('success'))
-                            <div class="alert alert-success"role="alert">
-                                {{ session('success') }}
-                                <button class="close alert-dismissible btn btn-link" data-dismiss="alert">
-                                    <i class="material-icons">close</i>
-                                </button>
-                            </div>
-                            @endif
+                            @include('pages.components.messages')
+                            
                             @if(count($services) == 0)
                                 <h3>No Services Found</h3>
                             @else
