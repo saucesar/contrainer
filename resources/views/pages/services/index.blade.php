@@ -20,7 +20,7 @@
                             @if(count($services) == 0)
                                 <h3>No Services Found</h3>
                             @else
-                            <table class="table table-bordered table-hover table-responsive text-center">
+                            <table class="table table-bordered table-hover text-center">
                                 <thead class="thead-light">
                                     <tr>
                                         <th rowspan="2">Name</th>
