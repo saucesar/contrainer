@@ -24,7 +24,7 @@
         <h4 class="">Container Spec</h4>
         <label for="env">Environment Variables </label>
         <textarea name="env" cols="30" rows="4" class="form-control"
-            placeholder="(Optional)A list of environment variables in the form VAR=value;VAR2=value2">{{ old('env') ? implode(';', $service['Spec']['TaskTemplate']['ContainerSpec']['Env']) : '' }}</textarea>
+            placeholder="(Optional)A list of environment variables in the form VAR=value;VAR2=value2">{{isset($service) ? implode(';', $service['Spec']['TaskTemplate']['ContainerSpec']['Env']) : old('env') }}</textarea>
         <label for="labels">Labels</label>
         <textarea name="labels" cols="30" rows="4" class="form-control"
             placeholder="(Optional)Labels to the service. Ex: L1:VALUE1;L2:VALUE2">{{ old('labels') ?? isset($service) ? implode(';', $service['Spec']['Labels']) : '' }}</textarea>
@@ -56,7 +56,7 @@
         <h4 class="">DNSConfig</h4>
         <label for="dnsNameServers">Name Servers</label>
         <textarea name="dnsNameServers" cols="30" rows="2" class="form-control"
-            placeholder="(Optional)Name Servers. Ex: 8.8.8.8;1.1.1.1;2.2.2.2">{{ old('dnsNameServers') ?? isset($service['Spec']['TaskTemplate']['ContainerSpec']['DNSConfig']['Nameservers']) ? implode(';', $service['Spec']['TaskTemplate']['ContainerSpec']['DNSConfig']['Nameservers']) : '' }}</textarea>
+            placeholder="(Optional)Name Servers. Ex: 8.8.8.8;1.1.1.1;2.2.2.2">{{ old('dnsNameServers') }}</textarea>
         <input type="text" name="dnsSearch" class="form-control" placeholder="(Optional)DNS Search."
             value="{{ old('dnsSearch') ?? isset($service['Spec']['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) ? implode(';', $service['Spec']['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) : '' }}" />
         <input type="text" name="dnsOptions" class="form-control" placeholder="(Optional)DNS Options."
