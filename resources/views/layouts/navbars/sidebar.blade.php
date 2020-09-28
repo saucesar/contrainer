@@ -30,6 +30,12 @@
             <p>{{ __('Docker Swarm') }}</p>
         </a>
       </li>
+      <li class="nav-item{{ $activePage == 'settings' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('settings.index') }}">
+          <i class="material-icons">settings</i>
+            <p>{{ __('Settings') }}</p>
+        </a>
+      </li>
       @endif
       <li class="nav-item{{ $activePage == 'services' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('services.index') }}">
