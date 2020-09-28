@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
     public function index()
     {
         $url = env('DOCKER_HOST');
-        $services = Http::get("$url/services");
+        $services = Http::get("$url/services?insertDefaults=true");
+
         $params = [
             'services' => $services->getStatusCode() == 200 ? $services->json() : [],
             'error' => $services->getStatusCode() != 200 ? $services->json()['message'] : null,
@@ -34,62 +36,35 @@ class ServiceController extends Controller
         if($createService->getStatusCode() == 201) {
             return redirect()->route('services.index')->with('success', 'Service has be created!');
         } else {
-            dd($createService->json());
+            return back()->withInput()->with('error', $createService->json()['message']);
         }
     }
 
     private function getParams($request)
     {
-        $data = [
-            'Name' => $request->serviceName,
-            'TaskTemplate' => [
-                'ContainerSpec' => [
-                    'Image' => $request->imageName,
-                    'Env' => isset($request->env) ? explode(';', $request->env) : [],
-                    'DNSConfig' => [
-                        'Nameservers' => isset($request->dnsNameServers) ? explode(';', $request->dnsNameServers) : ['8.8.8.8', '1.1.1.1'],
-                        'Search' => isset($request->dnsSearch) ? explode(';', $request->dnsSearch) : [],
-                        'Options' => isset($request->dnsOptions) ? $request->dnsOptions : ["timeout:3"],
-                    ],
-                    'TTY' => true,
-                    'OpenStdin' => true,
-                ],
-                'Resources' => [
-                    'Limits' => [
-                        'MemoryBytes' => 104857600,//equivale a 100MB
-                    ],
-                ],
-                'RestartPolicy' => [
-                    "Condition" => "any",
-                    "Delay" => 50000000000,
-                    "MaxAttempts" => 0,
-                ],
-                'ForceUpdate' => 0,
-                'Runtime' => 'container',
+        $service_template = DB::table('default_templates')->where('name', 'service')->first();
+        $data = json_decode($service_template->template, true);
+        
+        $data['Name'] = str_replace(' ', '', $request->serviceName);
+        $data['TaskTemplate']['ContainerSpec'] = [
+            'Image' => $request->imageName,
+            'Env' => isset($request->env) ? explode(';', $request->env) : [],
+            'DNSConfig' => [
+                'Nameservers' => isset($request->dnsNameServers) ? explode(';', $request->dnsNameServers) : ['8.8.8.8'],
+                'Search' => isset($request->dnsSearch) ? explode(';', $request->dnsSearch) : [],
+                'Options' => isset($request->dnsOptions) ? $request->dnsOptions : ["timeout:3"],
             ],
-            'Mode' => [
-                'Replicated' => [
-                    'Replicas' => 2,
-                ],
-            ],
-            'UpdateConfig' => [
-                'Parallelism' => 1,
-                'FailureAction' => 'pause',
-                'Monitor' => 5000000000,
-                'MaxFailureRatio' => 0,
-                "Order" => "stop-first",
-            ],
-            'EndpointSpec' => [
-                'Ports' => [
-                    [
-                        'Protocol' => $request->portProtocol,
-                        'PublishedPort' => intval($request->publishedPort),
-                        'TargetPort' => intval($request->targetPort)
-                    ],
-                ],
-            ],
-            'Labels' => $this->getLabels($request->labels),
         ];
+        $data['EndpointSpec'] = [
+            'Ports' => [
+                [
+                    'Protocol' => $request->portProtocol,
+                    'PublishedPort' => intval($request->publishedPort),
+                    'TargetPort' => intval($request->targetPort)
+                ],
+            ],
+        ];
+        $data['Labels'] = $this->getLabels($request->labels);
 
         return $data;
     }
