@@ -61,3 +61,9 @@ Route::resource('services', 'ServiceController');
 Route::get('docker-swarm', 'DockerSwarmController@index')->name('docker-swarm.index');
 Route::post('docker-swarm', 'DockerSwarmController@swarmInit')->name('docker-swarm.init');
 Route::post('docker-swarm/leave', 'DockerSwarmController@swarmLeave')->name('docker-swarm.leave');
+
+Route::prefix('settings')->group(function(){
+    Route::get('/', 'SettingsController@index')->name('settings.index');
+    Route::put('/service-template/update', 'SettingsController@updateServiceTemplate')->name('service-template.update');
+    Route::get('/phpinfo', 'SettingsController@phpinfo')->name('settings.phpinfo');
+});
