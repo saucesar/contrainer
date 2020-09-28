@@ -96,7 +96,6 @@
                                 <thead class="">
                                     <th>ID</th>
                                     <th>Role</th>
-                                    <th>Availability</th>
                                     <th>Plataform</th>
                                     <th>Hostname</th>
                                     <th>Memory</th>
@@ -109,11 +108,10 @@
                                     <tr>
                                         <td scope="col">{{ $node['ID'] }}</td>
                                         <td scope="col">{{ $node['Spec']['Role'] }}</td>
-                                        <td scope="col">{{ $node['Spec']['Availability'] }}</td>
                                         <td scope="col">{{ $node['Description']['Platform']['OS'].'_'.$node['Description']['Platform']['Architecture'] }}</td>
                                         <td scope="col">{{ $node['Description']['Hostname'] }}</td>
                                         <td scope="col">{{ round($node['Description']['Resources']['MemoryBytes']/pow(1024, 3), 2) }} GB</td>
-                                        <td scope="col">{{ $node['Status']['State'] }}</td>
+                                        <td scope="col">{{ $node['Spec']['Availability'] }}/{{ $node['Status']['State'] }}</td>
                                         <td scope="col">{{ $node['Status']['Addr'] }}</td>
                                         <td scope="col">{{ $node['Description']['Engine']['EngineVersion'] }}</td>
                                     </tr>
