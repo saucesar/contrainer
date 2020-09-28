@@ -50,6 +50,60 @@ class DatabaseSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
+        DB::table('default_templates')->insert([
+            'name' => 'service',
+            'template' => json_encode([
+                'Name' => 'SERVICE_NAME',
+                'TaskTemplate' => [
+                    'ContainerSpec' => [
+                        'Image' => 'IMAGE_NAME',
+                        'Env' => [],
+                        'DNSConfig' => [
+                            'Nameservers' => ['8.8.8.8'],
+                            'Search' =>  [],
+                            'Options' => ["timeout:3"],
+                        ],
+                        'TTY' => true,
+                        'OpenStdin' => true,
+                    ],
+                    'Resources' => [
+                        'Limits' => [
+                            'MemoryBytes' => 104857600,//equivale a 100MB
+                        ],
+                    ],
+                    'RestartPolicy' => [
+                        "Condition" => "any",
+                        "Delay" => 50000000000,
+                        "MaxAttempts" => 0,
+                    ],
+                    'ForceUpdate' => 0,
+                    'Runtime' => 'container',
+                ],
+                'Mode' => [
+                    'Replicated' => [
+                        'Replicas' => 2,
+                    ],
+                ],
+                'UpdateConfig' => [
+                    'Parallelism' => 1,
+                    'FailureAction' => 'pause',
+                    'Monitor' => 5000000000,
+                    'MaxFailureRatio' => 0,
+                    "Order" => "stop-first",
+                ],
+                'EndpointSpec' => [
+                    'Ports' => [
+                        [
+                            'Protocol' => 'tcp',
+                            'PublishedPort' => 1111,
+                            'TargetPort' => 80
+                        ],
+                    ],
+                ],
+                'Labels' => [],
+            ])
+        ]);
+
         $this->call([UsersTableSeeder::class]);
     }
 }
