@@ -130,7 +130,7 @@ class ContainersController extends Controller
         $this->pullImage($url, Image::find($data['image_id']));
         $this->createContainer($url, $data);
 
-        return redirect()->route('instance.index')->with('success', 'Container creation is running!');
+        return redirect()->route('containers.index')->with('success', 'Container creation is running!');
     }
 
     public function edit($id)
