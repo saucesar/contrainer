@@ -12,25 +12,25 @@
                 <div class="text-left">
                     <div class="row">
                         <div class="col">
-                            <label for="dnsNameservers">DNS Name Servers</label>
+                            <label for="dnsNameservers">DNS Name Servers (Separate with: ';')</label>
                             <textarea name="dnsNameservers" cols="30" rows="4"
-                            class="form-control">{{ implode(', ', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Nameservers']) }}</textarea>
+                            class="form-control">{{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Nameservers']) }}</textarea>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col">
-                            <label for="dnsNameservers">DNS Search</label>
+                            <label for="dnsNameservers">DNS Search (Separate with: ';')</label>
                             <textarea name="dnsNameservers" cols="30" rows="4"
-                            class="form-control">{{ implode(', ', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) }}</textarea>
+                            class="form-control">{{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) }}</textarea>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col">
-                            <label for="dnsNameservers">DNS Options</label>
+                            <label for="dnsNameservers">DNS Options (Separate with: ';')</label>
                             <textarea name="dnsNameservers" cols="30" rows="4"
-                            class="form-control">{{ implode(', ', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Options']) }}</textarea>
+                            class="form-control">{{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Options']) }}</textarea>
                         </div>
                     </div>
                     <br>
@@ -76,7 +76,6 @@
                             <input type="number" name="restartMax" class="form-control"
                             value="{{ $service_template['TaskTemplate']['RestartPolicy']['MaxAttempts'] }}">
                         </div>
-                                    <p></p>
                     </div>
                     <div class="row">
                         <h4>Mode</h4>
