@@ -30,9 +30,9 @@
                                 <div class="col">
                                     <h4>ContainerSpec</h4>
                                     <h5>DNSConfig</h5>
-                                    <p>Nameservers: {{ implode(', ', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Nameservers']) }}</p>
-                                    <p>Search: {{ implode(', ', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) }}</p>
-                                    <p>Options: {{ implode(', ', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Options']) }}</p>
+                                    <p>Nameservers: {{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Nameservers']) }}</p>
+                                    <p>Search: {{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) }}</p>
+                                    <p>Options: {{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Options']) }}</p>
                                     <p>TTY: {{ $service_template['TaskTemplate']['ContainerSpec']['TTY'] ? 'True' : 'False' }}</p>
                                     <p>OpenStdin: {{ $service_template['TaskTemplate']['ContainerSpec']['OpenStdin'] ? 'True' : 'False' }}</p>
                                 </div>
