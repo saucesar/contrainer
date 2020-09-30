@@ -99,7 +99,7 @@
                         <div class="col">
                             <label for="parallelism">FailureAction</label>
                             <select name="failureAction" class="form-control">
-                                <option value="" {{ $service_template['UpdateConfig']['FailureAction'] == '' ? 'selected' : '' }}></option>
+                                <option value="pause" {{ $service_template['UpdateConfig']['FailureAction'] == 'pause' ? 'selected' : '' }}>PAUSE</option>
                             </select>
                         </div>
                     </div>
@@ -111,8 +111,7 @@
                         </div>
                         <div class="col">
                             <label for="maxFailureRatio">MaxFailureRatio</label>
-                            <input type="number" name="maxFailureRatio"  class="form-control"
-                            value="{{ $service_template['UpdateConfig']['MaxFailureRatio'] }}">
+                            <input type="number" name="maxFailureRatio"  class="form-control" value="{{ $service_template['UpdateConfig']['MaxFailureRatio'] }}">
                         </div>
                     </div>
                     <div class="row">
