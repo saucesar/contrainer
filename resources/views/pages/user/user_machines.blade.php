@@ -14,10 +14,7 @@
             @if(session('error'))
               <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <div class="">
-              @include('pages/tables/machine_table', ['machines' => $machines])
-              @include('pages.user.machines_modal')
-            </div>
+            @include('pages/tables/machine_table', ['machines' => $machines])
           </div>
         </div>
       </div>
@@ -28,8 +25,11 @@
         <i class="material-icons" style="color:white">add_to_queue</i>
       </a>
       @include('pages.components.messages')
-      
     </button>
   </div>
+  @include('pages.user.machines_modal')
+  @foreach ($machines as $machine)
+    @include('pages.user.machines_modal', ['machine' => $machine])
+  @endforeach
 </div>
 @endsection
