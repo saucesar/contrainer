@@ -20,23 +20,23 @@
                     <br>
                     <div class="row">
                         <div class="col">
-                            <label for="dnsNameservers">DNS Search (Separate with: ';')</label>
-                            <textarea name="dnsNameservers" cols="30" rows="4"
+                            <label for="dnsNameSearch">DNS Search (Separate with: ';')</label>
+                            <textarea name="dnsNameSearch" cols="30" rows="4"
                             class="form-control">{{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) }}</textarea>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col">
-                            <label for="dnsNameservers">DNS Options (Separate with: ';')</label>
-                            <textarea name="dnsNameservers" cols="30" rows="4"
+                            <label for="dnsNameOptions">DNS Options (Separate with: ';')</label>
+                            <textarea name="dnsNameOptions" cols="30" rows="4"
                             class="form-control">{{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Options']) }}</textarea>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col">
-                            <label for="dnsNameservers">TTY</label>
+                            <label for="tty">TTY</label>
                             <input type="checkbox" name="tty"
                             {{ $service_template['TaskTemplate']['ContainerSpec']['TTY'] ? 'checked' : '' }}>
                         </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="parallelism">Replicas</label>
+                            <label for="parallelism">Parallelism</label>
                             <input type="number" name="parallelism" class="form-control"
                             value="{{ $service_template['UpdateConfig']['Parallelism'] }}">
                         </div>
