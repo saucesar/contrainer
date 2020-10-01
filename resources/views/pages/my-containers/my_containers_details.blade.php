@@ -76,9 +76,11 @@
                                     <p>
                                         <b>Binds: </b>
                                         <br>
-                                        @foreach($details['HostConfig']['Binds'] as $bind)
-                                            {{$bind}} <br>
-                                        @endforeach
+                                        @if(isset($details['HostConfig']['Binds']))
+                                            @foreach($details['HostConfig']['Binds'] as $bind)
+                                                {{$bind}} <br>
+                                            @endforeach
+                                        @endif
                                     </p>
                                     <p><b> NetworkMode: </b>{{$details['HostConfig']['NetworkMode']}}</p>
                                     <p><b> VolumeDriver: </b>{{$details['HostConfig']['VolumeDriver']}}</p>
@@ -170,9 +172,11 @@
                                         <br>
                                         @foreach($details['NetworkSettings']['Ports'] as $ports)
                                             {{ $key = array_search($ports, $details['NetworkSettings']['Ports']) }} =>
-                                            @foreach($ports as $portNumber)
-                                                {{ $portNumber['HostIp']}}:{{ $portNumber['HostPort']}}
-                                            @endforeach
+                                            @if(isset($ports))
+                                                @foreach($ports as $portNumber)
+                                                    {{ $portNumber['HostIp']}}:{{ $portNumber['HostPort']}}
+                                                @endforeach
+                                            @endif
                                         @endforeach
                                     </p>
                                     <p><b>SandboxKey: </b>{{ $details['NetworkSettings']['SandboxKey'] }}</p>
