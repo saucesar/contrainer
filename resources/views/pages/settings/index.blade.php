@@ -9,6 +9,10 @@ function changeIcon(element) {
 var jsonViewerService = new JSONViewer();
 document.querySelector("#services-json").appendChild(jsonViewerService.getContainer());
 jsonViewerService.showJSON(<?= $service_template_json ?>, -1, 1);
+
+var jsonViewerContainer = new JSONViewer();
+document.querySelector("#containers-json").appendChild(jsonViewerContainer.getContainer());
+jsonViewerContainer.showJSON(<?= $container_template_json ?>, -1, 1);
 </script>
 @endpush
 
@@ -23,23 +27,33 @@ jsonViewerService.showJSON(<?= $service_template_json ?>, -1, 1);
                         <p class="card-category">Configure default params to the plataform</p>
                     </div>
                     <div class="card-body">
-                        <div class="">
-                            @include('pages.components.messages')
-                            <div class="row d-flex justify-content-center">
-                                <div class="col-6">
-                                    <h3>
-                                        Service Template
-                                        <button class="btn btn-warning btn-link w-25" data-toggle="modal"
-                                            data-target="#modalServices" title="Edit services template">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                    </h3>
-                                </div>
+                        @include('pages.components.messages')
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-4">
+                                <h3>
+                                    Services Template
+                                    <button class="btn btn-warning btn-link" data-toggle="modal"
+                                        data-target="#modalServices" title="Edit services template">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </h3>
                             </div>
-                            <div class="row d-flex justify-content-center">
-                                <div class="col-6">
-                                    <div id="services-json"></div>
-                                </div>
+                            <div class="col-4">
+                                <h3>
+                                    Containers Template
+                                    <button class="btn btn-warning btn-link" data-toggle="modal"
+                                        data-target="#" title="Edit containers template">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-4">
+                                <div id="services-json"></div>
+                            </div>
+                            <div class="col-4">
+                                <div id="containers-json"></div>
                             </div>
                         </div>
                     </div>
