@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class ContainersController extends Controller
 {
@@ -118,19 +119,23 @@ class ContainersController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nickname' => 'required|min:5|unique:containers',
-            'IPAddress' => 'nullable|ipv4',
-            'IPPrefixLen' => 'nullable|ipv4',
-        ]);
-        
-        $url = env('DOCKER_HOST');
+        try{
+            $request->validate([
+                'nickname' => 'required|min:5|unique:containers',
+                'IPAddress' => 'nullable|ipv4',
+                'IPPrefixLen' => 'nullable|ipv4',
+            ]);
             
-        $data = $this->setDefaultDockerParams($request->all());
-        $this->pullImage($url, Image::find($data['image_id']));
-        $this->createContainer($url, $data);
+            $url = env('DOCKER_HOST');
+                
+            $data = $this->setDefaultDockerParams($request->all());
+            $this->pullImage($url, Image::find($data['image_id']));
+            $this->createContainer($url, $data);
 
-        return redirect()->route('containers.index')->with('success', 'Container creation is running!');
+            return redirect()->route('containers.index')->with('success', 'Container creation is running!');
+        } catch(Exception $e){
+            return redirect()->route('containers.index')->with('error', $e->getMessage())->withInput();
+        }
     }
 
     public function edit($id)
@@ -166,38 +171,20 @@ class ContainersController extends Controller
 
     private function setDefaultDockerParams(array $data)
     {
-        $data['Image'] = Image::find($data['image_id'])->fromImage;
-        $data['user_id'] = Auth::user()->id;
+        $template = json_decode(DB::table('default_templates')->where('name', 'container')->first()->template, true);
+        $template['nickname'] = $data['nickname'];
+        $template['Hostname'] = $data['nickname'];
+        $template['image_id'] = $data['image_id'];
+        $template['Image'] = Image::find($data['image_id'])->fromImage;
+        $template['user_id'] = Auth::user()->id;
 
-        $data['Env'] = $data['envVariables'] ? explode(';', $data['envVariables']) : [];
-        array_pop($data['Env']); // Para remover string vazia no ultimo item do array, evitando erro na criação do container.
-
-        $data['AttachStdin'] = true;
-        $data['AttachStdout'] = true;
-        $data['AttachStderr'] = true;
-        $data['OpenStdin'] = true;
-        $data['StdinOnce'] = false;
-        $data['Tty'] = true;
-
-        $data['Entrypoint'] = [
-            '/bin/bash',
-        ];
-
-        $data['HostConfig'] = [
-            'PublishAllPorts' => true,
-            'Privileged' => true,
-            'RestartPolicy' => [
-                'name' => 'always',
-            ],
-            'NetworkMode' => $data['NetworkMode'],
-            $data['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0,    
-            'Binds' => [
-                '/var/run/docker.sock:/var/run/docker.sock',
-                '/tmp:/tmp',
-             ],
-        ];
-
-        return $data;
+        $template['Env'] = $data['envVariables'] ? explode(';', $data['envVariables']) : [];
+        array_pop($template['Env']);// Para remover string vazia no ultimo item do array, evitando erro na criação do container.
+        $template['HostConfig']['NetworkMode'] = $data['NetworkMode'];
+        $template['HostConfig']['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0;
+        $template['HostConfig']['PublishAllPorts'] = isset($data['external-port']);
+        
+        return $template;
     }
 
     private function pullImage($url, Image $image)
