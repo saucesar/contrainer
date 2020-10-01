@@ -11,6 +11,7 @@ class SettingsController extends Controller
     {
         $params = [
             'service_template' => json_decode(DB::table('default_templates')->where('name', 'service')->first()->template, true),
+            'service_template_json' => DB::table('default_templates')->where('name', 'service')->first()->template,
         ];
 
         return view('pages/settings/index', $params);
