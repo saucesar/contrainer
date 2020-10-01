@@ -9,9 +9,13 @@ class SettingsController extends Controller
 {
     public function index()
     {
+        $serv = DB::table('default_templates')->where('name', 'service')->first()->template;
+        $cont = DB::table('default_templates')->where('name', 'container')->first()->template;
         $params = [
-            'service_template' => json_decode(DB::table('default_templates')->where('name', 'service')->first()->template, true),
-            'service_template_json' => DB::table('default_templates')->where('name', 'service')->first()->template,
+            'service_template' => json_decode($serv, true),
+            'container_template' => json_decode($cont, true),
+            'service_template_json' => $serv,
+            'container_template_json' => $cont,
         ];
 
         return view('pages/settings/index', $params);
