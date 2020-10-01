@@ -104,6 +104,52 @@ class DatabaseSeeder extends Seeder
             ])
         ]);
 
+        DB::table('default_templates')->insert([
+            'name' => 'container',
+            'template' => json_encode([
+                "nickname" => "NICKNAME",
+                "Labels" => [
+                    'app.name' => 'cloud-project',
+                ],
+                "Hostname"=> null,
+                "Domainname" => "cloud",
+                "Dns" => [],
+                "DnsOptions" => [],
+                "DnsSearch"=> [],
+                "IPAddress" => '',
+                "IPPrefixLen" => 0,
+                "MacAddress" => "",
+                "Memory" => 0,
+                "NetworkMode" => "bridge",
+                "Image" => "IMAGE_NAME",
+                "Env" => [],
+                "AttachStdin" =>true,
+                "AttachStdout" => true,
+                "AttachStderr" => true,
+                "OpenStdin" => true,
+                "StdinOnce" => false,
+                "Tty" =>true,
+                "Entrypoint"=> [
+                    "/bin/bash",
+                ],
+                "HostConfig" => [
+                    "PublishAllPorts" => true,
+                    "Privileged" => true,
+                    "RestartPolicy" => [
+                        "name" => "always",
+                    ],
+                    "NetworkMode" => "bridge",
+                    "Binds" => [
+                        "/var/run/docker.sock:/var/run/docker.sock",
+                        "/tmp:/tmp",
+                    ],
+                    "StorageOpt" => [
+                        "size" => "2G",
+                    ]
+                ],
+            ])
+        ]);
+
         $this->call([UsersTableSeeder::class]);
     }
 }
