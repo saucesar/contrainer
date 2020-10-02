@@ -18,49 +18,58 @@ jsonViewerContainer.showJSON(<?= $container_template_json ?>, -1, 1);
 
 @section('content')
 <div class="content">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-12">
+                @include('pages.components.messages')
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Settings</h4>
-                        <p class="card-category">Configure default params to the plataform</p>
+                        <h4 class="card-title ">Services Template</h4>
+                        <p class="card-category"><strong>Configure default template to create services</strong></p>
                     </div>
                     <div class="card-body">
-                        @include('pages.components.messages')
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-4">
-                                <h3>
-                                    Services Template
-                                    <button class="btn btn-warning btn-link" data-toggle="modal"
-                                        data-target="#modalServices" title="Edit services template">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                </h3>
-                            </div>
-                            <div class="col-4">
-                                <h3>
-                                    Containers Template
-                                    <button class="btn btn-warning btn-link" data-toggle="modal"
-                                        data-target="#" title="Edit containers template">
-                                        <i class="material-icons">edit</i>
-                                    </button>
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-4">
+                        <div class="row">
+                            <div class="col overflow-auto" style="height: 250px;">
                                 <div id="services-json"></div>
                             </div>
-                            <div class="col-4">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-warning btn-link" data-toggle="modal" data-target="#modalServices"
+                            title="Edit services template">
+                            <i class="material-icons">edit</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title ">Containers Template</h4>
+                        <p class="card-category"><strong>Configure default params to the create containers</strong></p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col overflow-auto" style="height: 250px;">
                                 <div id="containers-json"></div>
                             </div>
                         </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-warning btn-link" data-toggle="modal" data-target="#modalContainersService"
+                            title="Edit containers template">
+                            <i class="material-icons">edit</i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
         @include('pages.settings.modal_services_template')
+        @include('pages.settings.modal_containers_template')
     </div>
 </div>
 @endsection
