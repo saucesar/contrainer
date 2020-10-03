@@ -143,9 +143,6 @@ class DatabaseSeeder extends Seeder
                         "/var/run/docker.sock:/var/run/docker.sock",
                         "/tmp:/tmp",
                     ],
-                    "StorageOpt" => [
-                        "size" => "2G",
-                    ]
                 ],
             ])
         ]);
