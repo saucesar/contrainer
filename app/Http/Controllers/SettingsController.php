@@ -65,6 +65,8 @@ class SettingsController extends Controller
 
     public function updateContainerTemplate(Request $request)
     {
+        $request->validate($this->rules());
+
         $container_template = json_decode(DB::table('default_templates')->where('name', 'container')->first()->template, true);
 
         $container_template['Domainname'] = str_replace(' ', '', $request->Domainname);
@@ -113,5 +115,18 @@ class SettingsController extends Controller
         }
 
         return $labels_array;
+    }
+
+    private function rules()
+    {
+        return [
+            'Domainname' => 'nullable|min:3',
+            'IPAddress' => 'nullable|ipv4',
+            'IPPrefixLen' => 'numeric',
+            'MacAddress' => 'nullable|regex:/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/',
+            'Memory' => 'numeric',
+            'NetworkMode' => 'in:bridge,host,none',
+            'RestartPolicy' => 'nullable|in:always,unless-stopped,on-failure',
+        ];
     }
 }
