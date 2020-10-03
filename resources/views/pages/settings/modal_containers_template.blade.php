@@ -19,9 +19,9 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="labels">Labels (Ex: KEY=VALUE;KEY2=VALUE2;)</label>
-                            <textarea name="labels"cols="30" rows="2" class="form-control" placeholder=""
-                            >{{ old('labels') ?? $cont_labels }}</textarea>
+                            <label for="Labels">Labels (Ex: KEY:VALUE;KEY2:VALUE2;)</label>
+                            <textarea name="Labels"cols="30" rows="2" class="form-control" placeholder=""
+                            >{{ old('Labels') ?? $cont_labels }}</textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -65,8 +65,8 @@
                     <div class="row">
                         <div class="col">
                             <label for="Memory">Env variables ( Ex: env=value;env2=value2; )</label>
-                            <textarea name="dnsOptions"cols="30" rows="3" class="form-control" placeholder=""
-                            >{{ old('Env') ?? implode(';',$container_template['Env']) }}</textarea>
+                            <textarea name="env"cols="30" rows="3" class="form-control" placeholder=""
+                            >{{ old('Env') ?? implode(';', $container_template['Env']) }}</textarea>
                         </div>
                     </div>
                     <br>
@@ -141,7 +141,7 @@
                         <div class="col">
                             <label for="Binds">Binds ( Ex: value;value2; )</label>
                             <textarea name="Binds"cols="30" rows="3" class="form-control" placeholder=""
-                            >{{ old('Binds') ?? implode(';',$container_template['HostConfig']['Binds']) }}</textarea>
+                            >{{ old('Binds') ?? implode(';', $container_template['HostConfig']['Binds']) }}</textarea>
                         </div>
                     </div>
                 </div>
