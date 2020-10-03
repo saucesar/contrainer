@@ -19,11 +19,72 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="Labels">Labels (Ex: KEY:VALUE;KEY2:VALUE2;)</label>
-                            <textarea name="Labels"cols="30" rows="2" class="form-control" placeholder=""
-                            >{{ old('Labels') ?? $cont_labels }}</textarea>
+                            <h3>Labels</h3>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="LabelKeys[]">KEY</label>
+                        </div>
+                        <div class="col">
+                            <label for="">VALUE</label>
+                        </div>
+                        <div class="col">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col" id="label-keys">
+                            <input type="text" name="LabelKeys[]" class="form-control">
+                        </div>
+                        <div class="col" id="label-values">
+                            <input type="text" name="LabelValues[]" class="form-control">
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-success" id="buttonAddLabel" onclick="addLabel();" type="button">ADD</button>
+                        </div>
+                        <script type="text/javascript">
+                            function addLabel(){
+                                let divKeys = $("#label-keys");
+                                let divValues = $("#label-values");
+
+                                var fieldValue = '<input type="text" name="LabelValues[]" class="form-control">';
+                                var fieldKey = '<input type="text" name="LabelKeys[]" class="form-control">';
+                                
+                                $(divKeys).prepend(fieldKey);
+                                $(divValues).prepend(fieldValue);
+
+                                checkLabels();
+                            }
+                            
+                            function checkLabels(){
+                                var labelKeys = document.getElementsByName('LabelKeys[]');
+                                var labelValues = document.getElementsByName('LabelValues[]');
+                                var allFilled = true;
+
+                                for(var i = 0; i<labelKeys.length; i++){
+                                    button = document.getElementById('buttonAddLabel');
+                                    if(labelKeys[i].value == ''){
+                                        allFilled = false;
+                                        break;
+                                    }
+                                }
+
+                                for(var i = 0; i<labelValues.length; i++){
+                                    button = document.getElementById('buttonAddLabel');
+                                    if(labelValues[i].value == ''){
+                                        allFilled = false;
+                                        break;
+                                    }
+                                }
+
+                                button.disabled = !allFilled;
+                                console.log(button.disabled);
+                            }
+
+                            setInterval(checkLabels, 100);
+                        </script>
+                    </div>
+                    <br><br>
                     <div class="row">
                         <div class="col">
                             <label for="dns">DNS (Ex: 0.0.0.0;1.1.1.1;)</label>
