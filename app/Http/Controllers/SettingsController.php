@@ -63,6 +63,42 @@ class SettingsController extends Controller
         return back()->with('success', 'Service Template Updated!');
     }
 
+    private function extractLabels($request)
+    {
+        $labelKeys = $request->LabelKeys;
+        $labelValues = $request->LabelValues;
+        
+        $labels = [];
+
+        for($i = 0; $i < count($labelKeys); $i++){
+            if(isset($labelKeys[$i]) && isset($labelValues[$i])){
+                $labels[$labelKeys[$i]] = $labelValues[$i];
+            }
+        }
+        
+        return $labels;
+    }
+
+    private function extractArray($keys, $values, $separator = '=', $upper = false)
+    {
+        $array = [];
+
+        for($i = 0; $i < count($keys); $i++){
+            if(isset($keys[$i]) && $values[$i]){
+                $val = $keys[$i].$separator.$values[$i];
+                $array[] = $upper ? strtoupper($val) : $val;
+            }
+        }
+
+        return $array;
+    }
+
+    private function removeNull($array, $index = 0)
+    {
+        unset($array[$index]);
+        return $array;
+    }
+
     public function updateContainerTemplate(Request $request)
     {
         $request->validate($this->rules());
@@ -70,14 +106,13 @@ class SettingsController extends Controller
         $container_template = json_decode(DB::table('default_templates')->where('name', 'container')->first()->template, true);
 
         $container_template['Domainname'] = str_replace(' ', '', $request->Domainname);
-        $container_template['Labels'] = $this->labelsToArray($request->Labels);
-        $container_template['Dns'] = $this->removeBlanck(explode(';', $request->dns));
-        $container_template['DnsOptions'] = $this->removeBlanck(explode(';', $request->dnsOptions));
+        $container_template['Labels'] = $this->extractLabels($request);
+        $container_template['Dns'] = [$request->dns];
+        $container_template['DnsOptions'] = $this->removeNull($request->dnsOptions);
         $container_template['IPAddress'] = $request->IPAddress;
         $container_template['IPPrefixLen'] = intval($request->IPPrefixLen);
-        $container_template['MacAddress'] = $request->MacAddress;
-        $container_template['Memory'] = $request->Memory;
-        $container_template['Env'] = $this->removeBlanck(explode(';', $request->env));
+        $container_template['Memory'] = intval($request->Memory);
+        $container_template['Env'] = $this->extractArray($request->EnvKeys, $request->EnvValues, '=',true);
         $container_template['AttachStdin'] = isset($request->AttachStdin);
         $container_template['AttachStdout'] = isset($request->AttachStdout);
         $container_template['AttachStderr'] = isset($request->AttachStderr);
@@ -87,34 +122,14 @@ class SettingsController extends Controller
         $container_template['HostConfig']['PublishAllPorts'] = isset($request->PublishAllPorts);
         $container_template['HostConfig']['Privileged'] = isset($request->Privileged);
         $container_template['NetworkMode'] = $request->NetworkMode;
-        $container_template['Entrypoint'] = $this->removeBlanck(explode(';', $request->Entrypoint));
+        $container_template['Entrypoint'] = [$request->Entrypoint];
         $container_template['HostConfig']['RestartPolicy']['name'] = $request->RestartPolicy;
-        $container_template['HostConfig']['Binds'] = $this->removeBlanck(explode(';', $request->Binds));
+        $container_template['HostConfig']['Binds'] = $this->extractArray($request->BindSrc, $request->BindDest, ':');
         $container_template['HostConfig']['NetworkMode'] = $request->NetworkMode;
 
         DB::table('default_templates')->where('name', 'container')->update(['template' => json_encode($container_template)]);
 
         return back()->with('success', 'Container Template Updated!');
-    }
-
-    private function removeBlanck($array)
-    {
-        return $array[count($array)-1] == '' ? array_diff($array, ['']) : $array;
-    }
-
-    private function labelsToArray($labels)
-    {
-        $labels_array = [];
-        $array = explode(';', $labels);
-
-        foreach($array as $label){
-            if($label != ''){
-                $temp = explode(':', $label);
-                $labels_array[$temp[0]] = $temp[1];
-            }
-        }
-
-        return $labels_array;
     }
 
     private function rules()
@@ -123,7 +138,6 @@ class SettingsController extends Controller
             'Domainname' => 'nullable|min:3',
             'IPAddress' => 'nullable|ipv4',
             'IPPrefixLen' => 'numeric',
-            'MacAddress' => 'nullable|regex:/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/',
             'Memory' => 'numeric',
             'NetworkMode' => 'in:bridge,host,none',
             'RestartPolicy' => 'nullable|in:always,unless-stopped,on-failure',
