@@ -161,7 +161,7 @@ class ContainersController extends Controller
         $responseDelete = Http::delete("$url/containers/$id?force=1");
         if($responseDelete->getStatusCode() == 204 || $responseDelete->getStatusCode() == 404) {
             $instancia = Container::firstWhere('docker_id', $id);
-            $instancia->delete();
+            isset($instancia) ? $instancia->delete() : '';
 
             return back()->with('success', 'Container deleted with sucess!');
         } else {
