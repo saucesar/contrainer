@@ -1,24 +1,4 @@
-<script type="text/javascript">
-function addAtFirst(containerId, field) {
-    let container = $(containerId);
-    $(container).prepend(field);
-}
-
-function checkInputArray(inputName, buttonId) {
-    var input = document.getElementsByName(inputName);
-    var button = document.getElementById(buttonId);
-    var allFilled = true;
-
-    for (var i = 0; i < input.length; i++) {
-        if (input[i].value == '') {
-            allFilled = false;
-            break;
-        }
-    }
-
-    button.disabled = !allFilled;
-}
-</script>
+<script type="text/javascript" src="{{ asset('js') }}/cloud.js"></script>
 
 <div class="modal" id="modalContainersService" tabindex="-1" role="dialog" aria-labelledby="modalContainersLabel"
     aria-hidden="true">
@@ -58,46 +38,52 @@ function checkInputArray(inputName, buttonId) {
                     </div>
                     <div class="row">
                         <div class="col-5" id="label-keys">
-                            <input type="text" name="LabelKeys[]" class="form-control">
+                            @php ($countLabelKey = 0)
+                            <input type="text" name="LabelKeys[]" id="LabelKey{{ ++$countLabelKey }}"class="form-control">
                             @if(old('LabelKeys[]'))
                                 @foreach(array_keys(old('LabelKeys[]')) as $key)
-                                    <input type="text" name="LabelKeys[]" class="form-control" value="{{ $key }}">
+                                    <input type="text" name="LabelKeys[]" id="LabelKey{{ ++$countLabelKey }}" class="form-control" value="{{ $key }}">
                                 @endforeach
                             @else
                                 @foreach(array_keys($container_template['Labels']) as $key)
-                                    <input type="text" name="LabelKeys[]" class="form-control" value="{{ $key }}">
+                                    <input type="text" name="LabelKeys[]" id="LabelKey{{ ++$countLabelKey }}"class="form-control" value="{{ $key }}">
                                 @endforeach
                             @endif
                         </div>
                         <div class="col-5" id="label-values">
-                            <input type="text" name="LabelValues[]" class="form-control">
-                            @if(old('LabelValues[]'))
-                                @foreach(old('LabelValues[]') as $val)
-                                    <input type="text" name="LabelValues[]" class="form-control" value="{{ $val }}">
-                                @endforeach
-                            @else
-                                @foreach($container_template['Labels'] as $val)
-                                    <input type="text" name="LabelValues[]" class="form-control" value="{{ $val }}">
-                                @endforeach
-                            @endif
+                            @php ($countLabelValue = 0)
+                            <input type="text" name="LabelValues[]" id="LabelValue{{ ++$countLabelValue }}" class="form-control">
+                            @php($array = old('LabelValues[]') ? old('LabelValues[]') : $container_template['Labels'])
+                            @foreach($array as $val)
+                                <div class="row" id="LabelValue{{ ++$countLabelValue }}">
+                                    <div class="col-10">
+                                        <input type="text" name="LabelValues[]"class="form-control" value="{{ $val }}">
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-sm btn-link btn-danger"
+                                                onclick='deleteElements(<?= json_encode(['LabelValue'.$countLabelValue, 'LabelKey'.$countLabelValue,]);?>, this);'>
+                                            X
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach     
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-sm btn-success" id="buttonAddLabel" onclick="addLabel();"
-                                type="button">Add</button>
+                            <button class="btn btn-sm btn-success" id="buttonAddLabel" onclick="addLabel();" type="button">Add</button>
                         </div>
                         <script type="text/javascript">
+                        var countLabel = <?= $countLabelValue;?>;
                         function addLabel() {
-                            checkLabels();
-
-                            addAtFirst("#label-keys", '<input type="text" name="LabelKeys[]" class="form-control">');
-                            addAtFirst("#label-values", '<input type="text" name="LabelValues[]" class="form-control">');
+                            countLabel++;
+                            addAtFirst("#label-keys", '<input type="text" name="LabelKeys[]" class="form-control"'+'id="LabelKey'+countLabel+'">');
+                            addAtFirst("#label-values", '<input type="text" name="LabelValues[]" class="form-control"'+'id="LabelValue'+countLabel+'">');
                         }
 
                         function checkLabels() {
-                            checkInputArray("LabelKeys[]", "buttonAddLabel");
-                            checkInputArray("LabelValues[]", "buttonAddLabel");
+                            var button = document.getElementById('buttonAddLabel');
+                            button.disabled = !(checkInputArray("LabelKeys[]") && checkInputArray("LabelValues[]"));
                         }
-
+                        
                         setInterval(checkLabels, 100);
                         </script>
                     </div>
@@ -152,23 +138,33 @@ function checkInputArray(inputName, buttonId) {
                     </div>
                     <div class="row">
                         <div class="col-4" id="dnsOpt-values">
-                            <input type="text" name="dnsOptions[]" id="" class="form-control">
+                            @php($countDnsOpt = 0)
+                            <input type="text" name="dnsOptions[]" id="DnsOptValue{{ ++$countDnsOpt }}" class="form-control">
                             @foreach($container_template['DnsOptions'] as $dns)
-                                <input type="text" name="dnsOptions[]" class="form-control" value="{{ $dns }}">
+                                <div class="row" id="DnsOptValue{{ ++$countDnsOpt }}">
+                                    <div class="col-10">
+                                        <input type="text" name="dnsOptions[]" class="form-control" value="{{ $dns }}">
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-sm btn-link btn-danger"
+                                                onclick='deleteElements(<?= json_encode(['DnsOptValue'.$countDnsOpt,]);?>, this);'>
+                                            X
+                                        </button>
+                                    </div>
+                                </div>
                             @endforeach
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-sm btn-success" id="buttonAddDnsOpt" onclick="addDnsOpt();"
-                                type="button">Add</button>
+                            <button class="btn btn-sm btn-success" id="buttonAddDnsOpt" onclick="addDnsOpt();"type="button">Add</button>
                         </div>
                         <script type="text/javascript">
                             function addDnsOpt(){
-                                checkDns();
                                 addAtFirst("#dnsOpt-values", '<input type="text" name="dnsOptions[]" class="form-control">');
                             }
 
                             function checkDnsOpt(){
-                                checkInputArray('dnsOptions[]', 'buttonAddDnsOpt');
+                                var button = document.getElementById('buttonAddDnsOpt');
+                                button.disabled = !checkInputArray('dnsOptions[]');
                             }
 
                             setInterval(checkDnsOpt, 100);
@@ -195,26 +191,48 @@ function checkInputArray(inputName, buttonId) {
                     </div>
                     <div class="row">
                         <div class="col-5" id="col-env-keys">
-                            <input type="text" name="EnvKeys[]" class="form-control">
+                            @php($countEnvKeys = 0)
+                            <input type="text" name="EnvKeys[]" id="envKeys{{ ++$countEnvKeys }}" class="form-control">
                             @if(old('EnvKeys[]'))
                                 @foreach(old('EnvKeys[]') as $key)
-                                    <input type="text" name="EnvKeys[]" class="form-control" value="{{ $key }}">
+                                    <input type="text" name="EnvKeys[]" id="envKeys{{ ++$countEnvKeys }}" class="form-control" value="{{ $key }}">
                                 @endforeach
                             @else
                                 @foreach($container_template['Env'] as $key)
-                                    <input type="text" name="EnvKeys[]" class="form-control" value="{{ explode('=', $key)[0] }}">
+                                    <input type="text" name="EnvKeys[]" id="envKeys{{ ++$countEnvKeys }}" class="form-control" value="{{ explode('=', $key)[0] }}">
                                 @endforeach
                             @endif
                         </div>
                         <div class="col-5" id="col-env-values">
-                            <input type="text" name="EnvValues[]" class="form-control">
+                            @php($countEnvValues = 0)
+                            <input type="text" name="EnvValues[]" id="envKeys{{ ++$countEnvValues }}" class="form-control">
                             @if(old('EnvValues[]'))
                                 @foreach(old('EnvValues[]') as $value)
-                                    <input type="text" name="EnvValues[]" class="form-control" value="{{ $value }}">
+                                    <div class="row" id="envValues{{ ++$countEnvValues }}">
+                                        <div class="col-10">
+                                            <input type="text" name="EnvValues[]" class="form-control" value="{{ $value }}">
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="button" class="btn btn-sm btn-link btn-danger"
+                                                    onclick='deleteElements(<?= json_encode(['envValues'.$countEnvValues, 'envKeys'.$countEnvValues ]);?>, this);'>
+                                                X
+                                            </button>
+                                        </div>
+                                    </div>
                                 @endforeach
                             @else
                                 @foreach($container_template['Env'] as $value)
-                                    <input type="text" name="EnvValues[]" class="form-control" value="{{ explode('=', $value)[1] }}">
+                                    <div class="row" id="envValues{{ ++$countEnvValues }}">
+                                        <div class="col-10">
+                                            <input type="text" name="EnvValues[]" class="form-control" value="{{ explode('=', $value)[1] }}">
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="button" class="btn btn-sm btn-link btn-danger"
+                                                    onclick='deleteElements(<?= json_encode(['envValues'.$countEnvValues, 'envKeys'.$countEnvValues ]);?>, this);'>
+                                                X
+                                            </button>
+                                        </div>
+                                    </div>
                                 @endforeach
                             @endif
                         </div>
@@ -223,15 +241,13 @@ function checkInputArray(inputName, buttonId) {
                         </div>
                         <script type="text/javascript">
                         function addEnv() {
-                            checkEnvs();
-
                             addAtFirst("#col-env-keys", '<input type="text" name="EnvKeys[]" class="form-control">');
                             addAtFirst("#col-env-values", '<input type="text" name="EnvValues[]" class="form-control">');
                         }
 
                         function checkEnvs() {
-                            checkInputArray("EnvKeys[]", "buttonAddEnv");
-                            checkInputArray("EnvValues[]", "buttonAddEnv");
+                            var button = document.getElementById('buttonAddEnv');
+                            button.disabled = !(checkInputArray("EnvKeys[]") && checkInputArray("EnvValues[]"));
                         }
 
                         setInterval(checkEnvs, 100);
@@ -337,26 +353,48 @@ function checkInputArray(inputName, buttonId) {
                     </div>
                     <div class="row">
                         <div class="col-5" id="col-bind-src">
-                            <input type="text" name="BindSrc[]" class="form-control">
+                            @php($countBindSrc = 0)
+                            <input type="text" name="BindSrc[]" id="bindSrc{{ ++$countBindSrc }}" class="form-control">
                             @if(old('BindSrc[]'))
                                 @foreach(old('BindSrc[]') as $bind)
-                                    <input type="text" name="BindSrc[]" class="form-control" value="{{ explode(':', $bind)[0] }}">
+                                    <input type="text" name="BindSrc[]" id="bindSrc{{ ++$countBindSrc }}" class="form-control" value="{{ explode(':', $bind)[0] }}">
                                 @endforeach
                             @else
                                 @foreach($container_template['HostConfig']['Binds'] as $bind)
-                                    <input type="text" name="BindSrc[]" class="form-control" value="{{ explode(':', $bind)[0] }}">
+                                    <input type="text" name="BindSrc[]" id="bindSrc{{ ++$countBindSrc }}" class="form-control" value="{{ explode(':', $bind)[0] }}">
                                 @endforeach
                             @endif
                         </div>
                         <div class="col-5" id="col-bind-dest">
-                            <input type="text" name="BindDest[]" class="form-control">
+                            @php($countBindDests = 0)
+                            <input type="text" name="BindDest[]" id="bindDest{{ ++$countBindDests }}" class="form-control">
                             @if(old('BindDest[]'))
                                 @foreach(old('BindDest[]') as $bind)
-                                    <input type="text" name="BindDest[]" class="form-control" value="{{ explode(':', $bind)[1] }}">
+                                    <div class="row"id="bindDest{{ ++$countBindDests }}">
+                                        <div class="col-10">
+                                            <input type="text" name="BindDest[]" class="form-control" value="{{ explode(':', $bind)[1] }}">
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="button" class="btn btn-sm btn-link btn-danger"
+                                                    onclick='deleteElements(<?= json_encode(['bindDest'.$countBindDests, 'bindSrc'.$countBindDests ]);?>, this);'>
+                                                X
+                                            </button>
+                                        </div>
+                                    </div>
                                 @endforeach
                             @else
                                 @foreach($container_template['HostConfig']['Binds'] as $bind)
-                                    <input type="text" name="BindDest[]" class="form-control" value="{{ explode(':', $bind)[1] }}">
+                                    <div class="row"id="bindDest{{ ++$countBindDests }}">
+                                        <div class="col-10">
+                                            <input type="text" name="BindDest[]" class="form-control" value="{{ explode(':', $bind)[1] }}">
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="button" class="btn btn-sm btn-link btn-danger"
+                                                    onclick='deleteElements(<?= json_encode(['bindDest'.$countBindDests, 'bindSrc'.$countBindDests ]);?>, this);'>
+                                                X
+                                            </button>
+                                        </div>
+                                    </div>
                                 @endforeach
                             @endif
                         </div>
@@ -365,15 +403,13 @@ function checkInputArray(inputName, buttonId) {
                         </div>
                         <script type="text/javascript">
                         function addBind() {
-                            checkBinds();
-
                             addAtFirst("#col-bind-src", '<input type="text" name="BindSrc[]" class="form-control">');
                             addAtFirst("#col-bind-dest", '<input type="text" name="BindDest[]" class="form-control">');
                         }
 
                         function checkBinds() {
-                            checkInputArray("BindSrc[]", "buttonAddBind");
-                            checkInputArray("BindDest[]", "buttonAddBind");
+                            var button = document.getElementById('buttonAddBind');
+                            button.disabled = !(checkInputArray("BindSrc[]") && checkInputArray("BindDest[]"));
                         }
 
                         setInterval(checkBinds, 100);
