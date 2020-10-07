@@ -203,59 +203,43 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-5" id="col-env-keys">
-                            @php($countEnvKeys = 0)
-                            <input type="text" name="EnvKeys[]" id="envKeys{{ ++$countEnvKeys }}" class="form-control">
-                            @if(old('EnvKeys[]'))
-                                @foreach(old('EnvKeys[]') as $key)
-                                    <input type="text" name="EnvKeys[]" id="envKeys{{ ++$countEnvKeys }}" class="form-control" value="{{ $key }}">
-                                @endforeach
-                            @else
-                                @foreach($container_template['Env'] as $key)
-                                    <input type="text" name="EnvKeys[]" id="envKeys{{ ++$countEnvKeys }}" class="form-control" value="{{ explode('=', $key)[0] }}">
-                                @endforeach
-                            @endif
-                        </div>
-                        <div class="col-5" id="col-env-values">
-                            @php($countEnvValues = 0)
-                            <input type="text" name="EnvValues[]" id="envKeys{{ ++$countEnvValues }}" class="form-control">
-                            @if(old('EnvValues[]'))
-                                @foreach(old('EnvValues[]') as $value)
-                                    <div class="row" id="envValues{{ ++$countEnvValues }}">
-                                        <div class="col-10">
-                                            <input type="text" name="EnvValues[]" class="form-control" value="{{ $value }}">
-                                        </div>
-                                        <div class="col-2">
-                                            <button type="button" class="btn btn-sm btn-link btn-danger"
-                                                    onclick='deleteElements(<?= json_encode(['envValues'.$countEnvValues, 'envKeys'.$countEnvValues ]);?>, this);'>
-                                                X
-                                            </button>
-                                        </div>
+                        <div class="col-10" id="colEnv">
+                            <div class="row">
+                                <div class="col-5">
+                                    <input type="text" name="EnvKeys[]" class="form-control">
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" name="EnvValues[]" class="form-control">
+                                </div>
+                                <div class="col-2" id="colBtnRemoveEnv1">
+                                </div>
+                            </div>
+                            @foreach($container_template['Env'] as $env)
+                                <div class="row">
+                                    <div class="col-5">
+                                        <input type="text" name="EnvKeys[]" class="form-control" value="{{ explode('=', $env)[0] }}">
                                     </div>
-                                @endforeach
-                            @else
-                                @foreach($container_template['Env'] as $value)
-                                    <div class="row" id="envValues{{ ++$countEnvValues }}">
-                                        <div class="col-10">
-                                            <input type="text" name="EnvValues[]" class="form-control" value="{{ explode('=', $value)[1] }}">
-                                        </div>
-                                        <div class="col-2">
-                                            <button type="button" class="btn btn-sm btn-link btn-danger"
-                                                    onclick='deleteElements(<?= json_encode(['envValues'.$countEnvValues, 'envKeys'.$countEnvValues ]);?>, this);'>
-                                                X
-                                            </button>
-                                        </div>
+                                    <div class="col-5">
+                                        <input type="text" name="EnvValues[]" class="form-control" value="{{ explode('=', $env)[1] }}">
                                     </div>
-                                @endforeach
-                            @endif
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-sm btn-link btn-danger" onclick='deleteElement(this, 2);'>X</button>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                         <div class="col-2">
                             <button class="btn btn-sm btn-success" id="buttonAddEnv" onclick="addEnv();"type="button">Add</button>
                         </div>
                         <script type="text/javascript">
+                        var countEnv = 1;
+
                         function addEnv() {
-                            addAtFirst("#col-env-keys", '<input type="text" name="EnvKeys[]" class="form-control">');
-                            addAtFirst("#col-env-values", '<input type="text" name="EnvValues[]" class="form-control">');
+                            var field = '<div class="row"><div class="col-5"><input type="text" name="EnvKeys[]" class="form-control">';
+                                field+= '</div><div class="col-5"><input type="text" name="EnvValues[]" class="form-control"></div>';
+                                field+='<div class="col-2" id="colBtnRemoveEnv'+(++countEnv)+'"></div></div>';
+                            addAtFirst("#colEnv", field);
+                            addAtFirst("#colBtnRemoveEnv"+(countEnv-1), '<button type="button" class="btn btn-sm btn-link btn-danger" onclick="deleteElement(this, 2);">X</button>');
                         }
 
                         function checkEnvs() {
