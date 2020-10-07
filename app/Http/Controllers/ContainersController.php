@@ -59,6 +59,7 @@ class ContainersController extends Controller
             'dockerHost' => env('DOCKER_HOST'),
             'title' => 'My Containers',
             'images' => Image::all(),
+            'container_template' => json_decode(DB::table('default_templates')->where('name', 'container')->first()->template, true),
         ];
 
         return view('pages/my-containers/my_containers', $params);
@@ -120,19 +121,13 @@ class ContainersController extends Controller
     public function store(Request $request)
     {
         try{
-            $request->validate([
-                'nickname' => 'required|min:5|unique:containers',
-                'IPAddress' => 'nullable|ipv4',
-                'IPPrefixLen' => 'nullable|ipv4',
-            ]);
-            
             $url = env('DOCKER_HOST');
                 
-            $data = $this->setDefaultDockerParams($request->all());
-            $this->pullImage($url, Image::find($data['image_id']));
-            $this->createContainer($url, $data);
+            $data = $this->setDefaultDockerParams($request);
 
-            return redirect()->route('containers.index')->with('success', 'Container creation is running!');
+            $this->pullImage($url, Image::find($data['image_id']));
+
+            return $this->createContainer($url, $data);
         } catch(Exception $e){
             return redirect()->route('containers.index')->with('error', $e->getMessage())->withInput();
         }
@@ -169,21 +164,40 @@ class ContainersController extends Controller
         }
     }
 
-    private function setDefaultDockerParams(array $data)
+    private function setDefaultDockerParams($request)
     {
         $template = json_decode(DB::table('default_templates')->where('name', 'container')->first()->template, true);
-        $template['nickname'] = $data['nickname'];
-        $template['Hostname'] = $data['nickname'];
-        $template['image_id'] = $data['image_id'];
-        $template['Image'] = Image::find($data['image_id'])->fromImage;
+        $template['nickname'] = $request->nickname;
+        $template['Hostname'] = $request->nickname;
+        $template['image_id'] = $request->image_id;
+        $template['Image'] = Image::find($request->image_id)->fromImage;
         $template['user_id'] = Auth::user()->id;
 
-        $template['Env'] = $data['envVariables'] ? explode(';', $data['envVariables']) : [];
-        array_pop($template['Env']);// Para remover string vazia no ultimo item do array, evitando erro na criação do container.
-        $template['HostConfig']['NetworkMode'] = $data['NetworkMode'];
-        $template['HostConfig']['Memory'] = $data['Memory'] ? intval($data['Memory']) : 0;
-        $template['HostConfig']['PublishAllPorts'] = isset($data['external-port']);
-        
+        $template['Env'] = $this->extractArray($request->EnvKeys, $request->EnvValues, '=', true);
+        $template['HostConfig']['Memory'] = intval($request->Memory);
+
+        $template['Domainname'] = str_replace(' ', '', $request->Domainname);
+        $template['Labels'] = $this->extractLabels($request);
+        $template['Dns'] = [$request->dns];
+        $template['DnsOptions'] = $this->removeNull($request->dnsOptions);
+        $template['IPAddress'] = $request->IPAddress;
+        $template['IPPrefixLen'] = intval($request->IPPrefixLen);
+        $template['Memory'] = intval($request->Memory);
+        $template['Env'] = $this->extractArray($request->EnvKeys, $request->EnvValues, '=',true);
+        $template['AttachStdin'] = isset($request->AttachStdin);
+        $template['AttachStdout'] = isset($request->AttachStdout);
+        $template['AttachStderr'] = isset($request->AttachStderr);
+        $template['OpenStdin'] = isset($request->OpenStdin);
+        $template['StdinOnce'] = isset($request->StdinOnce);
+        $template['Tty'] = isset($request->Tty);
+        $template['HostConfig']['PublishAllPorts'] = isset($request->PublishAllPorts);
+        $template['HostConfig']['Privileged'] = isset($request->Privileged);
+        $template['NetworkMode'] = $request->NetworkMode;
+        $template['Entrypoint'] = [$request->Entrypoint];
+        $template['HostConfig']['RestartPolicy']['name'] = $request->RestartPolicy;
+        $template['HostConfig']['Binds'] = $this->extractArray($request->BindSrc, $request->BindDest, ':');
+        $template['HostConfig']['NetworkMode'] = $request->NetworkMode;
+
         return $template;
     }
 
@@ -215,8 +229,45 @@ class ContainersController extends Controller
             $data['dataHora_finalizado'] = $response->getStatusCode() == 204 ? null : now();
 
             Container::create($data);
+            return redirect()->route('containers.index')->with('success', 'Container creation is running!');
         } else {
-            dd($response->json());
+            return back()->with('error', $response->json()['message']);
         }
+    }
+
+    private function extractArray($keys, $values, $separator = '=', $upper = false)
+    {
+        $array = [];
+
+        for($i = 0; $i < count($keys); $i++){
+            if(isset($keys[$i]) && $values[$i]){
+                $val = $keys[$i].$separator.$values[$i];
+                $array[] = $upper ? strtoupper($val) : $val;
+            }
+        }
+
+        return $array;
+    }
+
+    private function extractLabels($request)
+    {
+        $labelKeys = $request->LabelKeys;
+        $labelValues = $request->LabelValues;
+        
+        $labels = [];
+
+        for($i = 0; $i < count($labelKeys); $i++){
+            if(isset($labelKeys[$i]) && isset($labelValues[$i])){
+                $labels[$labelKeys[$i]] = $labelValues[$i];
+            }
+        }
+        
+        return $labels;
+    }
+
+    private function removeNull($array, $index = 0)
+    {
+        unset($array[$index]);
+        return $array;
     }
 }
