@@ -349,59 +349,42 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-5" id="col-bind-src">
-                            @php($countBindSrc = 0)
-                            <input type="text" name="BindSrc[]" id="bindSrc{{ ++$countBindSrc }}" class="form-control">
-                            @if(old('BindSrc[]'))
-                                @foreach(old('BindSrc[]') as $bind)
-                                    <input type="text" name="BindSrc[]" id="bindSrc{{ ++$countBindSrc }}" class="form-control" value="{{ explode(':', $bind)[0] }}">
-                                @endforeach
-                            @else
-                                @foreach($container_template['HostConfig']['Binds'] as $bind)
-                                    <input type="text" name="BindSrc[]" id="bindSrc{{ ++$countBindSrc }}" class="form-control" value="{{ explode(':', $bind)[0] }}">
-                                @endforeach
-                            @endif
-                        </div>
-                        <div class="col-5" id="col-bind-dest">
-                            @php($countBindDests = 0)
-                            <input type="text" name="BindDest[]" id="bindDest{{ ++$countBindDests }}" class="form-control">
-                            @if(old('BindDest[]'))
-                                @foreach(old('BindDest[]') as $bind)
-                                    <div class="row"id="bindDest{{ ++$countBindDests }}">
-                                        <div class="col-10">
-                                            <input type="text" name="BindDest[]" class="form-control" value="{{ explode(':', $bind)[1] }}">
-                                        </div>
-                                        <div class="col-2">
-                                            <button type="button" class="btn btn-sm btn-link btn-danger"
-                                                    onclick='deleteElements(<?= json_encode(['bindDest'.$countBindDests, 'bindSrc'.$countBindDests ]);?>, this);'>
-                                                X
-                                            </button>
-                                        </div>
+                        <div class="col-10" id="colBind">
+                            <div class="row">
+                                <div class="col-5">
+                                    <input type="text" name="BindSrc[]" class="form-control">
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" name="BindDest[]" class="form-control">
+                                </div>
+                                <div class="col-2" id="colBtnRemoveBind1"></div>
+                            </div>
+                            @foreach($container_template['HostConfig']['Binds'] as $bind)
+                                <div class="row">
+                                    <div class="col-5">
+                                        <input type="text" name="BindSrc[]" class="form-control" value="{{ explode(':', $bind)[0] }}">
                                     </div>
-                                @endforeach
-                            @else
-                                @foreach($container_template['HostConfig']['Binds'] as $bind)
-                                    <div class="row"id="bindDest{{ ++$countBindDests }}">
-                                        <div class="col-10">
-                                            <input type="text" name="BindDest[]" class="form-control" value="{{ explode(':', $bind)[1] }}">
-                                        </div>
-                                        <div class="col-2">
-                                            <button type="button" class="btn btn-sm btn-link btn-danger"
-                                                    onclick='deleteElements(<?= json_encode(['bindDest'.$countBindDests, 'bindSrc'.$countBindDests ]);?>, this);'>
-                                                X
-                                            </button>
-                                        </div>
+                                    <div class="col-5">
+                                        <input type="text" name="BindDest[]" class="form-control" value="{{ explode(':', $bind)[1] }}">
                                     </div>
-                                @endforeach
-                            @endif
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-sm btn-link btn-danger"onclick="deleteElement(this, 2);">X</button>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                         <div class="col-2">
                             <button class="btn btn-sm btn-success" id="buttonAddBind" onclick="addBind();"type="button">Add</button>
                         </div>
                         <script type="text/javascript">
+                        var countBind = 1;
+
                         function addBind() {
-                            addAtFirst("#col-bind-src", '<input type="text" name="BindSrc[]" class="form-control">');
-                            addAtFirst("#col-bind-dest", '<input type="text" name="BindDest[]" class="form-control">');
+                            var field = '<div class="row"><div class="col-5"><input type="text" name="BindSrc[]" class="form-control">';
+                                field+= '</div><div class="col-5"><input type="text" name="BindDest[]" class="form-control"></div>';
+                                field+= '<div class="col-2" id="colBtnRemoveBind'+(++countBind)+'"></div></div>';
+                            addAtFirst("#colBind", field);
+                            addAtFirst("#colBtnRemoveBind"+(countBind-1), '<button type="button" class="btn btn-sm btn-link btn-danger"onclick="deleteElement(this, 2);">X</button>');
                         }
 
                         function checkBinds() {
@@ -411,7 +394,7 @@
 
                         setInterval(checkBinds, 100);
                         </script>
-                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">
