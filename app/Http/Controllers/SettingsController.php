@@ -122,7 +122,7 @@ class SettingsController extends Controller
         $container_template['HostConfig']['PublishAllPorts'] = isset($request->PublishAllPorts);
         $container_template['HostConfig']['Privileged'] = isset($request->Privileged);
         $container_template['NetworkMode'] = $request->NetworkMode;
-        $container_template['Entrypoint'] = [$request->Entrypoint];
+        $container_template['Entrypoint'] = $request->Entrypoint;
         $container_template['HostConfig']['RestartPolicy']['name'] = $request->RestartPolicy;
         $container_template['HostConfig']['Binds'] = $this->extractArray($request->BindSrc, $request->BindDest, ':');
         $container_template['HostConfig']['NetworkMode'] = $request->NetworkMode;
