@@ -16,9 +16,7 @@
                     <div class="row">
                         <div class="col-10">
                             <label for="Domainname">Domainname</label>
-                            <input type="text" name="Domainname"
-                                value="{{ old('Domainname') ?? $container_template['Domainname'] }}"
-                                class="form-control">
+                            <input type="text" name="Domainname" value="{{ old('Domainname') ?? $container_template['Domainname'] }}"class="form-control">
                         </div>
                     </div>
                     <div class="row">
@@ -37,56 +35,64 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-5" id="label-keys">
-                            @php ($countLabelKey = 0)
-                            <input type="text" name="LabelKeys[]" id="LabelKey{{ ++$countLabelKey }}"class="form-control">
-                            @if(old('LabelKeys[]'))
-                                @foreach(array_keys(old('LabelKeys[]')) as $key)
-                                    <input type="text" name="LabelKeys[]" id="LabelKey{{ ++$countLabelKey }}" class="form-control" value="{{ $key }}">
-                                @endforeach
-                            @else
-                                @foreach(array_keys($container_template['Labels']) as $key)
-                                    <input type="text" name="LabelKeys[]" id="LabelKey{{ ++$countLabelKey }}"class="form-control" value="{{ $key }}">
-                                @endforeach
-                            @endif
-                        </div>
-                        <div class="col-5" id="label-values">
-                            @php ($countLabelValue = 0)
-                            <input type="text" name="LabelValues[]" id="LabelValue{{ ++$countLabelValue }}" class="form-control">
-                            @php($array = old('LabelValues[]') ? old('LabelValues[]') : $container_template['Labels'])
-                            @foreach($array as $val)
-                                <div class="row" id="LabelValue{{ ++$countLabelValue }}">
-                                    <div class="col-10">
-                                        <input type="text" name="LabelValues[]"class="form-control" value="{{ $val }}">
-                                    </div>
-                                    <div class="col-2">
-                                        <button type="button" class="btn btn-sm btn-link btn-danger"
-                                                onclick='deleteElements(<?= json_encode(['LabelValue'.$countLabelValue, 'LabelKey'.$countLabelValue,]);?>, this);'>
-                                            X
-                                        </button>
+                        <div class="col-10" id="labels">
+                            <div class="row">
+                                <div class="col-5">
+                                    <input type="text" name="LabelKeys[]" class="form-control">
+                                </div>
+                                <div class="col-5" id="label-values">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <input type="text" name="LabelValues[]"class="form-control">
+                                        </div>
+                                        <div class="col-2" id="colBtnRemoveLabel1"></div>
                                     </div>
                                 </div>
-                            @endforeach     
+                            </div>
+                            @php( $labelKeys = array_keys($container_template['Labels']) )
+                            @for($i = 0; $i < count($container_template['Labels']); $i++)
+                            <div class="row">
+                                <div class="col-5">
+                                    <input type="text" name="LabelKeys[]" value="{{ $labelKeys[$i] }}" class="form-control">
+                                </div>
+                                <div class="col-5" id="label-values">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <input type="text" name="LabelValues[]"class="form-control" value="{{ $container_template['Labels'][$labelKeys[$i]] }}">
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="button" class="btn btn-sm btn-link btn-danger" title="Delete the label"
+                                                    onclick="deleteElement(this, 4);">X</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endfor
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-sm btn-success" id="buttonAddLabel" onclick="addLabel()">Add</button>
+                            </div>
                         </div>
-                        <div class="col-2">
-                            <button class="btn btn-sm btn-success" id="buttonAddLabel" onclick="addLabel();" type="button">Add</button>
-                        </div>
-                        <script type="text/javascript">
-                        var countLabel = <?= $countLabelValue;?>;
-                        function addLabel() {
-                            countLabel++;
-                            addAtFirst("#label-keys", '<input type="text" name="LabelKeys[]" class="form-control"'+'id="LabelKey'+countLabel+'">');
-                            addAtFirst("#label-values", '<input type="text" name="LabelValues[]" class="form-control"'+'id="LabelValue'+countLabel+'">');
-                        }
-
-                        function checkLabels() {
-                            var button = document.getElementById('buttonAddLabel');
-                            button.disabled = !(checkInputArray("LabelKeys[]") && checkInputArray("LabelValues[]"));
-                        }
-                        
-                        setInterval(checkLabels, 100);
-                        </script>
                     </div>
+                    <script type="text/javascript">
+                    var countLabel = 1;
+                    
+                    function addLabel() {
+                        var field = '<div class="row"><div class="col-5"><input type="text" name="LabelKeys[]" class="form-control">';
+                        field+= '</div><div class="col-5" id="label-values"><div class="row"><div class="col-10">';
+                        field+= '<input type="text" name="LabelValues[]"class="form-control">';
+                        field+= '</div><div class="col-2" id="colBtnRemoveLabel'+(++countLabel)+'"></div></div></div></div>';
+                        addAtFirst("#labels", field);
+                        addAtFirst("#colBtnRemoveLabel"+(countLabel-1), '<button type="button" class="btn btn-sm btn-link btn-danger" title="Delete the label"onclick="deleteElement(this, 4);">X</button>');
+                    }
+
+                    function checkLabels() {
+                        var button = document.getElementById('buttonAddLabel');
+                        button.disabled = !(checkInputArray("LabelKeys[]") && checkInputArray("LabelValues[]"));
+                    }
+                        
+                    setInterval(checkLabels, 100);
+                    </script>
                     <div class="row">
                         <div class="col">
                             <h3>Network</h3>
@@ -138,18 +144,20 @@
                     </div>
                     <div class="row">
                         <div class="col-4" id="dnsOpt-values">
-                            @php($countDnsOpt = 0)
-                            <input type="text" name="dnsOptions[]" id="DnsOptValue{{ ++$countDnsOpt }}" class="form-control">
+                            <div class="row">
+                                <div class="col-10">
+                                    <input type="text" name="dnsOptions[]" class="form-control">
+                                </div>
+                                <div class="col-2" id="colBtnRemoveDnsOpt1">
+                                </div>
+                            </div>
                             @foreach($container_template['DnsOptions'] as $dns)
-                                <div class="row" id="DnsOptValue{{ ++$countDnsOpt }}">
+                                <div class="row">
                                     <div class="col-10">
                                         <input type="text" name="dnsOptions[]" class="form-control" value="{{ $dns }}">
                                     </div>
                                     <div class="col-2">
-                                        <button type="button" class="btn btn-sm btn-link btn-danger"
-                                                onclick='deleteElements(<?= json_encode(['DnsOptValue'.$countDnsOpt,]);?>, this);'>
-                                            X
-                                        </button>
+                                        <button type="button" class="btn btn-sm btn-link btn-danger"onclick='deleteElement(this, 2);'>X</button>
                                     </div>
                                 </div>
                             @endforeach
@@ -158,8 +166,13 @@
                             <button class="btn btn-sm btn-success" id="buttonAddDnsOpt" onclick="addDnsOpt();"type="button">Add</button>
                         </div>
                         <script type="text/javascript">
+                            var countDnsOpt = 1;
                             function addDnsOpt(){
-                                addAtFirst("#dnsOpt-values", '<input type="text" name="dnsOptions[]" class="form-control">');
+                                var field = '<div class="row"><div class="col-10"><input type="text" name="dnsOptions[]" class="form-control">';
+                                    field+= '</div><div class="col-2" id="colBtnRemoveDnsOpt'+(++countDnsOpt)+'"></div></div>';
+
+                                addAtFirst("#dnsOpt-values", field);
+                                addAtFirst("#colBtnRemoveDnsOpt"+(countDnsOpt-1), '<button type="button" class="btn btn-sm btn-link btn-danger"onclick="deleteElement(this, 2);">X</button>');
                             }
 
                             function checkDnsOpt(){
@@ -415,7 +428,6 @@
                         setInterval(checkBinds, 100);
                         </script>
                     </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">
