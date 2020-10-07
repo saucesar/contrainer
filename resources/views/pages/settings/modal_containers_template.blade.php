@@ -61,8 +61,7 @@
                                             <input type="text" name="LabelValues[]"class="form-control" value="{{ $container_template['Labels'][$labelKeys[$i]] }}">
                                         </div>
                                         <div class="col-2">
-                                            <button type="button" class="btn btn-sm btn-link btn-danger" title="Delete the label"
-                                                    onclick="deleteElement(this, 4);">X</button>
+                                            <button type="button" class="btn btn-sm btn-link btn-danger" title="Delete the label"onclick="deleteElement(this, 4);">X</button>
                                         </div>
                                     </div>
                                 </div>
@@ -311,12 +310,54 @@
                     </div>
                     <div class="row">
                         <div class="col-5">
-                            <label for="Entrypoint">Entrypoint</label>
-                            <input type="text" name="Entrypoint" class="form-control"
-                                    value="{{ old('Entrypoint') ?? implode(';',$container_template['Entrypoint']) }}">
+                            <h3>Entrypoint</h3>                                
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-5">
+                            <h3>RestartPolicy</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5" id="entryPoints">
+                            <div class="row">
+                                <div class="col-10">
+                                    <input type="text" name="Entrypoint[]" class="form-control">
+                                </div>
+                                <div class="col-2" id="colBtnRemoveEntryPoint1"></div>
+                            </div>
+                            @for($i = 0; $i < count($container_template['Entrypoint']); $i++)
+                            <div class="row">
+                                <div class="col-10">
+                                    <input type="text" name="Entrypoint" class="form-control" value="{{ $container_template['Entrypoint'][$i] }}">
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-sm btn-link btn-danger" title="Delete the label"onclick="deleteElement(this, 2);">X</button>
+                                </div>
+                            </div>
+                            @endfor                     
+                        </div>
+                        <script type="text/javascript">
+                        var countEntryPoint = 1;
+                        
+                        function addEntrypoint() {
+                            var field = '<div class="row"><div class="col-10"><input type="text" name="Entrypoint[]" class="form-control"></div>';
+                                field+= '<div class="col-2" id="colBtnRemoveEntryPoint'+(++countEntryPoint)+'"></div></div>';
+                            addAtFirst("#entryPoints", field);
+                            addAtFirst("#colBtnRemoveEntryPoint"+(countEntryPoint-1), '<button type="button" class="btn btn-sm btn-link btn-danger" title="Delete" onclick="deleteElement(this, 2);">X</button>');
+                        }
+
+                        function checkEntrypoints() {
+                            var button = document.getElementById('buttonAddEntryPoint');
+                            button.disabled = !(checkInputArray("Entrypoint[]"));
+                        }
+                            
+                        setInterval(checkEntrypoints, 100);
+                        </script>
+                        <div class="col-2">
+                            <br>
+                            <button type="button" class="btn btn-sm btn-success" id="buttonAddEntryPoint" onclick="addEntrypoint()">Add</button>
                         </div>
                         <div class="col-5">
-                            <label for="RestartPolicy">RestartPolicy</label>
                             <select name="RestartPolicy" class="form-control">
                                 <option value=""
                                     {{  $container_template['HostConfig']['RestartPolicy']['name'] == '' ? 'selected' : '' }}>
