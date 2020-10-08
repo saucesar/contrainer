@@ -16,17 +16,11 @@
                             <textarea name="dnsNameservers" cols="30" rows="4"
                             class="form-control">{{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Nameservers']) }}</textarea>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
                         <div class="col">
                             <label for="dnsNameSearch">DNS Search (Separate with: ';')</label>
                             <textarea name="dnsNameSearch" cols="30" rows="4"
                             class="form-control">{{ implode(';', $service_template['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) }}</textarea>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
                         <div class="col">
                             <label for="dnsNameOptions">DNS Options (Separate with: ';')</label>
                             <textarea name="dnsNameOptions" cols="30" rows="4"
@@ -36,26 +30,35 @@
                     <br>
                     <div class="row">
                         <div class="col">
-                            <label for="tty">TTY</label>
-                            <input type="checkbox" name="tty"
-                            {{ $service_template['TaskTemplate']['ContainerSpec']['TTY'] ? 'checked' : '' }}>
-                        </div>
-                        <div class="col">
-                            <label for="openStdin">OpenStdin</label>
-                            <input type="checkbox" name="openStdin"
-                            {{ $service_template['TaskTemplate']['ContainerSpec']['OpenStdin'] ? 'checked' : '' }}>
+                            <h4>Resources</h4>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-4">
                             <label for="memoryBytes">Memory Limite (MB)</label>
-                            <input type="number" name="memoryBytes" class="form-control"
-                            value="{{ $service_template['TaskTemplate']['Resources']['Limits']['MemoryBytes']/(1024*1024) }}">
+                            <input type="number" name="memoryBytes" class="form-control" value="{{ $service_template['TaskTemplate']['Resources']['Limits']['MemoryBytes']/(1024*1024) }}">
+                        </div>
+                        <div class="col-4">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="memoryBytes">Replicas</label>
+                                    <input type="number" name="replicas" class="form-control"value="{{ $service_template['Mode']['Replicated']['Replicas'] }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <input type="checkbox" name="tty" {{ $service_template['TaskTemplate']['ContainerSpec']['TTY'] ? 'checked' : '' }}>
+                            <label for="tty">TTY</label>
+                            <br>
+                            <input type="checkbox" name="openStdin" {{ $service_template['TaskTemplate']['ContainerSpec']['OpenStdin'] ? 'checked' : '' }}>
+                            <label for="openStdin">OpenStdin</label>
                         </div>
                     </div>
                     <br>
                     <div class="row">
-                        <h4>RestartPolicy</h4>
+                        <div class="col">
+                            <h4>RestartPolicy</h4>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col">
@@ -68,46 +71,27 @@
                         </div>
                         <div class="col">
                             <label for="restartDelay">Restart Delay (ms)</label>
-                            <input type="number" name="restartDelay" class="form-control"
-                            value="{{ $service_template['TaskTemplate']['RestartPolicy']['Delay'] }}">
+                            <input type="number" name="restartDelay" class="form-control" value="{{ $service_template['TaskTemplate']['RestartPolicy']['Delay'] }}">
                         </div>
                         <div class="col">
                             <label for="restartCondition">MaxAttempts</label>
-                            <input type="number" name="restartMax" class="form-control"
-                            value="{{ $service_template['TaskTemplate']['RestartPolicy']['MaxAttempts'] }}">
+                            <input type="number" name="restartMax" class="form-control" value="{{ $service_template['TaskTemplate']['RestartPolicy']['MaxAttempts'] }}">
                         </div>
                     </div>
-                    <div class="row">
-                        <h4>Mode</h4>
-                    </div>
+                    <br>
                     <div class="row">
                         <div class="col">
-                            <label for="replicas">Replicas</label>
-                            <input type="number" name="replicas" class="form-control"
-                            value="{{ $service_template['Mode']['Replicated']['Replicas'] }}">
+                            <h4>UpdateConfig</h4>
                         </div>
-                    </div>
-                    <div class="row">
-                        <h4>UpdateConfig</h4>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="parallelism">Parallelism</label>
-                            <input type="number" name="parallelism" class="form-control"
-                            value="{{ $service_template['UpdateConfig']['Parallelism'] }}">
+                            <input type="number" name="parallelism" class="form-control" value="{{ $service_template['UpdateConfig']['Parallelism'] }}">
                         </div>
-                        <div class="col">
-                            <label for="parallelism">FailureAction</label>
-                            <select name="failureAction" class="form-control">
-                                <option value="pause" {{ $service_template['UpdateConfig']['FailureAction'] == 'pause' ? 'selected' : '' }}>PAUSE</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col">
                             <label for="updateMonitor">Monitor</label>
-                            <input type="number" name="updateMonitor" class="form-control"
-                            value="{{ $service_template['UpdateConfig']['Monitor'] }}">
+                            <input type="number" name="updateMonitor" class="form-control" value="{{ $service_template['UpdateConfig']['Monitor'] }}">
                         </div>
                         <div class="col">
                             <label for="maxFailureRatio">MaxFailureRatio</label>
@@ -119,6 +103,13 @@
                             <label for="updateOrder">Order</label>
                             <select name="updateOrder" class="form-control">
                                 <option value="stop-first" {{ $service_template['UpdateConfig']['Order'] == 'stop-first' ? 'selected' : ''}}>Stop-First</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="parallelism">FailureAction</label>
+                            <select name="failureAction" class="form-control">
+                                <option value="pause" {{ $service_template['UpdateConfig']['FailureAction'] == 'pause' ? 'selected' : '' }}>Pause</option>
+                                <option value="continue" {{ $service_template['UpdateConfig']['FailureAction'] == 'continue' ? 'selected' : '' }}>Continue</option>
                             </select>
                         </div>
                     </div>
