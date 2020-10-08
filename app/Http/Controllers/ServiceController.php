@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
@@ -16,9 +18,19 @@ class ServiceController extends Controller
         $params = [
             'services' => $services->getStatusCode() == 200 ? $services->json() : [],
             'error' => $services->getStatusCode() != 200 ? $services->json()['message'] : null,
+            'user_services' => $this->arraytoValues(Service::where('user_id', Auth::user()->id)->get(['docker_id'])->toArray()),
         ];
 
         return view('pages/services/index', $params);
+    }
+
+    private function arraytoValues($input)
+    {
+        $array = [];
+        foreach($input as $in){
+            $array[] = $in['docker_id'];
+        }
+        return $array;
     }
 
     public function create()
@@ -34,7 +46,12 @@ class ServiceController extends Controller
         $createService = Http::asJson()->post("$url/services/create", $this->getParams($request));
 
         if($createService->getStatusCode() == 201) {
-            dd($createService->json());
+            Service::create([
+                'docker_id' => $createService->json()['ID'],
+                'user_id' => Auth::user()->id,
+                'name' => str_replace(' ', '', $request->serviceName),
+                'port' => intval($request->publishedPort),
+            ]);
             return redirect()->route('services.index')->with('success', 'Service has be created!');
         } else {
             return back()->withInput()->with('error', $createService->json()['message']);
