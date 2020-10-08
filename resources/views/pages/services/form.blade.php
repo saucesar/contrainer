@@ -38,11 +38,11 @@
             </div>
             <div class="col-4">
                 <label for="publishedPort">Published</label>
-                <input type="number" name="publishedPort" class="form-control" value="{{ old('publishedPort') ?? 1 }}" min="1">
+                <input type="number" name="publishedPort" class="form-control" value="{{ old('publishedPort') ?? 10000 }}" min="1">
             </div>
             <div class="col-4">
                 <label for="targetPort">Target</label>
-                <input type="number" name="targetPort" class="form-control" value="{{ old('targetPort') ?? 1 }}" min="1">
+                <input type="number" name="targetPort" class="form-control" value="{{ old('targetPort') ?? 10000 }}" min="1">
             </div>
         </div>
     </div>
