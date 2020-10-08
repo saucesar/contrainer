@@ -36,7 +36,8 @@
                                     </tr>
                                 </thead>
                                 @foreach($services as $service)
-                                <tbody>
+                                    @if(in_array($service['ID'], $user_services))
+                                    <tbody>
                                     <tr>
                                         <td scope="col"
                                             rowspan="{{ isset($service['Spec']['EndpointSpec']['Ports']) ? count($service['Spec']['EndpointSpec']['Ports'])*2 : 2 }}">
@@ -81,7 +82,8 @@
                                             </form>
                                         </td>
                                     </tr>
-                                </tbody>
+                                    </tbody>
+                                    @endif
                                 @endforeach
                             </table>
                             @endif
