@@ -1,23 +1,14 @@
-@csrf
-<!-- progressbar -->
-<ul id="progressbar">
-    <li class="active" id="account"><strong>Basic Params</strong></li>
-    <li id="personal"><strong>Task Template</strong></li>
-    <li id="payment"><strong>Endpoint Spec</strong></li>
-    <li id="confirm"><strong>Finish</strong></li>
-</ul> <!-- fieldsets -->
+<div class="tab">
 <fieldset>
-    <div class="form-card">
         <h2 class="fs-title">Service Information</h2>
         <label for="serviceName">Service Name</label>
-        <input type="text" name="serviceName" placeholder="Service name(Required)." class="form-control"
-            value="{{ old('serviceName') ?? $service['Spec']['Name'] ?? '' }}" />
+        <input type="text" name="serviceName" class="form-control" value="{{ old('serviceName') ?? $service['Spec']['Name'] ?? '' }}" />
         <label for="imageName">Image Name</label>
-        <input type="text" name="imageName" placeholder="Image Name.(Required)" class="form-control"
-            value="{{ old('imageName') ?? $service['Spec']['TaskTemplate']['ContainerSpec']['Image'] ?? '' }}" />
-    </div>
-    <input type="button" name="next" class="next action-button" value="Next Step" />
+        <input type="text" name="imageName" class="form-control"value="{{ old('imageName') ?? $service['Spec']['TaskTemplate']['ContainerSpec']['Image'] ?? '' }}" />
 </fieldset>
+</div>
+
+<div class="tab">
 <fieldset>
     <div class="form-card">
         <h2 class="fs-title">Task Template</h2>
@@ -29,42 +20,35 @@
         <textarea name="labels" cols="30" rows="4" class="form-control"
             placeholder="(Optional)Labels to the service. Ex: L1:VALUE1;L2:VALUE2">{{ old('labels') ?? isset($service) ? implode(';', $service['Spec']['Labels']) : '' }}</textarea>
     </div>
-    <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-    <input type="btn btn-primary btn-lg" name="next" class="next action-button" value="Next Step" />
 </fieldset>
+</div>
+
+<div class="tab">
 <fieldset>
-    <div class="form-card">
+    <div class="">
         <h2 class="fs-title">Endpoint Spec</h2>
-        <h4 class="">Ports to Expose</h4>
+        <h4 class="form-card">Ports to Expose</h4>
         <div class="row">
-            <div class="col">
+            <div class="col-4">
                 <label for="portProtocol">Protocol</label>
                 <select name="portProtocol" class="form-control">
                     <option value="tcp" {{ old('port-protocol') == 'tcp' ? 'selected' : '' }}>TCP</option>
                     <option value="udp" {{ old('port-protocol') == 'udp' ? 'selected' : '' }}>UDP</option>
                 </select>
             </div>
-            <div class="col">
-                <label for="publishedPort">Published Port</label>
-                <input type="number" name="publishedPort" class="form-control" value="{{ old('publishedPort') }}" min="1">
+            <div class="col-4">
+                <label for="publishedPort">Published</label>
+                <input type="number" name="publishedPort" class="form-control" value="{{ old('publishedPort') ?? 1 }}" min="1">
             </div>
-            <div class="col">
-                <label for="targetPort">Target Port</label>
-                <input type="number" name="targetPort" class="form-control" value="{{ old('targetPort') }}" min="1">
+            <div class="col-4">
+                <label for="targetPort">Target</label>
+                <input type="number" name="targetPort" class="form-control" value="{{ old('targetPort') ?? 1 }}" min="1">
             </div>
         </div>
-        <h4 class="">DNSConfig</h4>
-        <label for="dnsNameServers">Name Servers</label>
-        <textarea name="dnsNameServers" cols="30" rows="2" class="form-control"
-            placeholder="(Optional)Name Servers. Ex: 8.8.8.8;1.1.1.1;2.2.2.2">{{ old('dnsNameServers') }}</textarea>
-        <input type="text" name="dnsSearch" class="form-control" placeholder="(Optional)DNS Search."
-            value="{{ old('dnsSearch') ?? isset($service['Spec']['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) ? implode(';', $service['Spec']['TaskTemplate']['ContainerSpec']['DNSConfig']['Search']) : '' }}" />
-        <input type="text" name="dnsOptions" class="form-control" placeholder="(Optional)DNS Options."
-            value="{{ old('dnsOptions') ?? isset($service['Spec']['TaskTemplate']['ContainerSpec']['DNSConfig']['Options']) ? implode(';', $service['Spec']['TaskTemplate']['ContainerSpec']['DNSConfig']['Options']) : '' }}" />
     </div>
-    <input type="button" name="previous" class="previous action-button-previous" value="Previous" />
-    <input type="btn btn-primary btn-lg" name="next" class="next action-button" value="Next Step" />
 </fieldset>
+</div>
+<div class="tab">
 <fieldset>
     <div class="form-card text-center">
         <h2 class="fs-title text-center">Success!</h2><br><br>
@@ -83,3 +67,19 @@
         </div>
     </div>
 </fieldset>
+</div>
+
+<div style="overflow:auto;">
+  <div style="float:right;">
+    <button type="button" class="btn btn-sm btn-info" id="prevBtn" onclick="nextPrev(-1)">Prev</button>
+    <button type="button" class="btn btn-sm btn-success" id="nextBtn" onclick="nextPrev(1)">Next</button>
+  </div>
+</div>
+
+<!-- Circles which indicates the steps of the form: -->
+<div style="text-align:center;margin-top:40px;">
+  <span class="step"></span>
+  <span class="step"></span>
+  <span class="step"></span>
+  <span class="step"></span>
+</div>
