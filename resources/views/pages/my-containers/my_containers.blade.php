@@ -10,8 +10,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Containers Table</h4>
-                        <p class="card-category">List of Instace Container Images</p>
+                        <h4 class="card-title ">Containers List</h4>
+                        <p class="card-category">List of Instace Containers</p>
                     </div>
                     <div class="card-body">
                         @include('pages.components.messages')
