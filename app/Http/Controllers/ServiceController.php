@@ -34,6 +34,7 @@ class ServiceController extends Controller
         $createService = Http::asJson()->post("$url/services/create", $this->getParams($request));
 
         if($createService->getStatusCode() == 201) {
+            dd($createService->json());
             return redirect()->route('services.index')->with('success', 'Service has be created!');
         } else {
             return back()->withInput()->with('error', $createService->json()['message']);
@@ -42,31 +43,29 @@ class ServiceController extends Controller
 
     private function getParams($request)
     {
-        $service_template = DB::table('default_templates')->where('name', 'service')->first();
-        $data = json_decode($service_template->template, true);
+        $data = DB::table('default_templates')->where('name', 'service')->first();
+        $service_template = json_decode($data->template, true);
         
-        $data['Name'] = str_replace(' ', '', $request->serviceName);
-        $data['TaskTemplate']['ContainerSpec'] = [
-            'Image' => $request->imageName,
-            'Env' => isset($request->env) ? explode(';', $request->env) : [],
-            'DNSConfig' => [
-                'Nameservers' => isset($request->dnsNameServers) ? explode(';', $request->dnsNameServers) : ['8.8.8.8'],
-                'Search' => isset($request->dnsSearch) ? explode(';', $request->dnsSearch) : [],
-                'Options' => isset($request->dnsOptions) ? $request->dnsOptions : ["timeout:3"],
+        $service_template['TaskTemplate']['RestartPolicy']['Condition'] = $request->restartCondition;
+        $service_template['TaskTemplate']['RestartPolicy']['Delay'] = intval($request->restartDelay);
+        $service_template['TaskTemplate']['RestartPolicy']['MaxAttempts'] = intval($request->restartMax);
+        $service_template['TaskTemplate']['ContainerSpec']['Image'] = $request->imageName;
+        $service_template['UpdateConfig']['FailureAction'] = $request->failureAction;
+        $service_template['UpdateConfig']['Monitor'] = intval($request->updateMonitor);
+        $service_template['UpdateConfig']['MaxFailureRatio'] = intval($request->maxFailureRatio);
+        $service_template['UpdateConfig']['Order'] = $request->updateOrder;
+        $service_template['Name'] = str_replace(' ', '', $request->serviceName);
+        $service_template['Env'] = isset($request->env) ? explode(';', $request->env) : [];
+        $service_template['EndpointSpec']['Ports'] = [
+            [
+                'Protocol' => $request->portProtocol,
+                'PublishedPort' => intval($request->publishedPort),
+                'TargetPort' => intval($request->targetPort)
             ],
         ];
-        $data['EndpointSpec'] = [
-            'Ports' => [
-                [
-                    'Protocol' => $request->portProtocol,
-                    'PublishedPort' => intval($request->publishedPort),
-                    'TargetPort' => intval($request->targetPort)
-                ],
-            ],
-        ];
-        $data['Labels'] = $this->getLabels($request->labels);
 
-        return $data;
+        $service_template['Labels'] = $this->getLabels($request->labels);
+        return $service_template;
     }
 
     private function getLabels($labels)
