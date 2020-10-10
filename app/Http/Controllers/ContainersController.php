@@ -174,7 +174,7 @@ class ContainersController extends Controller
         $template['user_id'] = Auth::user()->id;
 
         $template['Env'] = $this->extractArray($request->EnvKeys, $request->EnvValues, '=', true);
-        $template['HostConfig']['Memory'] = intval($request->Memory);
+        $template['HostConfig']['Memory'] = Auth::user()->category->ram_limit * 1024 * 1024;//Converte de MB para bytes
 
         $template['Domainname'] = str_replace(' ', '', $request->Domainname);
         $template['Labels'] = $this->extractLabels($request);
@@ -182,7 +182,6 @@ class ContainersController extends Controller
         $template['DnsOptions'] = $this->removeNull($request->dnsOptions);
         $template['IPAddress'] = $request->IPAddress;
         $template['IPPrefixLen'] = intval($request->IPPrefixLen);
-        $template['Memory'] = intval($request->Memory);
         $template['Env'] = $this->extractArray($request->EnvKeys, $request->EnvValues, '=',true);
         $template['AttachStdin'] = isset($request->AttachStdin);
         $template['AttachStdout'] = isset($request->AttachStdout);
