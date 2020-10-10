@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('secret'),
             'phone' => '8799998888',
             'user_type' => 'normal',
+            'category_id' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -10,12 +10,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call([UserCategorySeeder::class]);
+
         DB::table('users')->insert([
             'name' => 'Admin  admin',
             'email' => 'admin@nuvem.com',
             'password' => bcrypt('123456'),
             'phone' => '8799998888',
             'user_type' => 'admin',
+            'category_id' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -146,7 +149,7 @@ class DatabaseSeeder extends Seeder
                 ],
             ])
         ]);
-
+                
         $this->call([UsersTableSeeder::class]);
     }
 }
