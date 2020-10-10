@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\Container;
 use App\Models\Maquina;
 use App\Models\User;
+use App\Models\UserCategory;
 use Illuminate\Support\Facades\Auth;
 
 class AdminAreaController extends Controller
@@ -14,6 +15,9 @@ class AdminAreaController extends Controller
 
     public function index()
     {
+        if(!Auth::user()){
+            return redirect()->route('login');
+        }
         $params = [
             'machines' => Maquina::paginate($this::PAGE_LIMITE),
             'users' => User::orderBy('id')->paginate($this::PAGE_LIMITE),
@@ -31,6 +35,7 @@ class AdminAreaController extends Controller
             'imagesLabel' => $this->getImagesLabels(),
             'graficDataImages' => $this->getInstacesCountImages(),
             'title' => 'Admin Area',
+            'categories' => UserCategory::all(),
         ];
 
         return view('pages/admin/index', $params);
