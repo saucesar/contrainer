@@ -78,6 +78,9 @@
                     </div>
                     <div class="" id="users">
                         @include('pages/tables/users_table', ['users' => $users])
+                        @foreach($users as $user)
+                            @include('pages/tables/modal_users', ['user' => $user])
+                        @endforeach
                     </div>
                     <div class="card-footer">
                         <p class="card-category">Registered this Mouth: {{ $registeredMonth }}</p>
