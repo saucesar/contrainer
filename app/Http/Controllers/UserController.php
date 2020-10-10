@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Requests\UserRequest;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -17,9 +18,14 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
-        $this->validate($request, $request->rules());
+        $this->validate($request, [
+            'name' => ['required', 'min:3'],
+            'email' => ['required', 'email', 'unique:users'],
+            'password' => [$this->route()->user ? 'nullable' : 'required', 'confirmed', 'min:6'],
+            'phone' => ['required', 'min:11', 'numeric']
+        ]);
 
         $user = User::create($request->all());
 
@@ -36,15 +42,20 @@ class UserController extends Controller
         return view('users.edit', ['user' => User::where('id', $id)->first(), 'title' => 'User Profile']);
     }
 
-    public function update(UserRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $this->validate($request, $request->rules());
+        $this->validate($request, [
+            'name' => ['required', 'min:3'],
+            'email' => ['required', 'email'],
+            'phone' => ['required', 'min:11', 'numeric'],
+            'category_id' => 'required|numeric',
+        ]);
 
         $user = User::firstWhere('id', $id);
         $result = $user->update($request->all());
 
         if ($result) {
-            return redirect()->route('home.index');
+            return redirect()->back()->with('success', 'User updated!');
         } else {
             return redirect()->back()->withInput();
         }
