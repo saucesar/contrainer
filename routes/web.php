@@ -68,3 +68,5 @@ Route::prefix('settings')->group(function(){
     Route::put('/container-template/update', 'SettingsController@updateContainerTemplate')->name('container-template.update');
     Route::get('/phpinfo', 'SettingsController@phpinfo')->name('settings.phpinfo');
 });
+
+Route::resource('user-categories', 'UserCategoryController', ['except' => ['show', 'index', 'create', 'edit']]);
