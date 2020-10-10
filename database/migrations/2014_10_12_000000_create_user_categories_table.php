@@ -18,6 +18,7 @@ class CreateUserCategoriesTable extends Migration
             $table->string('name');
             $table->integer('ram_limit');
             $table->integer('storage_limit');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
