@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,7 @@ class SettingsController extends Controller
         $serv_decode = json_decode($serv, true);
 
         $params = [
+            'categories' => UserCategory::all(),
             'service_template' => $serv_decode,
             'container_template' => $cont_decode,
             'service_template_json' => $serv,
