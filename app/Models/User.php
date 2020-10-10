@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->user_type == 'admin';
     }
+
+    public function category()
+    {
+        return $this->hasOne('App\Models\UserCategory', 'id', 'category_id');
+    }
 }
