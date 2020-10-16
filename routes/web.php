@@ -70,3 +70,7 @@ Route::prefix('settings')->group(function(){
 });
 
 Route::resource('user-categories', 'UserCategoryController', ['except' => ['show', 'index', 'create', 'edit']]);
+
+Route::prefix('swarm-nodes')->group(function(){
+    Route::get('/', 'NodesController@index')->name('nodes.index');
+});
