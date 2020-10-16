@@ -11,9 +11,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\traits\ArrayTrait;
 
 class ContainersController extends Controller
 {
+    use ArrayTrait;
+
     public function playStop($container_id)
     {
         $instancia = Container::where('docker_id', $container_id)->first();
@@ -125,6 +128,17 @@ class ContainersController extends Controller
                 
             $data = $this->setDefaultDockerParams($request);
 
+            $data['Volumes'] = [
+                $request->nickname.'-volume' => [
+                    'o' => 'size=100m',
+                    'type' => 'btrfs',
+                    'device' => '/dev/sda',
+                    'Labels' => [
+                        'container.name' => $request->nickname,
+                    ],
+                ]
+            ];
+
             $this->pullImage($url, Image::find($data['image_id']));
 
             return $this->createContainer($url, $data);
@@ -175,6 +189,10 @@ class ContainersController extends Controller
 
         $template['Env'] = $this->extractArray($request->EnvKeys, $request->EnvValues, '=', true);
         $template['HostConfig']['Memory'] = Auth::user()->category->ram_limit * 1024 * 1024;//Converte de MB para bytes
+        $template['HostConfig']['StorageOpt'] = [
+            'size' => Auth::user()->category->storage_limit.'m',
+            'device' => 'btrfs',
+        ];
 
         $template['Domainname'] = str_replace(' ', '', $request->Domainname);
         $template['Labels'] = $this->extractLabels($request);
@@ -234,39 +252,5 @@ class ContainersController extends Controller
         }
     }
 
-    private function extractArray($keys, $values, $separator = '=', $upper = false)
-    {
-        $array = [];
 
-        for($i = 0; $i < count($keys); $i++){
-            if(isset($keys[$i]) && $values[$i]){
-                $val = $keys[$i].$separator.$values[$i];
-                $array[] = $upper ? strtoupper($val) : $val;
-            }
-        }
-
-        return $array;
-    }
-
-    private function extractLabels($request)
-    {
-        $labelKeys = $request->LabelKeys;
-        $labelValues = $request->LabelValues;
-        
-        $labels = [];
-
-        for($i = 0; $i < count($labelKeys); $i++){
-            if(isset($labelKeys[$i]) && isset($labelValues[$i])){
-                $labels[$labelKeys[$i]] = $labelValues[$i];
-            }
-        }
-        
-        return $labels;
-    }
-
-    private function removeNull($array, $index = 0)
-    {
-        unset($array[$index]);
-        return $array;
-    }
 }

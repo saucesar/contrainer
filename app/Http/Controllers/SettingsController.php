@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\UserCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\traits\ArrayTrait;
 
 class SettingsController extends Controller
 {
+    use ArrayTrait;
+    
     public function index()
     {
         $serv = DB::table('default_templates')->where('name', 'service')->first()->template;
@@ -63,42 +66,6 @@ class SettingsController extends Controller
         DB::table('default_templates')->where('name', 'service')->update(['template' => json_encode($service_template)]);
 
         return back()->with('success', 'Service Template Updated!');
-    }
-
-    private function extractLabels($request)
-    {
-        $labelKeys = $request->LabelKeys;
-        $labelValues = $request->LabelValues;
-        
-        $labels = [];
-
-        for($i = 0; $i < count($labelKeys); $i++){
-            if(isset($labelKeys[$i]) && isset($labelValues[$i])){
-                $labels[$labelKeys[$i]] = $labelValues[$i];
-            }
-        }
-        
-        return $labels;
-    }
-
-    private function extractArray($keys, $values, $separator = '=', $upper = false)
-    {
-        $array = [];
-
-        for($i = 0; $i < count($keys); $i++){
-            if(isset($keys[$i]) && $values[$i]){
-                $val = $keys[$i].$separator.$values[$i];
-                $array[] = $upper ? strtoupper($val) : $val;
-            }
-        }
-
-        return $array;
-    }
-
-    private function removeNull($array, $index = 0)
-    {
-        unset($array[$index]);
-        return $array;
     }
 
     public function updateContainerTemplate(Request $request)
