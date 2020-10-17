@@ -73,4 +73,6 @@ Route::resource('user-categories', 'UserCategoryController', ['except' => ['show
 
 Route::prefix('swarm-nodes')->group(function(){
     Route::get('/', 'NodesController@index')->name('nodes.index');
+    Route::put('/{id}/{version}', 'NodesController@updateNode')->name('nodes.update');
+    Route::delete('/{id}', 'NodesController@destroyNode')->name('nodes.destroy');
 });
