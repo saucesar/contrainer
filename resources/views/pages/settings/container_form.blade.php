@@ -252,8 +252,18 @@ setInterval(checkLabels, 100);
 <div class="row">
     <div class="col-5">
         <label for="Memory">Memory(MB) 0 is unlimited</label>
-        <input type="number" name="Memory" value="{{ old('Memory') ?? $container_template['Memory'] }}"
-            class="form-control">
+        <input type="number" name="Memory" value="{{ old('Memory') ?? $container_template['Memory'] }}" class="form-control">
+    </div>
+    <div class="col-5">
+        <label for="Memory" title="Select where your storage folder will be.">Storage path</label>
+        <select name="storage_path" class="form-control" required>
+            <option value="/bin">/bin</option>
+            <option value="/home">/home</option>
+            <option value="/mnt">/mnt</option>
+            <option value="/dev">/dev</option>
+            <option value="/opt">/opt</option>
+            <option value="/var" selected>/var</option>
+        </select>
     </div>
 </div>
 <br><br>
