@@ -90,35 +90,6 @@
                                 </tbody>
                             </table>
 
-                            <h3>Nodes</h3>
-
-                            <table class="table table-bordered">
-                                <thead class="">
-                                    <th>ID</th>
-                                    <th>Role</th>
-                                    <th>Plataform</th>
-                                    <th>Hostname</th>
-                                    <th>Memory</th>
-                                    <th>Status</th>
-                                    <th>Addr</th>
-                                    <th>EngineVersion</th>
-                                </thead>
-                                <tbody>
-                                @foreach($nodes as $node)
-                                    <tr>
-                                        <td scope="col">{{ $node['ID'] }}</td>
-                                        <td scope="col">{{ $node['Spec']['Role'] }}</td>
-                                        <td scope="col">{{ $node['Description']['Platform']['OS'].'_'.$node['Description']['Platform']['Architecture'] }}</td>
-                                        <td scope="col">{{ $node['Description']['Hostname'] }}</td>
-                                        <td scope="col">{{ round($node['Description']['Resources']['MemoryBytes']/pow(1024, 3), 2) }} GB</td>
-                                        <td scope="col">{{ $node['Spec']['Availability'] }}/{{ $node['Status']['State'] }}</td>
-                                        <td scope="col">{{ $node['Status']['Addr'] }}</td>
-                                        <td scope="col">{{ $node['Description']['Engine']['EngineVersion'] }}</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-
                             <form action="{{ route('docker-swarm.leave') }}" method="post">
                                 @csrf
                                 <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('are you sure?q')">
