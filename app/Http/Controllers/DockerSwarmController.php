@@ -14,8 +14,7 @@ class DockerSwarmController extends Controller
         $nodes = Http::get("$url/nodes");
 
         $params = [
-            'swarm' => $swarm->getStatusCode() == 200 ? $swarm->json() : null,
-            'nodes' => $nodes->getStatusCode() == 200 ? $nodes->json() : null,
+            'swarm' => $swarm->getStatusCode() == 200 ? $swarm->json() : [],
             'manager' => $this->getSwarmManager($nodes),
             'error' => $swarm->getStatusCode() != 200 ? ($swarm->json())['message'] : null,
         ];
@@ -40,17 +39,17 @@ class DockerSwarmController extends Controller
 
     public function swarmInit(Request $request)
     {
-        $ip = $request->ip ? $request->ip : 'eth0';
+        $ip = $request->ip;
 
         $params = [
             "ListenAddr" => "0.0.0.0:2377",
             "AdvertiseAddr" => "$ip:2377",
             "DataPathPort" => 4789,
             "DefaultAddrPool" => [
-                "10.10.0.0/8",
-                "20.20.0.0/8"
+                "10.10.0.0/32",
+                "20.20.0.0/32"
             ],
-            "SubnetSize" => 24,
+            "SubnetSize" => 32,
             "ForceNewCluster" => true,
         ];
         $url = env('DOCKER_HOST');
