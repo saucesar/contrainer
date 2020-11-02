@@ -128,17 +128,20 @@ class ContainersController extends Controller
                 
             $data = $this->setDefaultDockerParams($request);
 
-            $data['Volumes'] = [
-                $request->nickname.'-volume' => [
-                    'o' => 'size=100m',
-                    'type' => 'btrfs',
-                    'device' => '/dev/sda',
-                    'Labels' => [
-                        'container.name' => $request->nickname,
-                    ],
-                ]
-            ];
+            $volume_name = $data['nickname'].'-storage';
+            $volume_size = Auth::user()->category->storage_limit.'m';
 
+            $create_volume = Http::asJson()->post("$url/volumes/create", [
+                "Name"=> $volume_name,
+                "Labels"=> [
+                    'container.name' => $data['nickname'],
+                ],
+                "Driver" => "local",
+                //"DriverOpts" => [],
+            ]);
+
+            $data['HostConfig']['Binds'][] = $volume_name.':'.($request->storage_path);
+            
             $this->pullImage($url, Image::find($data['image_id']));
 
             return $this->createContainer($url, $data);
@@ -189,10 +192,6 @@ class ContainersController extends Controller
 
         $template['Env'] = $this->extractArray($request->EnvKeys, $request->EnvValues, '=', true);
         $template['HostConfig']['Memory'] = Auth::user()->category->ram_limit * 1024 * 1024;//Converte de MB para bytes
-        $template['HostConfig']['StorageOpt'] = [
-            'size' => Auth::user()->category->storage_limit.'m',
-            'device' => 'btrfs',
-        ];
 
         $template['Domainname'] = str_replace(' ', '', $request->Domainname);
         $template['Labels'] = $this->extractLabels($request);
