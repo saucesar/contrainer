@@ -54,7 +54,7 @@
                                             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
                                                 <a class="btn btn-link btn-info" data-toggle="collapse" href="#collapse{{ $node['ID'] }}"
                                                     role="button" aria-expanded="false" aria-controls="collapse{{ $node['ID'] }}" title="Expand details.">
-                                                    <span class="material-icons">visibility</span>
+                                                    <span class="material-icons">unfold_more</span>
                                                 </a>
                                                 <button class="btn btn-link btn-warning" data-toggle="modal" data-toggle="modal" data-target="#modal{{ $node['ID'] }}">
                                                     <span class="material-icons">create</span>
@@ -73,7 +73,7 @@
                                     <tr>
                                         <td colspan="8" class="text-right">
                                             <div class="collapse" id="collapse{{ $node['ID'] }}">
-                                                <small>EngineVersion: {{ $node['Description']['Engine']['EngineVersion'] }}</small>
+                                                <small class="mr-2">EngineVersion: {{ $node['Description']['Engine']['EngineVersion'] }}</small>
                                                 <table class="table text-left">
                                                     <thead>
                                                         <tr class="text-center">
@@ -96,7 +96,7 @@
                                                             <td>{{ $services[$task['ServiceID']]['Spec']['Name'] }}</td>
                                                             <td>{{ $task['Slot'] }}</td>
                                                             <td>{{ isset($task['Status']['ContainerStatus']['ContainerID']) ? substr($task['Status']['ContainerStatus']['ContainerID'], 0, 12) : '' }}</td>
-                                                            <td>{{ $task['Status']['ContainerStatus']['PID'] }}</td>
+                                                            <td>{{ isset($task['Status']['ContainerStatus']['PID']) ? $task['Status']['ContainerStatus']['PID']: '' }}</td>
                                                             <td>{{ $task['Spec']['ContainerSpec']['Image'] }}</td>
                                                             <td>{{ $task['Spec']['Resources']['Limits']['MemoryBytes']/pow(1024, 2) }} MB</td>
                                                             <td>
