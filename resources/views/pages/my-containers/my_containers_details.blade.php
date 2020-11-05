@@ -143,7 +143,7 @@
                                     <p><b>Image: </b>{{ $details['Config']['Image'] }}</p>
                                     <p><b>WorkingDir: </b>{{ $details['Config']['WorkingDir'] }}</p>
                                     <p>
-                                        <b>Cmd: </b>
+                                        <b>Entrypoint: </b>
                                         <br>
                                         @foreach($details['Config']['Entrypoint'] as $entry)
                                             {{$entry}} <br>
