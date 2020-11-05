@@ -2,8 +2,7 @@
     <div class="row">
         <div class="col-10">
             <label for="Domainname">Domainname</label>
-            <input type="text" name="Domainname" value="{{ old('Domainname') ?? $container_template['Domainname'] }}"
-                class="form-control">
+            <input type="text" name="Domainname" value="{{ old('Domainname') ?? $container_template['Domainname'] }}" class="form-control">
         </div>
     </div>
     <div class="row">
@@ -44,12 +43,10 @@
                 <div class="col-5" id="label-values">
                     <div class="row">
                         <div class="col-10">
-                            <input type="text" name="LabelValues[]" class="form-control"
-                                value="{{ $container_template['Labels'][$labelKeys[$i]] }}">
+                            <input type="text" name="LabelValues[]" class="form-control" value="{{ $container_template['Labels'][$labelKeys[$i]] }}">
                         </div>
                         <div class="col-2">
-                            <button type="button" class="btn btn-sm btn-link btn-danger" title="Delete the label"
-                                onclick="deleteElement(this, 4);">X</button>
+                            <button type="button" class="btn btn-sm btn-link btn-danger" title="Delete the label" onclick="deleteElement(this, 4);">X</button>
                         </div>
                     </div>
                 </div>
@@ -88,14 +85,21 @@ setInterval(checkLabels, 100);
     </div>
 </div>
 <div class="row">
-    <div class="col-10">
+    <div class="col-2">
         <label for="NetworkMode">NetworkMode</label>
         <select name="NetworkMode" class="form-control">
-            <option value="bridge" {{ $container_template['NetworkMode'] == 'bridge' ? 'selected' : '' }}>Bridge
-            </option>
+            <option value="bridge" {{ $container_template['NetworkMode'] == 'bridge' ? 'selected' : '' }}>Bridge</option>
             <option value="host" {{ $container_template['NetworkMode'] == 'host' ? 'selected' : '' }}>Host</option>
             <option value="none" {{ $container_template['NetworkMode'] == 'none' ? 'selected' : '' }}>None</option>
         </select>
+    </div>
+    <div class="col-4">
+        <label for="IPAddress">IP Address</label>
+        <input type="text" name="IPAddress" value="{{ old('IPAddress') ?? $container_template['IPAddress'] }}"class="form-control">
+    </div>
+    <div class="col-4">
+        <label for="IPPrefixLen">IP Prefix Len</label>
+        <input type="text" name="IPPrefixLen" value="{{ old('IPPrefixLen') ?? $container_template['IPPrefixLen'] }}"class="form-control">
     </div>
 </div>
 <br>
@@ -103,30 +107,16 @@ setInterval(checkLabels, 100);
     <div class="col-6">
         <label for="dns">DNS (Ex: 0.0.0.0)</label>
     </div>
-    <div class="col-6">
-        <label for="IPAddress">IP Address</label>
-    </div>
 </div>
 <div class="row">
     <div class="col-4" id="dns-values">
         <input type="text" name="dns" class="form-control" value="{{ implode(';', $container_template['Dns']) }}">
-    </div>
-    <div class="col-2">
-    </div>
-    <div class="col-4">
-        <input type="text" name="IPAddress" value="{{ old('IPAddress') ?? $container_template['IPAddress'] }}"
-            class="form-control">
     </div>
 </div>
 <br><br>
 <div class="row">
     <div class="col-4">
         <label for="dnsOptions">DNS Options (Ex: timeout:20)</label>
-    </div>
-    <div class="col-2">
-    </div>
-    <div class="col-4">
-        <label for="IPPrefixLen">IP Prefix Len</label>
     </div>
 </div>
 <div class="row">
@@ -173,10 +163,6 @@ setInterval(checkLabels, 100);
 
     setInterval(checkDnsOpt, 100);
     </script>
-    <div class="col-4">
-        <input type="text" name="IPPrefixLen" value="{{ old('IPPrefixLen') ?? $container_template['IPPrefixLen'] }}"
-            class="form-control">
-    </div>
 </div>
 <div class="row">
     <div class="col">
@@ -246,15 +232,11 @@ setInterval(checkLabels, 100);
 </div>
 <div class="row">
     <div class="col">
-        <h3>Others</h3>
+        <h3>Resources</h3>
     </div>
 </div>
 <div class="row">
-    <div class="col-5">
-        <label for="Memory">Memory(MB) 0 is unlimited</label>
-        <input type="number" name="Memory" value="{{ old('Memory') ?? $container_template['Memory'] }}" class="form-control">
-    </div>
-    <div class="col-5">
+    <div class="col">
         <label for="Memory" title="Select where your storage folder will be.">Storage path</label>
         <select name="storage_path" class="form-control" required>
             <option value="/bin">/bin</option>
@@ -263,6 +245,15 @@ setInterval(checkLabels, 100);
             <option value="/dev">/dev</option>
             <option value="/opt">/opt</option>
             <option value="/var" selected>/var</option>
+        </select>
+    </div>
+    <div class="col">
+        <label for="volume" title="Select where your volume.">Volume</label>
+        <select name="volume" class="form-control" required>
+            <option value="new">Create new volume</option>
+            @foreach($volumes as $volume)
+                <option value="{{ $volume->name }}">{{ $volume->name }}</option>
+            @endforeach
         </select>
     </div>
 </div>
@@ -317,7 +308,7 @@ setInterval(checkLabels, 100);
     </div>
 </div>
 <div class="row">
-    <div class="col-5" id="entryPoints">
+    <div class="col-5">
         <div class="row">
             <div class="col-10">
                 <input type="text" name="Entrypoint" class="form-control" value="{{ implode(';', $container_template['Entrypoint']) }}">
@@ -326,22 +317,22 @@ setInterval(checkLabels, 100);
         </div>
     </div>
     <div class="col-5">
-    <select name="RestartPolicy" class="form-control">
-        <option value="" {{  $container_template['HostConfig']['RestartPolicy']['name'] == '' ? 'selected' : '' }}>
-            Never</option>
-        <option value="always"
-            {{  $container_template['HostConfig']['RestartPolicy']['name'] == 'always' ? 'selected' : '' }}>
-            Always</option>
-        <option value="unless-stopped"
-            {{ $container_template['HostConfig']['RestartPolicy']['name'] == 'unless-stopped' ? 'selected' : '' }}>
-            Unless-Stopped</option>
-        <option value="on-failure"
-            {{ $container_template['HostConfig']['RestartPolicy']['name'] == 'on-failure' ? 'selected' : '' }}>
-            On-Failure</option>
-    </select>
-    </div>
+        <select name="RestartPolicy" class="form-control">
+            <option value="" {{  $container_template['HostConfig']['RestartPolicy']['name'] == '' ? 'selected' : '' }}>
+                Never</option>
+            <option value="always"
+                {{  $container_template['HostConfig']['RestartPolicy']['name'] == 'always' ? 'selected' : '' }}>
+                Always</option>
+            <option value="unless-stopped"
+                {{ $container_template['HostConfig']['RestartPolicy']['name'] == 'unless-stopped' ? 'selected' : '' }}>
+                Unless-Stopped</option>
+            <option value="on-failure"
+                {{ $container_template['HostConfig']['RestartPolicy']['name'] == 'on-failure' ? 'selected' : '' }}>
+                On-Failure</option>
+        </select>
     </div>
 </div>
+<!--
 <div class="row">
     <div class="col">
         <h3>Binds</h3>
@@ -407,3 +398,4 @@ setInterval(checkLabels, 100);
     setInterval(checkBinds, 100);
     </script>
 </div>
+ -->

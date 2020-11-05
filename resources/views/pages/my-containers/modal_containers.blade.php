@@ -13,21 +13,17 @@
             <div class="modal-body">
                 <div class="text-left">
                     <div class="row">
-                        <div class="col-sm-10">
+                        <div class="col-sm-5">
+                            {!! Form::text('nickname', old('nickname'), ['class'=>"form-control", 'placeholder' => "Nickname to container", 'required'=>"true"]) !!}
+                        </div>
+                        <div class="col-sm-5">
                             <select name="image_id" class='form-control' required>
                                 <option value="">Select a Image</option>
                                 @foreach($images as $image)
-                                <option value="{{ $image->id }}">{{ $image->name }}</option>
+                                <option value="{{ $image->id }}" {{ old('image_id') == $image->id ? 'selected' : '' }}>{{ $image->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-sm-10">
-                            {!! Form::text('nickname', old('nickname'), ['class'=>"form-control", 'placeholder' => "Nickname to container", 'required'=>"true"]) !!}
-                        </div>
-                    </div>
+                        </div>                    </div>
                     <br>
                     @include('pages/settings/container_form')
                 </div>
