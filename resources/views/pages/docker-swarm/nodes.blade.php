@@ -70,14 +70,14 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr class="table-secondary">
                                         <td colspan="8" class="text-right">
                                             <div class="collapse" id="collapse{{ $node['ID'] }}">
                                                 <small class="mr-2">EngineVersion: {{ $node['Description']['Engine']['EngineVersion'] }}</small>
                                                 <table class="table text-left">
                                                     <thead>
                                                         <tr class="text-center">
-                                                            <th colspan="7"><h3>Containers</h3></th>
+                                                            <th colspan="8"><h3>Containers</h3></th>
                                                         </tr>
                                                         <tr>
                                                             <th>Service</th>
@@ -87,6 +87,7 @@
                                                             <th>Image</th>
                                                             <th>Memory</th>
                                                             <th>State</th>
+                                                            <th>Options</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -113,6 +114,12 @@
                                                                     <i class="material-icons">stop</i>
                                                                 </div>
                                                                 @endif
+                                                            </td>
+                                                            <td>
+                                                            <a href="{{$dockerHost}}/tasks/{{ $task['ID'] }}/logs?timestamps=1&stdout=1&stderr=1&follow=1"
+                                                                class="btn btn-info btn-link" target="_black" title="Logs.">
+                                                                <i class="fas fa-file-alt"></i>
+                                                            </a>
                                                             </td>
                                                         </tr>
                                                         @endif
