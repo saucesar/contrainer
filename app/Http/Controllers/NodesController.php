@@ -19,6 +19,7 @@ class NodesController extends Controller
             'nodes' => $nodes->getStatusCode() == 200 ? $nodes->json() : [],
             'tasks' => $tasks->getStatusCode() == 200 ? $tasks->json() : [],
             'services' => $this->changeId($services),
+            'dockerHost' => env('DOCKER_HOST'),
         ];
         
         return view('pages/docker-swarm/nodes', $params);
