@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\traits\ArrayTrait;
+use App\Models\Volume;
 
 class ContainersController extends Controller
 {
@@ -63,6 +64,7 @@ class ContainersController extends Controller
             'title' => 'My Containers',
             'images' => Image::all(),
             'container_template' => json_decode(DB::table('default_templates')->where('name', 'container')->first()->template, true),
+            'volumes' => Volume::where('user_id', $user->id)->get(),
         ];
 
         return view('pages/my-containers/my_containers', $params);
@@ -127,27 +129,53 @@ class ContainersController extends Controller
             $url = env('DOCKER_HOST');
                 
             $data = $this->setDefaultDockerParams($request);
-
-            $volume_name = $data['nickname'].'-storage';
-            $volume_size = Auth::user()->category->storage_limit.'m';
-
-            $create_volume = Http::asJson()->post("$url/volumes/create", [
-                "Name"=> $volume_name,
-                "Labels"=> [
-                    'container.name' => $data['nickname'],
-                ],
-                "Driver" => "local",
-                //"DriverOpts" => [],
-            ]);
-
-            $data['HostConfig']['Binds'][] = $volume_name.':'.($request->storage_path);
             
-            $this->pullImage($url, Image::find($data['image_id']));
+            $volume_name = $data['nickname'].'-volume';
+            $volume = Volume::firstWhere('name', $volume_name);
+            
+            if($request->volume == 'new' && !isset($volume)){
+                $user = Auth::user();
+                $create_volume = $this->createVolume($url, $user, $volume_name, $data['nickname']);
 
-            return $this->createContainer($url, $data);
+                if($create_volume->getStatusCode() == 201){
+                    Volume::create(['user_id' => $user->id, 'name' => $volume_name]);
+    
+                    return $this->proceedCreation($data, $url, $volume_name, $request->storage_path);
+                } else {
+                    return back()->withInput()->with('error', $create_volume->json()['message']);
+                }
+            } else {
+                return $this->proceedCreation($data, $url, $request->volume, $request->storage_path);
+            }
+            
         } catch(Exception $e){
             return redirect()->route('containers.index')->with('error', $e->getMessage())->withInput();
         }
+    }
+
+    private function proceedCreation($data, $url, $volume_name, $storage_path)
+    {
+        $data['HostConfig']['Binds'][] = $volume_name.':'.$storage_path;
+    
+        $this->pullImage($url, Image::find($data['image_id']));
+
+        return $this->createContainer($url, $data);
+    }
+
+    private function createVolume($url, $user, $volume_name, $nickname)
+    {
+        $volume_size = $user->category->storage_limit.'m';
+
+        $create_volume = Http::asJson()->post("$url/volumes/create", [
+            "Name"=> $volume_name,
+            "Labels"=> [
+                'container.name' => $nickname,
+            ],
+            "Driver" => "local",
+            //"DriverOpts" => ['size' => $volume_size],
+        ]);
+        
+        return $create_volume;
     }
 
     public function edit($id)
@@ -211,7 +239,7 @@ class ContainersController extends Controller
         $template['NetworkMode'] = $request->NetworkMode;
         $template['Entrypoint'] = [$request->Entrypoint];
         $template['HostConfig']['RestartPolicy']['name'] = $request->RestartPolicy;
-        $template['HostConfig']['Binds'] = $this->extractArray($request->BindSrc, $request->BindDest, ':');
+        //$template['HostConfig']['Binds'] = $this->extractArray($request->BindSrc, $request->BindDest, ':');
         $template['HostConfig']['NetworkMode'] = $request->NetworkMode;
 
         return $template;
@@ -250,6 +278,4 @@ class ContainersController extends Controller
             return back()->with('error', $response->json()['message']);
         }
     }
-
-
 }
