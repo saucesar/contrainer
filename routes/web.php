@@ -37,6 +37,7 @@ Route::post('containers-instace', 'ContainersController@configureContainer')->na
 Route::get('terminal-tab/{docker_id}', 'ContainersController@terminalNewTab')->name('container.terminalTab');
 Route::resource('containers', 'ContainersController')->except(['create', 'index']);
 Route::get('containers/play-stop/{containerId}', 'ContainersController@playStop')->name('containers.playStop');
+Route::post('containers/{docker_id}/delete', 'ContainersController@deleteContainer')->name('container.delete');
 
 Auth::routes();
 
