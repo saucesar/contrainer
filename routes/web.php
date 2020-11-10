@@ -66,6 +66,7 @@ Route::prefix('settings')->group(function(){
     Route::get('/', 'SettingsController@index')->name('settings.index');
     Route::put('/service-template/update', 'SettingsController@updateServiceTemplate')->name('service-template.update');
     Route::put('/container-template/update', 'SettingsController@updateContainerTemplate')->name('container-template.update');
+    Route::put('/volume-driver-template/update', 'SettingsController@updateVolumeDriver')->name('volume-driver.update');
     Route::get('/phpinfo', 'SettingsController@phpinfo')->name('settings.phpinfo');
 });
 
