@@ -13,6 +13,11 @@ jsonViewerService.showJSON(<?= $service_template_json ?>, -1, 1);
 var jsonViewerContainer = new JSONViewer();
 document.querySelector("#containers-json").appendChild(jsonViewerContainer.getContainer());
 jsonViewerContainer.showJSON(<?= $container_template_json ?>, -1, 1);
+
+var jsonViewerVolDriver = new JSONViewer();
+document.querySelector("#volume-driver-json").appendChild(jsonViewerVolDriver.getContainer());
+jsonViewerVolDriver.showJSON(<?= $volume_driver_json ?>, -1, 1);
+
 </script>
 @endpush
 
@@ -125,11 +130,35 @@ jsonViewerContainer.showJSON(<?= $container_template_json ?>, -1, 1);
                 </div>
             </div>
 
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title ">Volume Driver</h4>
+                        <p class="card-category"><strong>Configure default volume driver to docker containers.</strong></p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col overflow-auto" style="height: 250px;">
+                                <div id="volume-driver-json"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-warning btn-link" data-toggle="modal" data-target="#modalVolumeDriver"
+                            title="Edit volume driver.">
+                            <i class="material-icons">edit</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
         @include('pages.settings.modal_services_template')
         @include('pages.settings.modal_containers_template')
+    </div>
+    @include('pages.settings.modal_volume_driver')
 
-        @foreach($categories as $category)
+    @foreach($categories as $category)
             @include('pages.settings.modal_user_category', [
                 'route' => route('user-categories.update', $category->id),
                 'category' => $category,
@@ -143,6 +172,5 @@ jsonViewerContainer.showJSON(<?= $container_template_json ?>, -1, 1);
             'category' => null,
             'method' => 'POST',
         ])
-    </div>
 </div>
 @endsection
