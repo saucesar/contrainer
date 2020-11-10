@@ -129,13 +129,13 @@ class ContainersController extends Controller
             $url = env('DOCKER_HOST');
                 
             $data = $this->setDefaultDockerParams($request);
-            
             $volume_name = $data['nickname'].'-volume';
             $volume = Volume::firstWhere('name', $volume_name);
             
             if($request->volume == 'new' && !isset($volume)){
                 $user = Auth::user();
                 $create_volume = $this->createVolume($url, $user, $volume_name, $data['nickname']);
+                $data['volume_name'] = $volume_name;
 
                 if($create_volume->getStatusCode() == 201){
                     Volume::create(['user_id' => $user->id, 'name' => $volume_name]);
@@ -145,6 +145,7 @@ class ContainersController extends Controller
                     return back()->withInput()->with('error', $create_volume->json()['message']);
                 }
             } else {
+                $data['volume_name'] = $request->volume;
                 return $this->proceedCreation($data, $url, $request->volume, $request->storage_path);
             }
             
@@ -171,8 +172,6 @@ class ContainersController extends Controller
         
         if($volume_template['Driver'] != 'local'){
             $volume_template['DriverOpts']['size'] = $volume_size;
-        } else {
-            $volume_template['DriverOpts'] = null;
         }
 
         $create_volume = Http::asJson()->post("$url/volumes/create", $volume_template);
@@ -195,6 +194,35 @@ class ContainersController extends Controller
         } else {
             return redirect()->route('containers.index')->with('error', "Nickname can't be blank!!!");
         }
+    }
+
+    public function deleteContainer(Request $request,$docker_id)
+    {
+        $url = env('DOCKER_HOST');
+
+        $responseDelete = Http::delete("$url/containers/$docker_id?force=1");
+        $container = Container::firstWhere('docker_id', $docker_id);
+        $vol_name = $container->volume_name;
+
+        if($responseDelete->getStatusCode() == 204 || $responseDelete->getStatusCode() == 404) {
+            isset($container) ? $container->delete() : '';
+        } else {
+            return back()->with('error', $responseDelete->json()['message']);
+        }
+
+        if(isset($request->delete_volume)){
+
+            $delete_vol = Http::delete("$url/volumes/$vol_name");
+
+            if($delete_vol->getStatusCode() == 204){
+                $volume = Volume::firstWhere('name', $vol_name);
+                isset($volume) ? $volume->delete() : '';
+            } else {
+                return back()->with('error', $delete_vol->json()['message']);
+            }
+        }
+
+        return back()->with('success', 'Container deleted with sucess!');
     }
 
     public function destroy($id)
