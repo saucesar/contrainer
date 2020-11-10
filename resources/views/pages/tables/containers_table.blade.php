@@ -64,12 +64,17 @@
                         title="Edit nickname.">
                         <i class="material-icons">edit</i>
                     </a>
-                    {!! Form::open(['route' => ['containers.destroy', $container->docker_id], 'method' => 'delete']) !!}
+                <!--{!! Form::open(['route' => ['containers.destroy', $container->docker_id], 'method' => 'delete']) !!}
                     <button type="submit" class="btn btn-danger btn-link" title="Detele the container."
                         onclick="return confirm('Are you sure?')" type="submit">
                         <i class="material-icons">delete</i>
                     </button>
-                    {!! Form::close() !!}
+                -->{!! Form::close() !!}
+                    <button class="btn btn-danger btn-link" data-toggle="modal" data-target="#modalDeleteContainer{{ $container->docker_id }}"
+                        title="Delete a containers">
+                        <i class="material-icons">delete</i>
+                    </button>
+                    @include('pages/my-containers/modal_delete_container')
                 </div>
             </td>
         </tr>
