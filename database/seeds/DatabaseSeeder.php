@@ -149,7 +149,22 @@ class DatabaseSeeder extends Seeder
                 ],
             ])
         ]);
-                
+
+        DB::table('default_templates')->insert([
+            'name' => 'volume_driver',
+            'template' => json_encode([
+                "Name"=> 'VOLUME_NAME',
+                "Labels"=> [
+                    'container.name' => 'CONTAINER_NAME',
+                ],
+                "Driver" => "lvm",
+                "DriverOpts" => [
+                    'size' => 'VOLUME_SIZE',
+                    'keyfile' => 'PATH_TO_KEY',
+                ],
+            ])
+        ]);
+
         $this->call([UsersTableSeeder::class]);
     }
 }
