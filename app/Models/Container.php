@@ -9,7 +9,7 @@ class Container extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['hashcode_maquina', 'docker_id', 'user_id', 'dataHora_instanciado', 'dataHora_finalizado', 'nickname', 'image_id'];
+    protected $fillable = ['hashcode_maquina', 'docker_id', 'user_id', 'dataHora_instanciado', 'dataHora_finalizado', 'nickname', 'image_id', 'volume_name'];
 
     public static $rules = [
         'hashcode_maquina' => ['required'],
