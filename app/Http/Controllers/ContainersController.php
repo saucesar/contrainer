@@ -164,16 +164,18 @@ class ContainersController extends Controller
 
     private function createVolume($url, $user, $volume_name, $nickname)
     {
-        $volume_size = $user->category->storage_limit.'m';
+        $volume_size = ($user->category->storage_limit/1024).'G';
+        $volume_template = json_decode(DB::table('default_templates')->where('name', 'volume_driver')->first()->template, true);
+        $volume_template['Name'] = $volume_name;
+        $volume_template['Labels']['container.name'] = $nickname;
+        
+        if($volume_template['Driver'] != 'local'){
+            $volume_template['DriverOpts']['size'] = $volume_size;
+        } else {
+            $volume_template['DriverOpts'] = null;
+        }
 
-        $create_volume = Http::asJson()->post("$url/volumes/create", [
-            "Name"=> $volume_name,
-            "Labels"=> [
-                'container.name' => $nickname,
-            ],
-            "Driver" => "local",
-            //"DriverOpts" => ['size' => $volume_size],
-        ]);
+        $create_volume = Http::asJson()->post("$url/volumes/create", $volume_template);
         
         return $create_volume;
     }
