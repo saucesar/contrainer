@@ -34,6 +34,19 @@ trait ArrayTrait {
         return $labels;
     }
 
+    public function extractArrayKey($keys, $values)
+    {
+        $array = [];
+
+        for($i = 0; $i < count($keys); $i++){
+            if(isset($keys[$i]) && isset($values[$i])){
+                $array[$keys[$i]] = $values[$i];
+            }
+        }
+        
+        return $array;
+    }
+
     public function removeNull($array, $index = 0)
     {
         unset($array[$index]);
