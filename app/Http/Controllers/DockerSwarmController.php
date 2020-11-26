@@ -45,11 +45,11 @@ class DockerSwarmController extends Controller
             "ListenAddr" => "0.0.0.0:2377",
             "AdvertiseAddr" => "$ip:2377",
             "DataPathPort" => 4789,
-            "DefaultAddrPool" => [
+            /*"DefaultAddrPool" => [
                 "10.10.0.0/32",
                 "20.20.0.0/32"
-            ],
-            "SubnetSize" => 32,
+            ],*/
+            //"SubnetSize" => 32,
             "ForceNewCluster" => true,
         ];
         $url = env('DOCKER_HOST');
