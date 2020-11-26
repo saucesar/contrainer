@@ -174,6 +174,10 @@ class ContainersController extends Controller
             $volume_template['DriverOpts']['size'] = $volume_size;
         }
 
+        if(count($volume_template['DriverOpts']) == 0){
+            $volume_template['DriverOpts'] = null;
+        }
+
         $create_volume = Http::asJson()->post("$url/volumes/create", $volume_template);
         
         return $create_volume;
