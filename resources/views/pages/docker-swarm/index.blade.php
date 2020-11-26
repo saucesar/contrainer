@@ -1,6 +1,18 @@
-@extends('layouts.app', ['activePage' => 'docker-swarm', 'titlePage' => __("Docker Swarm"), 'title' => __("DockerSwarm")])
+@extends('layouts.app', ['activePage' => 'docker-swarm', 'titlePage' => __("Docker Swarm"), 'title' =>
+__("DockerSwarm")])
 
 @push('js')
+<script src="{{ asset('js') }}/FileSaver.min.js" type="text/javascript"></script>
+<script>
+function saveFile() {
+    let text = "#!/bin/bash\ndocker swarm join --token={{ $swarm['JoinTokens']['Manager'].' '.$manager['Status']['Addr'] }}";
+    let title = "join-swarm.sh";
+    let blob = new Blob([text], {
+        type: "text/plain;charset=utf-8"
+    });
+    saveAs(blob, title);
+}
+</script>
 @endpush
 
 @section('content')
@@ -16,7 +28,7 @@
                         </div>
                         <div class="card-body">
                             @include('pages.components.messages')
-                            
+
                             @if($swarm)
                             <h3>Manager Info</h3>
                             <table class="table table-bordered">
@@ -48,7 +60,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            
+
                             <table class="table table-bordered">
                                 <thead class="">
                                     <th>Created At</th>
@@ -66,25 +78,15 @@
 
                             <table class="table table-bordered">
                                 <thead class="">
-                                    <th>To join in this swarm as worker run</th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="col">
-                                            <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Worker'].' '.$manager['Status']['Addr'] }}</b></small>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <table class="table table-bordered">
-                                <thead class="">
                                     <th>To join in this swarm as manager run</th>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td scope="col">
                                             <small><b>docker swarm join --token={{ $swarm['JoinTokens']['Manager'].' '.$manager['Status']['Addr'] }}</b></small>
+                                            <button class="btn btn-sm btn-link" onclick="saveFile()" title="save a file with bash script to join the swarm">
+                                                <i class="material-icons">get_app</i>
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
