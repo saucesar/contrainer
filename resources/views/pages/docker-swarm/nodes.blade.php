@@ -19,7 +19,7 @@
 
                             <h3>Nodes</h3>
                             
-                            <table class="table table-bordered table-responsive table-hover text-center">
+                            <table class="table table-bordered table-hover text-center">
                                 <thead class="thead-dark">
                                     <th>ID</th>
                                     <th>Role</th>

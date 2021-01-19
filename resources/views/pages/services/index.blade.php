@@ -13,7 +13,7 @@
                         <h4 class="card-title ">Services</h4>
                         <p class="card-category">Your Services</p>
                     </div>
-                    <div class="card-body table-responsive">
+                    <div class="card-body">
                         <div class="">
                             @include('pages.components.messages')
                             
