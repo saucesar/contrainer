@@ -41,7 +41,9 @@ class ServiceController extends Controller
     public function store(Request $request)
     {   
         $request->validate(['serviceName' => 'required|min:5', 'imageName' => 'required']);
-
+        if(Service::firstWhere('name', $request->serviceName)){
+            return back()->withInput()->with('error', 'O nome informado já está em uso.');
+        }
         $url = env('DOCKER_HOST');
         $createService = Http::asJson()->post("$url/services/create", $this->getParams($request));
 
