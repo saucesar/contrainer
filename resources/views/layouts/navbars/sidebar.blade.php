@@ -54,13 +54,13 @@
           <i class="material-icons">account_circle</i>
             <span class="sidebar-normal">{{ __('User profile') }} </span>
         </a>
-      </li>
+      </li><!--
       <li class="nav-item{{ $activePage == 'user-machines' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('user.machines') }}">
           <i class="material-icons">dvr</i>
             <span class="sidebar-normal"> {{ __('Machines') }} </span>
         </a>
-      </li>
+      </li>-->
       <li class="nav-item{{ $activePage == 'images' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('images.index') }}">
             <i class="fab fa-docker"></i>
