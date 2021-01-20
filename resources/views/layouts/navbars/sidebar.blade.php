@@ -6,7 +6,7 @@
   -->
   <div class="logo">
     <a  class="simple-text logo-normal">
-      {{ __('Cloud Project') }}
+      {{ __('Contrainer') }}
     </a>
   </div>
   <div class="sidebar-wrapper">
