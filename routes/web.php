@@ -58,11 +58,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
 
-Route::resource('services', 'ServiceController');
-Route::get('docker-swarm', 'DockerSwarmController@index')->name('docker-swarm.index');
-Route::post('docker-swarm', 'DockerSwarmController@swarmInit')->name('docker-swarm.init');
-Route::post('docker-swarm/leave', 'DockerSwarmController@swarmLeave')->name('docker-swarm.leave');
-
 Route::prefix('settings')->group(function(){
     Route::get('/', 'SettingsController@index')->name('settings.index');
     Route::put('/service-template/update', 'SettingsController@updateServiceTemplate')->name('service-template.update');
@@ -72,9 +67,3 @@ Route::prefix('settings')->group(function(){
 });
 
 Route::resource('user-categories', 'UserCategoryController', ['except' => ['show', 'index', 'create', 'edit']]);
-
-Route::prefix('swarm-nodes')->group(function(){
-    Route::get('/', 'NodesController@index')->name('nodes.index');
-    Route::put('/{id}/{version}', 'NodesController@updateNode')->name('nodes.update');
-    Route::delete('/{id}', 'NodesController@destroyNode')->name('nodes.destroy');
-});

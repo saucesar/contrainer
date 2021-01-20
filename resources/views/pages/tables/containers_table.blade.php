@@ -1,25 +1,17 @@
 <table class='table'>
     <thead>
-        <th>#</th>
+        <th class="text-center">#</th>
         <th>Container Id</th>
         <th>Nickname</th>
         @if($isAdminArea ?? false)
         <th>User Email</th>
         @endif
         <th>Iniciated at</th>
-        <th>Running</th>
         <th>Options</th>
     </thead>
     <tbody>
         @foreach ($mycontainers as $container)
         <tr>
-            <td><i class="fas fa-server"></i></td>
-            <td>{{ substr($container->docker_id, 0, 12) }}</td>
-            <td>{{ $container->nickname }}</td>
-            @if($isAdminArea)
-            <td>{{ $container->user()->email }}</td>
-            @endif
-            <td>{{ $container->dataHora_instanciado }}</td>
             <td class="td-actions text-center">
                 @if ($container->dataHora_finalizado)
                 <a href="#" class="btn btn-danger" data-original-title="" title="">
@@ -31,6 +23,13 @@
                 </div>
                 @endif
             </td>
+            <td>{{ substr($container->docker_id, 0, 12) }}</td>
+            <td>{{ $container->nickname }}</td>
+            @if($isAdminArea)
+            <td>{{ $container->user()->email }}</td>
+            @endif
+            <td>{{ $container->dataHora_instanciado }}</td>
+
             <td class="td-actions text-right">
                 <div class='row'>
                     @if($container->dataHora_finalizado)
@@ -63,13 +62,13 @@
                     <a href="{{ route('containers.edit' , [$container->docker_id]) }}" class="btn btn-warning btn-link"
                         title="Edit nickname.">
                         <i class="material-icons">edit</i>
-                    </a>
-                <!--{!! Form::open(['route' => ['containers.destroy', $container->docker_id], 'method' => 'delete']) !!}
+                    </a><!--
+                    {!! Form::open(['route' => ['containers.destroy', $container->docker_id], 'method' => 'delete']) !!}
                     <button type="submit" class="btn btn-danger btn-link" title="Detele the container."
                         onclick="return confirm('Are you sure?')" type="submit">
                         <i class="material-icons">delete</i>
                     </button>
-                -->{!! Form::close() !!}
+                    {!! Form::close() !!}-->
                     <button class="btn btn-danger btn-link" data-toggle="modal" data-target="#modalDeleteContainer{{ $container->docker_id }}"
                         title="Delete a containers">
                         <i class="material-icons">delete</i>

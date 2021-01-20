@@ -248,15 +248,15 @@ setInterval(checkLabels, 100);
         </select>
     </div>
     <div class="col">
-        @if(isset($volumes))
         <label for="volume" title="Select where your volume.">Volume</label>
         <select name="volume" class="form-control" required>
             <option value="new">Create new volume</option>
-            @foreach($volumes as $volume)
-                <option value="{{ $volume->name }}">{{ $volume->name }}</option>
-            @endforeach
+            @if(isset($volumes))
+                @foreach($volumes as $volume)
+                    <option value="{{ $volume->name }}">{{ $volume->name }}</option>
+                @endforeach
+            @endif
         </select>
-        @endif
     </div>
 </div>
 <br><br>

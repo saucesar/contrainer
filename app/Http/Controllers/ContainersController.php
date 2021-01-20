@@ -115,9 +115,11 @@ class ContainersController extends Controller
     public function configureContainer(Request $request)
     {
         $params = [
-            'image' => Image::firstWhere('id', $request->image_id),
+            'images' => Image::all(),
             'user' => Auth::user()->name,
             'user_id' => Auth::user()->id,
+            'volumes' => Volume::where('user_id', Auth::user()->id)->get(),
+            'container_template' => json_decode(DB::table('default_templates')->where('name', 'container')->first()->template, true),
         ];
 
         return view('pages/my-containers/containers_config', $params);

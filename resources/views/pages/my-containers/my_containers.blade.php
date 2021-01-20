@@ -1,6 +1,7 @@
 @extends('layouts.app', ['activePage' => 'my-containers', 'titlePage' => __("My Containers")])
 
 @push('js')
+<script type="text/javascript" src="{{ asset('js') }}/cloud.js"></script>
 @endpush
 
 @section('content')

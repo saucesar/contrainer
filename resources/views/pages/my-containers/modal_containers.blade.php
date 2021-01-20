@@ -23,7 +23,8 @@
                                 <option value="{{ $image->id }}" {{ old('image_id') == $image->id ? 'selected' : '' }}>{{ $image->name }}</option>
                                 @endforeach
                             </select>
-                        </div>                    </div>
+                        </div>
+                    </div>
                     <br>
                     @include('pages/settings/container_form')
                 </div>
